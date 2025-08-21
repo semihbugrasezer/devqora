@@ -117,7 +117,7 @@ echo "--------------------------------"
 N8N_STATUS=$(docker compose ps n8n | grep -o "Up")
 if [ "$N8N_STATUS" = "Up" ]; then
     print_status "success" "n8n service is running"
-    print_status "info" "Access n8n at: https://n8n.hing.me"
+    print_status "info" "Access n8n at: http://localhost:7056"
 else
     print_status "error" "n8n service is not running"
 fi

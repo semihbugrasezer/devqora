@@ -128,5 +128,5 @@ def health():
     return {"ok": True}
 
 if __name__ == "__main__": 
-    # Run on port 7055 to match local test expectations when not using Docker
-    app.run(host="0.0.0.0", port=7055)
+    # Run on port 5055 inside Docker and local for consistency
+    app.run(host="0.0.0.0", port=5055)
