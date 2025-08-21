@@ -89,7 +89,7 @@
                 "requestMethod": "POST",
                 "responseFormat": "json",
                 "jsonParameters": true,
-                "parametersJson": "={{ { \"domain\": \"example.com\", \"title\": $json.title, \"body\": $json.body, \"slug\": $json.slug } }}",
+                "parametersJson": "={{ { \"domain\": \"hing.me\", \"title\": $json.title, \"body\": $json.body, \"slug\": $json.slug } }}",
                 "options": {
                     "timeout": 10000
                 }
@@ -105,7 +105,7 @@
         },
         {
             "parameters": {
-                "functionCode": "// Build domain rotation for multiple sites\nconst domains = ['example.com', 'example-two.com']; // Add your domains here\nconst keyword = $input.first().json.keyword;\nconst slug = $input.first().json.slug;\n\nconst results = [];\n\n// Create articles for each domain\nfor (const domain of domains) {\n  results.push({\n    json: {\n      domain: domain,\n      title: $input.first().json.title,\n      body: $input.first().json.body,\n      slug: slug,\n      keyword: keyword\n    }\n  });\n}\n\nreturn results;"
+                "functionCode": "// Build domain rotation for multiple sites\nconst domains = ['hing.me', 'playu.co']; // Production domains\nconst keyword = $input.first().json.keyword;\nconst slug = $input.first().json.slug;\n\nconst results = [];\n\n// Create articles for each domain\nfor (const domain of domains) {\n  results.push({\n    json: {\n      domain: domain,\n      title: $input.first().json.title,\n      body: $input.first().json.body,\n      slug: slug,\n      keyword: keyword\n    }\n  });\n}\n\nreturn results;"
             },
             "id": "multi-domain-distributor",
             "name": "Multi-Domain Distributor",

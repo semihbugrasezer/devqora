@@ -59,7 +59,7 @@ wait_for_n8n() {
     local attempt=1
     
     while [ $attempt -le $max_attempts ]; do
-        if curl -s "http://localhost:5678/api/v1/workflows" >/dev/null 2>&1; then
+        if curl -s "http://localhost:7056/api/v1/workflows" >/dev/null 2>&1; then
             log "✅ n8n API is responding"
             return 0
         fi
@@ -100,21 +100,12 @@ setup_environment() {
     fi
     
     # Set default values
-    local n8n_url="${N8N_URL:-http://localhost:5678/api/v1}"
+    local n8n_url="${N8N_URL:-http://localhost:7056/api/v1}"
     local n8n_key="${N8N_KEY:-}"
     
     if [[ -z "$n8n_key" ]]; then
-        warn "N8N_KEY not found in environment"
-        n8n_key=$(generate_api_key)
-        
-        # Add to .env file
-        if ! grep -q "N8N_KEY=" "$ENV_FILE" 2>/dev/null; then
-            echo "" >> "$ENV_FILE"
-            echo "# n8n API Configuration" >> "$ENV_FILE"
-            echo "N8N_URL=$n8n_url" >> "$ENV_FILE"
-            echo "N8N_KEY=$n8n_key" >> "$ENV_FILE"
-            log "✅ Added n8n configuration to .env file"
-        fi
+        error "N8N_KEY not found. Please export your existing n8n API key: export N8N_KEY=your_key_here"
+        exit 1
     fi
     
     # Export for current session

@@ -21,7 +21,7 @@ fi
 
 # Test 2: Test Content API
 echo -n "2. Testing Content API... "
-CONTENT_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5055/health 2>/dev/null || echo "000")
+CONTENT_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:7055/health 2>/dev/null || echo "000")
 if [ "$CONTENT_RESPONSE" = "200" ]; then
     echo -e "${GREEN}✓ Content API responding${NC}"
 else
@@ -30,7 +30,7 @@ fi
 
 # Test 3: Test Bot API
 echo -n "3. Testing Bot API... "
-BOT_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/health 2>/dev/null || echo "000")
+BOT_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:7001/health 2>/dev/null || echo "000")
 if [ "$BOT_RESPONSE" = "200" ]; then
     echo -e "${GREEN}✓ Bot API responding${NC}"
 else
@@ -47,7 +47,7 @@ fi
 
 # Test 5: Test content generation
 echo -n "5. Testing content generation... "
-TEST_CONTENT=$(curl -s -X POST http://localhost:5055/ingest \
+TEST_CONTENT=$(curl -s -X POST http://localhost:7055/ingest \
     -H "Content-Type: application/json" \
     -d '{"domain":"hing.me","title":"Test Article","body":"This is a test article to verify the automation system is working correctly."}' 2>/dev/null)
 
@@ -67,7 +67,7 @@ fi
 
 # Test 6: Test keyword enqueuing
 echo -n "6. Testing keyword enqueuing... "
-KEYWORD_RESPONSE=$(curl -s -X POST http://localhost:5001/enqueue/keyword \
+KEYWORD_RESPONSE=$(curl -s -X POST http://localhost:7001/enqueue/keyword \
     -H "Content-Type: application/json" \
     -d '{"keyword":"test automation keyword"}' 2>/dev/null)
 

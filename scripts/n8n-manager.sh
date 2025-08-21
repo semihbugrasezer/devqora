@@ -5,7 +5,7 @@
 set -e
 
 # Configuration
-N8N_URL="${N8N_URL:-http://n8n.your-domain.com/api/v1}"
+N8N_URL="${N8N_URL:-http://localhost:7056/api/v1}"
 N8N_KEY="${N8N_KEY:-}"
 WORKFLOW_DIR="${WORKFLOW_DIR:-$(dirname "$0")/../workflows}"
 
