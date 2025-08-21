@@ -130,7 +130,7 @@
 
 ### **Content Not Generating:**
 - Verify Content API is running
-- Check API health: `http://localhost:5055/health`
+- Check API health: `http://localhost:7055/health`
 - Review Content API logs
 
 ---

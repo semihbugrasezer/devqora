@@ -23,7 +23,7 @@ def build_job(keyword: str):
     desc = draft_description(keyword)
     tags = pick_hashtags(keyword)
     link = random.choice(DOMAIN_ROTATION) if DOMAIN_ROTATION else "https://example.com"
-    out_img = f"/tmp/pin_{int(time.time())}.jpg"
+    out_img = f"/tmp/pin_{int(time.time())}_{random.randint(1000,9999)}.jpg"
     make_pin_image(keyword, out_img)
     
     return {

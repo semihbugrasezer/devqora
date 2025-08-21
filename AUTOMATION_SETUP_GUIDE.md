@@ -32,7 +32,7 @@ Your auto-adsense automation system is now running and ready to generate content
 - **Purpose**: Daily content generation and automation
 
 ### **Content API**
-- **URL**: http://localhost:5055
+- **URL**: http://localhost:7055
 - **Status**: 🟢 **Generating content automatically**
 - **Purpose**: Creates .astro pages for your sites
 

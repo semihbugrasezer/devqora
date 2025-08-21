@@ -4,4 +4,4 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY content_api.py .
 ENV CONTENT_ROOT=/content
-CMD ["python","/app/content_api.py"]
+CMD ["gunicorn","-w","2","-b","0.0.0.0:7055","content_api:app"]

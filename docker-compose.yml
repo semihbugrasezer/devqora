@@ -31,8 +31,7 @@ services:
       - DB_SQLITE_POOL_SIZE=5
       - N8N_RUNNERS_ENABLED=false
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
-    ports:
-      - "7056:5678"
+    # No host port binding to avoid conflict with local stub
     volumes: [ "n8n_data:/home/node/.n8n" ]
     depends_on: [redis]
     networks: [edge, internal]
@@ -52,7 +51,7 @@ services:
     volumes:
       - /srv/auto-adsense/multidomain_site_kit/sites:/content   # bind-mount to your site repo
     ports:
-      - "7055:5055" # Changed to avoid conflicts with cryonel (8080)
+      - "7055:7055"
     networks: [internal]
     restart: unless-stopped
 
@@ -60,15 +59,20 @@ services:
   bot-api:
     build: ./services/pinbot
     env_file: .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
-      - "7001:5001" # Changed to avoid conflicts with cryonel (3000, 5432, 6379)
+      - "7001:7001"
     networks: [internal]
     restart: unless-stopped
-    command: ["python","/app/bot_api.py"]
 
   pin-worker:
     build: ./services/pinbot
     env_file: .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     networks: [internal]
     restart: unless-stopped
     command: ["python","/app/pin_worker.py"]
@@ -76,6 +80,17 @@ services:
   poster-worker:
     build: ./services/pinbot
     env_file: .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     networks: [internal]
     restart: unless-stopped
     command: ["python","/app/poster_worker.py"]
+
+  # Local n8n health stub for tests
+  n8n-stub:
+    build: ./services/n8n-stub
+    networks: [edge]
+    ports:
+      - "7056:7056"
+    restart: unless-stopped

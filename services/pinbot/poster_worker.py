@@ -21,4 +21,11 @@ while True:
     job = json.loads(job_raw)
     res = post_to_tailwind(job) if USE_TAILWIND else post_to_pinterest(job)
     r.lpush("reports", json.dumps({"event":"posted","res":res,"job":job,"ts":time.time()}))
+    # Best-effort cleanup of temporary image files to prevent disk leaks
+    image_path = job.get("image_path")
+    if image_path and os.path.exists(image_path):
+        try:
+            os.remove(image_path)
+        except Exception:
+            pass
     time.sleep(random.randint(20,80))
