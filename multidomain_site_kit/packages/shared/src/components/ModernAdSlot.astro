@@ -1,0 +1,140 @@
+---
+// /srv/auto-adsense/multidomain_site_kit/packages/shared/src/components/ModernAdSlot.astro
+const { 
+  client, 
+  slot, 
+  format = "auto", 
+  style = "responsive",
+  layout = "in-article" // header, in-article, sidebar, footer
+} = Astro.props;
+
+// Different layouts for different ad positions
+const layouts = {
+  "header": {
+    container: "min-height: 90px; margin: 16px 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);",
+    size: "728x90",
+    responsive: true
+  },
+  "in-article": {
+    container: "min-height: 280px; margin: 32px 0; background: linear-gradient(135deg, #fefefe 0%, #f1f5f9 100%);",
+    size: "responsive",
+    responsive: true
+  },
+  "sidebar": {
+    container: "min-height: 600px; margin: 16px 0; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);",
+    size: "300x600",
+    responsive: false
+  },
+  "footer": {
+    container: "min-height: 250px; margin: 24px 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);",
+    size: "responsive",
+    responsive: true
+  }
+};
+
+const config = layouts[layout] || layouts["in-article"];
+---
+
+<div class="ad-slot-container" style={`
+  ${config.container}
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+`}>
+  <!-- Ad Label -->
+  <div style="
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+    color: #64748b;
+    background: rgba(255,255,255,0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  ">
+    Advertisement
+  </div>
+
+  <!-- AdSense Unit -->
+  <ins class="adsbygoogle"
+       style={`
+         display: block;
+         width: 100%;
+         height: 100%;
+         ${config.responsive ? 'min-height: inherit;' : ''}
+       `}
+       data-ad-client={client}
+       data-ad-slot={slot}
+       data-ad-format={config.responsive ? "auto" : config.size}
+       data-full-width-responsive={config.responsive ? "true" : "false"}>
+  </ins>
+
+  <!-- Fallback content if ads don't load -->
+  <noscript>
+    <div style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #64748b;
+      font-size: 14px;
+      text-align: center;
+      padding: 20px;
+    ">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style="margin-bottom: 12px; opacity: 0.5;">
+        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+        <path d="M9 9l6 6M15 9l-6 6" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <p>Enable JavaScript to view advertisements</p>
+    </div>
+  </noscript>
+</div>
+
+<!-- Initialize AdSense -->
+<script>
+  // Wait for page load to initialize ads
+  if (typeof window !== 'undefined') {
+    window.addEventListener('load', function() {
+      if (typeof adsbygoogle !== 'undefined') {
+        try {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+          console.log('AdSense initialization deferred');
+        }
+      }
+    });
+  }
+</script>
+
+<style>
+  .ad-slot-container {
+    transition: all 0.3s ease;
+  }
+  
+  .ad-slot-container:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .ad-slot-container {
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+  }
+  
+  /* Ensure ads don't cause layout shift */
+  .adsbygoogle {
+    min-height: inherit;
+  }
+</style>

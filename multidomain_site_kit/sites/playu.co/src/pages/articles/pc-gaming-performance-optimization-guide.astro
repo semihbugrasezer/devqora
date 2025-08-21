@@ -1,0 +1,15 @@
+---
+import Base from '@mdkit/shared/src/layouts/Base.astro'
+import AdSlot from '@mdkit/shared/src/components/AdSlot.astro'
+import domains from '../../config.json'
+const cfg = domains['playu.co']
+const title = "PC Gaming Performance Optimization Guide"
+const desc = "Maximize your gaming experience with our comprehensive PC performance optimization guide. Learn how to optimize graphics settings, update drivers, and configure"
+---
+<Base title={title} description={desc} locale={cfg.locale} adsenseClient={cfg.adsense_client}>
+  <h1>{title}</h1>
+  <AdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.in_article} />
+  <article>
+    Maximize your gaming experience with our comprehensive PC performance optimization guide. Learn how to optimize graphics settings, update drivers, and configure your system for the best gaming performance. We cover everything from basic optimizations to advanced tweaks that can significantly improve frame rates and reduce input lag. Discover the best practices for overclocking, memory management, and storage optimization to get the most out of your gaming rig.
+  </article>
+</Base>

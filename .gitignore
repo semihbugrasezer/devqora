@@ -1,0 +1,133 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# Docker & Containers
+docker-compose.override.yml
+.docker/
+redis_data/
+n8n_data/
+traefik_acme/
+content_data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+env/
+.venv/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# Generated Content
+services/pinbot/generated_pins/
+/tmp/pin_*.jpg
+generated_images/
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Logs & Reports
+logs/
+*.log
+reports/
+health_reports/
+status_logs/
+
+# Redis dumps
+dump.rdb
+*.rdb
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# SSL & Certificates
+ssl/
+certs/
+*.crt
+*.csr
+
+# API Credentials
+pinterest_credentials.json
+tailwind_credentials.json
+*_api_keys.json
+
+# Backups
+*.bak
+*.backup
+
+# Database
+*.sql
+*.dump
+*.db
+
+# Monitoring
+metrics/
+monitoring/
+
+# Wrangler & Cloudflare
+.wrangler/
+wrangler.toml.backup
+
+# Site builds (generated)
+sites/*/dist/
+sites/*/node_modules/
+sites/*/.astro/
+
+# Local dev
+.local/
+local_config/
+dev_override/
+
+# Archives
+*.zip
+*.tar.gz
+*.rar

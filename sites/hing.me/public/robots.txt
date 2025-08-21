@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://hing.me/sitemap.xml
+
+# Crawl-delay for search engines
+Crawl-delay: 1
+
+# Finance content - encourage indexing
+Allow: /articles/
+Allow: /calculators/
+Allow: /guides/
+
+# Ads.txt
+Allow: /ads.txt

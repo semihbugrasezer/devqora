@@ -1,0 +1,81 @@
+networks: { edge: { }, internal: { } }
+volumes: { traefik_acme: {}, n8n_data: {}, redis_data: {}, content_data: {} }
+
+services:
+  traefik:
+    image: traefik:v3.1
+    command:
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --log.level=INFO
+    ports: ["9090:80","9443:443","8081:8080"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks: [edge]
+    restart: unless-stopped
+
+  n8n:
+    image: n8nio/n8n:1.107.3
+    environment:
+      - TZ=${TZ}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_HOST=localhost
+      - N8N_PUBLIC_URL=http://localhost:7056
+      - WEBHOOK_URL=http://localhost:7056
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_SECURE_COOKIE=false
+      - DB_SQLITE_POOL_SIZE=5
+      - N8N_RUNNERS_ENABLED=false
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
+    ports:
+      - "7056:5678"
+    volumes: [ "n8n_data:/home/node/.n8n" ]
+    depends_on: [redis]
+    networks: [edge, internal]
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server","--appendonly","yes"]
+    volumes: [ "redis_data:/data" ]
+    networks: [internal]
+    restart: unless-stopped
+
+  # Content API (writes .astro pages into your site repo)
+  content-api:
+    build: ./services/content-api
+    env_file: .env
+    volumes:
+      - /srv/auto-adsense/multidomain_site_kit/sites:/content   # bind-mount to your site repo
+    ports:
+      - "7055:5055" # Changed to avoid conflicts with cryonel (8080)
+    networks: [internal]
+    restart: unless-stopped
+
+  # Pinterest bot API & workers
+  bot-api:
+    build: ./services/pinbot
+    env_file: .env
+    ports:
+      - "7001:5001" # Changed to avoid conflicts with cryonel (3000, 5432, 6379)
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python","/app/bot_api.py"]
+
+  pin-worker:
+    build: ./services/pinbot
+    env_file: .env
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python","/app/pin_worker.py"]
+
+  poster-worker:
+    build: ./services/pinbot
+    env_file: .env
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python","/app/poster_worker.py"]

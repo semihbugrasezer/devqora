@@ -1,0 +1,122 @@
+{
+  "name": "Mobile Finance Content Generator 2025",
+  "nodes": [
+    {
+      "parameters": {
+        "functionCode": "// Generate quality mobile-optimized financial content for 2025\nconst financeTopics = [\n  'mortgage rates and refinancing strategies 2025',\n  'mobile-first investment portfolio management',\n  'cryptocurrency investment basics for beginners',\n  'emergency fund planning in high inflation environment',\n  'tax optimization strategies for 2025',\n  'debt consolidation with rising interest rates',\n  'retirement planning for millennials and gen z',\n  'real estate investment in 2025 market'\n];\n\nconst randomTopic = financeTopics[Math.floor(Math.random() * financeTopics.length)];\n\nconst title = `${randomTopic.charAt(0).toUpperCase() + randomTopic.slice(1)} - Complete Guide 2025`;\n\nconst body = `# ${title}\n\n## Introduction\n\nIn 2025's evolving financial landscape, understanding ${randomTopic} is crucial for building wealth and achieving financial security. This comprehensive mobile-optimized guide provides expert insights and actionable strategies.\n\n## Why This Matters in 2025\n\n- Economic conditions continue to evolve post-pandemic\n- Interest rates and inflation impact all financial decisions\n- Mobile-first financial tools are becoming the norm\n- Digital financial literacy is more important than ever\n\n## Key Strategies\n\n### Strategy 1: Assessment and Planning\nEvaluate your current financial position using modern tools and mobile apps that make tracking easier than ever.\n\n### Strategy 2: Implementation\nTake advantage of 2025's financial technology to implement your strategy efficiently.\n\n### Strategy 3: Monitoring and Adjustment\nUse mobile dashboards and real-time alerts to stay on track with your financial goals.\n\n## 2025-Specific Considerations\n\n1. **Inflation Impact**: How current economic conditions affect this strategy\n2. **Technology Integration**: Leveraging mobile apps and fintech solutions\n3. **Regulatory Changes**: New rules and regulations for 2025\n4. **Market Conditions**: Current market trends and projections\n\n## Mobile-Optimized Action Steps\n\n✅ **Week 1**: Download recommended apps and set up tracking\n✅ **Week 2**: Implement basic strategy using mobile tools\n✅ **Week 3**: Monitor progress and make adjustments\n✅ **Week 4**: Optimize and scale your approach\n\n## Expert Tips for 2025\n\n- Prioritize mobile-accessible financial accounts\n- Use automation to reduce manual financial management\n- Stay informed about changing economic conditions\n- Leverage AI-powered financial advisory tools\n\n## Conclusion\n\nMastering ${randomTopic} in 2025 requires adapting to new technologies and economic realities. Start implementing these mobile-optimized strategies today for better financial outcomes.\n\n*Ready to take action? Use our responsive calculators and mobile-friendly tools designed for 2025's financial landscape.*`;\n\nreturn [{\n  json: {\n    keyword: randomTopic,\n    domain: 'hing.me',\n    title: title,\n    body: body,\n    timestamp: new Date().toISOString(),\n    slug: randomTopic.toLowerCase().replace(/\\s+/g, '-').replace(/[^a-z0-9-]/g, '')\n  }\n}];"
+      },
+      "id": "content-generator-2025",
+      "name": "Generate Mobile Content 2025",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:7055/ingest",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        },
+        "httpMethod": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "domain",
+              "value": "={{$json.domain}}"
+            },
+            {
+              "name": "title", 
+              "value": "={{$json.title}}"
+            },
+            {
+              "name": "body",
+              "value": "={{$json.body}}"
+            },
+            {
+              "name": "slug",
+              "value": "={{$json.slug}}"
+            }
+          ]
+        }
+      },
+      "id": "create-article-2025",
+      "name": "Create Mobile Article",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:7001/enqueue/keyword",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        },
+        "httpMethod": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "keyword",
+              "value": "={{$json.keyword}}"
+            }
+          ]
+        }
+      },
+      "id": "enqueue-pinterest-2025",
+      "name": "Queue Pinterest Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 400]
+    }
+  ],
+  "connections": {
+    "Generate Mobile Content 2025": {
+      "main": [
+        [
+          {
+            "node": "Create Mobile Article",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Queue Pinterest Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1"
+}

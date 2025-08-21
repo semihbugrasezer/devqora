@@ -1,0 +1,27 @@
+{
+  "hing.me": {
+    "locale": "en-US",
+    "country": "US",
+    "adsense_client": "ca-pub-XXXXXXX",
+    "adsense_slots": {
+      "header": "111",
+      "in_article": "112",
+      "footer": "113"
+    },
+    "title": "Hing.me - Finance & Investment Guides",
+    "description": "Expert guides, calculators, and tools for smart financial decisions."
+  },
+  "playu.co": {
+    "locale": "en-US",
+    "country": "US",
+    "adsense_client": "ca-pub-9876543210987654",
+    "adsense_slots": {
+      "header": "5555555555",
+      "in_article": "6666666666",
+      "footer": "7777777777",
+      "sidebar": "8888888888"
+    },
+    "title": "PlayU.co - Gaming & Entertainment Hub",
+    "description": "Gaming guides, reviews, and entertainment content for enthusiasts."
+  }
+}

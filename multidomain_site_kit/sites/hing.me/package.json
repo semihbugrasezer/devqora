@@ -1,0 +1,16 @@
+{
+  "name": "site-hing.me",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": { 
+    "dev": "astro dev", 
+    "build": "astro build", 
+    "preview": "astro preview",
+    "wrangler:dev": "npx wrangler pages dev dist --port 4000",
+    "deploy": "./deploy.sh",
+    "deploy:preview": "npx wrangler pages deploy dist --project-name hing-me --env preview",
+    "deploy:production": "npx wrangler pages deploy dist --project-name hing-me --env production"
+  },
+  "dependencies": { "astro":"^4.10.0", "@mdkit/shared":"file:../../packages/shared" }
+}

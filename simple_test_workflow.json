@@ -1,0 +1,24 @@
+{
+  "name": "Simple Test Workflow",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": [
+          {
+            "mode": "everyDay",
+            "hour": 10
+          }
+        ]
+      },
+      "id": "test_trigger",
+      "name": "Test Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [200, 300]
+    }
+  ],
+  "connections": {}
+}

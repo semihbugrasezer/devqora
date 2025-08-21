@@ -1,0 +1,353 @@
+---
+import ModernFinanceBase from '@mdkit/shared/src/layouts/ModernFinanceBase.astro'
+import domains from '../../config.json'
+const cfg = domains['hing.me']
+---
+<ModernFinanceBase title="Loan Payoff Calculator - Hing.me" description="Calculate how long it will take to pay off your loan and how much interest you'll pay. Plan your debt payoff strategy." locale={cfg.locale}>
+  <div class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Loan Payoff Calculator</h1>
+        <p>See how long it will take to pay off your debt and plan your financial freedom</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <div class="calculator-wrapper">
+        <div class="calculator-card">
+          <h2>Debt Payoff Calculator</h2>
+          <div id="loan-app"></div>
+          <div class="payoff-strategies">
+            <h3>Debt Payoff Strategies</h3>
+            <ul>
+              <li><strong>Debt Snowball:</strong> Pay minimums on all debts, extra on smallest balance</li>
+              <li><strong>Debt Avalanche:</strong> Pay minimums on all debts, extra on highest interest rate</li>
+              <li><strong>Debt Consolidation:</strong> Combine multiple debts into one lower-rate loan</li>
+              <li><strong>Extra Payments:</strong> Any additional payment goes directly to principal</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="info-card">
+          <h3>Tips to Pay Off Debt Faster</h3>
+          <ul>
+            <li>Make bi-weekly payments instead of monthly</li>
+            <li>Apply windfalls (tax refunds, bonuses) to principal</li>
+            <li>Cut expenses and put savings toward debt</li>
+            <li>Consider a side hustle for extra income</li>
+            <li>Negotiate with creditors for lower rates</li>
+          </ul>
+          
+          <h3>Why Pay Off Debt Early?</h3>
+          <ul>
+            <li><strong>Save Interest:</strong> Reduce total cost significantly</li>
+            <li><strong>Improve Credit:</strong> Lower debt-to-income ratio</li>
+            <li><strong>Reduce Stress:</strong> Financial peace of mind</li>
+            <li><strong>Free Up Cash:</strong> More money for goals and savings</li>
+          </ul>
+          
+          <div class="warning-box">
+            <h4>⚠️ Important Note</h4>
+            <p>Always maintain a small emergency fund (even $500-1000) before aggressively paying down debt.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const el = document.getElementById('loan-app')
+    el.innerHTML = `
+      <div class="input-group">
+        <label for="bal">Current Balance ($)</label>
+        <input id="bal" type="number" value="15000" placeholder="15,000" min="0">
+      </div>
+      <div class="input-group">
+        <label for="apr2">Interest Rate (% APR)</label>
+        <input id="apr2" type="number" value="18" step="0.01" placeholder="18.0" min="0" max="50">
+      </div>
+      <div class="input-group">
+        <label for="pay">Monthly Payment ($)</label>
+        <input id="pay" type="number" value="400" placeholder="400" min="0">
+      </div>
+      <div class="input-group">
+        <label for="extra">Extra Monthly Payment ($)</label>
+        <input id="extra" type="number" value="0" placeholder="0" min="0">
+      </div>
+      <div class="result-section">
+        <div class="result-comparison">
+          <div class="result-column">
+            <h4>Current Plan</h4>
+            <div class="result-item">
+              <span>Payoff Time:</span>
+              <span id="months-current">0 months</span>
+            </div>
+            <div class="result-item">
+              <span>Total Interest:</span>
+              <span id="interest-current">$0</span>
+            </div>
+            <div class="result-item">
+              <span>Total Paid:</span>
+              <span id="total-current">$0</span>
+            </div>
+          </div>
+          <div class="result-column with-extra">
+            <h4>With Extra Payment</h4>
+            <div class="result-item">
+              <span>Payoff Time:</span>
+              <span id="months-extra">0 months</span>
+            </div>
+            <div class="result-item">
+              <span>Total Interest:</span>
+              <span id="interest-extra">$0</span>
+            </div>
+            <div class="result-item">
+              <span>Total Paid:</span>
+              <span id="total-extra">$0</span>
+            </div>
+            <div class="savings">
+              <strong>Savings: <span id="savings">$0</span></strong>
+            </div>
+          </div>
+        </div>
+      </div>`
+      
+    function calculatePayoff(balance, rate, payment) {
+      if (balance <= 0 || payment <= 0) return { months: 0, totalInterest: 0, totalPaid: balance }
+      
+      const monthlyRate = rate / 100 / 12
+      let remainingBalance = balance
+      let months = 0
+      let totalInterest = 0
+      
+      // Check if payment covers interest
+      const monthlyInterest = balance * monthlyRate
+      if (payment <= monthlyInterest) {
+        return { months: Infinity, totalInterest: Infinity, totalPaid: Infinity }
+      }
+      
+      while (remainingBalance > 0.01 && months < 600) {
+        const interestPayment = remainingBalance * monthlyRate
+        const principalPayment = Math.min(payment - interestPayment, remainingBalance)
+        
+        totalInterest += interestPayment
+        remainingBalance -= principalPayment
+        months++
+      }
+      
+      return {
+        months: months >= 600 ? Infinity : months,
+        totalInterest: totalInterest,
+        totalPaid: balance + totalInterest
+      }
+    }
+    
+    function formatCurrency(amount) {
+      if (amount === Infinity) return "Never pays off"
+      return '$' + amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    }
+    
+    function formatMonths(months) {
+      if (months === Infinity) return "Never"
+      const years = Math.floor(months / 12)
+      const remainingMonths = months % 12
+      if (years > 0) {
+        return years + ' yr' + (years > 1 ? 's' : '') + (remainingMonths > 0 ? ' ' + remainingMonths + ' mo' : '')
+      }
+      return months + ' month' + (months > 1 ? 's' : '')
+    }
+    
+    function calculate() {
+      const balance = parseFloat(document.getElementById('bal').value || 0)
+      const rate = parseFloat(document.getElementById('apr2').value || 0)
+      const payment = parseFloat(document.getElementById('pay').value || 0)
+      const extraPayment = parseFloat(document.getElementById('extra').value || 0)
+      
+      // Current plan calculation
+      const current = calculatePayoff(balance, rate, payment)
+      document.getElementById('months-current').textContent = formatMonths(current.months)
+      document.getElementById('interest-current').textContent = formatCurrency(current.totalInterest)
+      document.getElementById('total-current').textContent = formatCurrency(current.totalPaid)
+      
+      // With extra payment calculation
+      const withExtra = calculatePayoff(balance, rate, payment + extraPayment)
+      document.getElementById('months-extra').textContent = formatMonths(withExtra.months)
+      document.getElementById('interest-extra').textContent = formatCurrency(withExtra.totalInterest)
+      document.getElementById('total-extra').textContent = formatCurrency(withExtra.totalPaid)
+      
+      // Savings calculation
+      const savings = current.totalPaid - withExtra.totalPaid
+      document.getElementById('savings').textContent = formatCurrency(savings >= 0 ? savings : 0)
+    }
+    
+    ['bal', 'apr2', 'pay', 'extra'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calculate)
+    })
+    
+    calculate() // Initial calculation
+  </script>
+
+  <style>
+    .calculator-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .calculator-card, .info-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .calculator-card h2 {
+      color: var(--secondary);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .result-section {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .result-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    
+    .result-column {
+      background: var(--bg);
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+    
+    .result-column h4 {
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+    
+    .with-extra {
+      border: 2px solid var(--accent);
+    }
+    
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+    
+    .result-item span:first-child {
+      color: var(--text-light);
+    }
+    
+    .result-item span:last-child {
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .savings {
+      text-align: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 2px solid var(--accent);
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+    
+    .info-card h3 {
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .info-card ul {
+      margin: 0 0 2rem 1rem;
+    }
+    
+    .info-card li {
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    
+    .payoff-strategies {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .warning-box {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .warning-box h4 {
+      color: #856404;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+    
+    .warning-box p {
+      color: #856404;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .calculator-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .calculator-card, .info-card {
+        padding: 1.5rem;
+      }
+      
+      .result-comparison {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+  </style>
+</ModernFinanceBase>

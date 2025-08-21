@@ -1,0 +1,46 @@
+---
+import Base from '@mdkit/shared/src/layouts/Base.astro'
+import AdSlot from '@mdkit/shared/src/components/AdSlot.astro'
+import domains from '../config.json'
+const cfg = domains['playu.co']
+---
+<Base title={cfg.title} description={cfg.description} locale={cfg.locale} adsenseClient={cfg.adsense_client}>
+  <div class="hero">
+    <h1>🎮 PlayU.co</h1>
+    <p>Your Ultimate Gaming & Entertainment Hub - Expert guides, reviews, and gaming strategies</p>
+  </div>
+
+  <div class="card">
+    <AdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.header} />
+    <h2>Welcome to the Gaming Universe</h2>
+    <p>Discover the latest gaming trends, expert strategies, and comprehensive guides to level up your gaming experience.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <h3>📚 Gaming Articles</h3>
+      <p>Expert insights on gaming strategies and entertainment</p>
+      <a href="/articles/hello-auto" class="btn">Read Articles</a>
+    </div>
+    <div class="feature">
+      <h3>🎯 Gaming Guides</h3>
+      <p>Comprehensive guides for beginners and pros</p>
+      <a href="/articles/gaming-setup-guide" class="btn">View Guides</a>
+    </div>
+    <div class="feature">
+      <h3>⭐ Game Reviews</h3>
+      <p>Honest reviews of the latest games and releases</p>
+      <a href="/reviews" class="btn">Read Reviews</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Latest Gaming Content</h2>
+    <ul>
+      <li><a href="/articles/hello-auto">Welcome to PlayU.co</a></li>
+      <li><a href="/articles/gaming-setup-guide">Ultimate Gaming Setup Guide</a></li>
+      <li><a href="/articles/pc-gaming-performance-optimization-guide">PC Gaming Performance Optimization Guide</a></li>
+      <li><a href="/articles/automation-test-article">Automation Test Article</a></li>
+    </ul>
+  </div>
+</Base>

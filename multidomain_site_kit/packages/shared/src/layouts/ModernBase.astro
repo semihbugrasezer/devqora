@@ -1,0 +1,165 @@
+---
+// /srv/auto-adsense/multidomain_site_kit/packages/shared/src/layouts/ModernBase.astro
+const { title, description, locale, adsenseClient, niche = "finance" } = Astro.props;
+
+// High-CTR color schemes by niche
+const themes = {
+  finance: {
+    primary: "#2563eb", // Blue for trust
+    accent: "#16a34a", // Green for money
+    bg: "#f8fafc",
+    text: "#1e293b"
+  },
+  tech: {
+    primary: "#7c3aed", // Purple for innovation
+    accent: "#f59e0b", // Orange for energy
+    bg: "#fafafa", 
+    text: "#18181b"
+  },
+  health: {
+    primary: "#dc2626", // Red for urgency
+    accent: "#059669", // Teal for health
+    bg: "#fefefe",
+    text: "#1f2937"
+  }
+};
+
+const theme = themes[niche] || themes.finance;
+---
+
+<!DOCTYPE html>
+<html lang={locale} class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Critical CSS for fast rendering -->
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6; 
+        color: {theme.text};
+        background: {theme.bg};
+      }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+      .btn { 
+        display: inline-block; 
+        padding: 12px 24px; 
+        background: {theme.primary}; 
+        color: white; 
+        text-decoration: none; 
+        border-radius: 8px; 
+        font-weight: 600;
+        transition: all 0.2s;
+      }
+      .btn:hover { background: {theme.accent}; transform: translateY(-1px); }
+      .ad-container { 
+        min-height: 280px; 
+        margin: 24px 0; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        background: #fafafa;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        position: relative;
+      }
+      .header-sticky { 
+        position: sticky; 
+        top: 0; 
+        z-index: 100; 
+        background: rgba(255,255,255,0.95); 
+        backdrop-filter: blur(10px); 
+        border-bottom: 1px solid #e5e7eb;
+      }
+    </style>
+    
+    <!-- AdSense Script -->
+    <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`} crossorigin="anonymous"></script>
+    
+    <!-- Analytics & Performance -->
+    <script>
+      // Web Vitals tracking
+      function sendWebVitals() {
+        import('https://unpkg.com/web-vitals@3').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+          getCLS(console.log); getFID(console.log); getFCP(console.log); getLCP(console.log); getTTFB(console.log);
+        });
+      }
+      if (document.readyState === 'complete') sendWebVitals();
+      else window.addEventListener('load', sendWebVitals);
+    </script>
+  </head>
+  
+  <body>
+    <!-- Header -->
+    <header class="header-sticky">
+      <div class="container">
+        <nav style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="8" fill={theme.primary}/>
+              <path d="M8 16h16M16 8v16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span style="font-size: 24px; font-weight: 700; color: {theme.primary};">
+              {title.split(' ')[0]}
+            </span>
+          </div>
+          
+          <div style="display: flex; gap: 24px; align-items: center;">
+            <a href="/" style="text-decoration: none; color: {theme.text}; font-weight: 500;">Home</a>
+            <a href="/calculators" style="text-decoration: none; color: {theme.text}; font-weight: 500;">Tools</a>
+            <a href="/guides" style="text-decoration: none; color: {theme.text}; font-weight: 500;">Guides</a>
+            <a href="/about" class="btn" style="font-size: 14px; padding: 8px 16px;">Get Started</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main style="min-height: 80vh;">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #1f2937; color: #d1d5db; padding: 48px 0 24px;">
+      <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px; margin-bottom: 32px;">
+          <div>
+            <h3 style="color: white; margin-bottom: 16px; font-size: 18px;">Quick Tools</h3>
+            <ul style="list-style: none; gap: 8px; display: flex; flex-direction: column;">
+              <li><a href="/calculators/mortgage" style="color: #d1d5db; text-decoration: none;">Mortgage Calculator</a></li>
+              <li><a href="/calculators/loan" style="color: #d1d5db; text-decoration: none;">Loan Calculator</a></li>
+              <li><a href="/calculators/investment" style="color: #d1d5db; text-decoration: none;">Investment Tracker</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="color: white; margin-bottom: 16px; font-size: 18px;">Popular Guides</h3>
+            <ul style="list-style: none; gap: 8px; display: flex; flex-direction: column;">
+              <li><a href="/guides/first-time-buyer" style="color: #d1d5db; text-decoration: none;">First-Time Buyer</a></li>
+              <li><a href="/guides/refinancing" style="color: #d1d5db; text-decoration: none;">Refinancing Guide</a></li>
+              <li><a href="/guides/credit-score" style="color: #d1d5db; text-decoration: none;">Credit Score Tips</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="color: white; margin-bottom: 16px; font-size: 18px;">Resources</h3>
+            <ul style="list-style: none; gap: 8px; display: flex; flex-direction: column;">
+              <li><a href="/privacy" style="color: #d1d5db; text-decoration: none;">Privacy Policy</a></li>
+              <li><a href="/terms" style="color: #d1d5db; text-decoration: none;">Terms of Service</a></li>
+              <li><a href="/contact" style="color: #d1d5db; text-decoration: none;">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div style="border-top: 1px solid #374151; padding-top: 24px; text-align: center;">
+          <p>© <span id="year"></span> {title.split(' ')[0]}. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+---
+import ModernFinanceBase from '@mdkit/shared/src/layouts/ModernFinanceBase.astro'
+import domains from '../config.json'
+const cfg = domains['hing.me']
+---
+<ModernFinanceBase title="Financial Calculators - Hing.me" description="Free financial calculators and tools for smart money decisions" locale={cfg.locale}>
+  <div class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Financial Calculators</h1>
+        <p>Powerful tools to help you make informed financial decisions and plan your future</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">Available Tools</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>🏠 Mortgage Calculator</h3>
+          <p>Calculate monthly mortgage payments, total interest, and affordability based on your income and down payment.</p>
+          <ul>
+            <li>Monthly payment estimation</li>
+            <li>Total interest calculation</li>
+            <li>Amortization schedule</li>
+            <li>PMI calculation</li>
+          </ul>
+          <a href="/calculators/mortgage" class="btn">Use Calculator</a>
+        </div>
+        
+        <div class="card">
+          <h3>💳 Loan Payoff Calculator</h3>
+          <p>Plan your debt payoff strategy and see how extra payments can save you money and time.</p>
+          <ul>
+            <li>Payoff timeline</li>
+            <li>Interest savings</li>
+            <li>Extra payment impact</li>
+            <li>Payment schedule</li>
+          </ul>
+          <a href="/calculators/loan" class="btn">Use Calculator</a>
+        </div>
+        
+        <div class="card coming-soon">
+          <h3>💰 Investment Calculator</h3>
+          <p>Calculate compound growth, retirement savings, and investment returns over time.</p>
+          <ul>
+            <li>Compound interest</li>
+            <li>Retirement planning</li>
+            <li>ROI calculation</li>
+            <li>Goal tracking</li>
+          </ul>
+          <div class="btn disabled">Coming Soon</div>
+        </div>
+        
+        <div class="card coming-soon">
+          <h3>📊 Budget Calculator</h3>
+          <p>Create and track your monthly budget with our comprehensive budgeting tool.</p>
+          <ul>
+            <li>Income tracking</li>
+            <li>Expense categories</li>
+            <li>Savings goals</li>
+            <li>Budget analysis</li>
+          </ul>
+          <div class="btn disabled">Coming Soon</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .coming-soon {
+      opacity: 0.7;
+    }
+    
+    .card ul {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+    }
+    
+    .card li {
+      padding: 0.3rem 0;
+      color: var(--text-light);
+    }
+    
+    .card li:before {
+      content: "✓ ";
+      color: var(--accent);
+      font-weight: bold;
+    }
+    
+    .btn.disabled {
+      background: var(--border);
+      cursor: not-allowed;
+      pointer-events: none;
+      color: var(--text-light);
+    }
+  </style>
+</ModernFinanceBase>

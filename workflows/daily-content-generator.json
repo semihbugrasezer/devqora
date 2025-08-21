@@ -1,0 +1,297 @@
+{
+    "name": "Daily Content Generator + Pinterest Automation",
+    "nodes": [
+        {
+            "parameters": {
+                "triggerTimes": [
+                    {
+                        "mode": "everyDay",
+                        "hour": 9,
+                        "minute": 0
+                    }
+                ]
+            },
+            "id": "daily-trigger",
+            "name": "Daily Trigger 09:00",
+            "type": "n8n-nodes-base.cron",
+            "typeVersion": 2,
+            "position": [
+                200,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.publicapis.org/entries",
+                "responseFormat": "json",
+                "options": {
+                    "timeout": 10000
+                }
+            },
+            "id": "fetch-seed-data",
+            "name": "Fetch Seed Data",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Generate keywords for high-CPC niches\nconst highCPCNiches = [\n  'mortgage calculator',\n  'loan calculator', \n  'insurance quotes',\n  'credit score check',\n  'investment advice',\n  'tax calculator',\n  'business loan',\n  'refinance rates',\n  'crypto trading',\n  'web hosting'\n];\n\nconst out = [];\nconst entries = $json.entries || [];\n\n// Generate 10 keywords mixing APIs with high-CPC terms\nfor (let i = 0; i < Math.min(10, entries.length); i++) {\n  const api = entries[i];\n  const niche = highCPCNiches[i % highCPCNiches.length];\n  \n  const keywords = [\n    `${api.API} ${niche} guide`,\n    `how to use ${api.API} for ${niche}`,\n    `${api.Category} ${niche} tutorial`,\n    `best ${niche} tools`,\n    `${niche} comparison 2024`\n  ];\n  \n  // Pick random keyword\n  const keyword = keywords[Math.floor(Math.random() * keywords.length)];\n  \n  out.push({\n    json: {\n      keyword: keyword,\n      category: api.Category || 'General',\n      description: api.Description || '',\n      source_api: api.API\n    }\n  });\n}\n\nreturn out;"
+            },
+            "id": "generate-keywords",
+            "name": "Generate High-CPC Keywords",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [
+                700,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://bot-api:5001/enqueue/keyword",
+                "requestMethod": "POST",
+                "responseFormat": "json",
+                "jsonParameters": true,
+                "parametersJson": "={{ { \"keyword\": $json.keyword } }}",
+                "options": {
+                    "timeout": 5000
+                }
+            },
+            "id": "enqueue-pinterest-keyword",
+            "name": "Enqueue Pinterest Keyword",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                950,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Generate article content for the keyword\nconst keyword = $json.keyword;\nconst category = $json.category || 'General';\n\n// Templates for different content types\nconst templates = {\n  calculator: {\n    title: `${keyword} - Free Online Calculator`,\n    content: `\n<h2>What is ${keyword}?</h2>\n<p>Our ${keyword} helps you make informed financial decisions quickly and accurately.</p>\n\n<h2>How to Use This Calculator</h2>\n<ol>\n  <li>Enter your financial details in the form above</li>\n  <li>Review the calculated results</li>\n  <li>Use the insights to make your decision</li>\n</ol>\n\n<h2>Benefits of Using ${keyword}</h2>\n<ul>\n  <li>Save time with instant calculations</li>\n  <li>Make informed financial decisions</li>\n  <li>Compare different scenarios</li>\n  <li>Free and easy to use</li>\n</ul>\n\n<h2>Frequently Asked Questions</h2>\n<h3>Is this ${keyword} accurate?</h3>\n<p>Yes, our calculator uses industry-standard formulas and is regularly updated.</p>\n\n<h3>Can I save my calculations?</h3>\n<p>You can bookmark the page or take a screenshot of your results.</p>\n    `\n  },\n  guide: {\n    title: `Complete Guide to ${keyword}`,\n    content: `\n<h2>Understanding ${keyword}</h2>\n<p>This comprehensive guide covers everything you need to know about ${keyword}.</p>\n\n<h2>Step-by-Step Process</h2>\n<ol>\n  <li>Research your options thoroughly</li>\n  <li>Compare different providers</li>\n  <li>Calculate costs and benefits</li>\n  <li>Make an informed decision</li>\n</ol>\n\n<h2>Key Factors to Consider</h2>\n<ul>\n  <li>Cost and fees</li>\n  <li>Terms and conditions</li>\n  <li>Customer service quality</li>\n  <li>Reviews and ratings</li>\n</ul>\n\n<h2>Common Mistakes to Avoid</h2>\n<p>Learn from others' experiences and avoid these common pitfalls when dealing with ${keyword}.</p>\n\n<h2>Expert Tips</h2>\n<p>Get insider knowledge from industry experts to maximize your success with ${keyword}.</p>\n    `\n  },\n  comparison: {\n    title: `${keyword} Comparison 2024`,\n    content: `\n<h2>Best ${keyword} Options in 2024</h2>\n<p>We've analyzed the top options for ${keyword} to help you choose the best one.</p>\n\n<h2>Comparison Criteria</h2>\n<ul>\n  <li>Features and functionality</li>\n  <li>Pricing and value</li>\n  <li>User experience</li>\n  <li>Customer support</li>\n  <li>Security and reliability</li>\n</ul>\n\n<h2>Top Recommendations</h2>\n<h3>Best Overall</h3>\n<p>Our top pick balances features, price, and reliability.</p>\n\n<h3>Best Value</h3>\n<p>Get the most bang for your buck with this option.</p>\n\n<h3>Premium Choice</h3>\n<p>For those who want the best features and don't mind paying more.</p>\n\n<h2>Final Thoughts</h2>\n<p>Choose the ${keyword} option that best fits your specific needs and budget.</p>\n    `\n  }\n};\n\n// Determine content type based on keyword\nlet contentType = 'guide';\nif (keyword.includes('calculator')) contentType = 'calculator';\nif (keyword.includes('comparison')) contentType = 'comparison';\n\nconst template = templates[contentType];\n\nreturn [{\n  json: {\n    keyword: keyword,\n    title: template.title,\n    body: template.content,\n    category: category,\n    slug: keyword.toLowerCase().replace(/[^a-zA-Z0-9\\s]/g, '').replace(/\\s+/g, '-').substring(0, 80)\n  }\n}];"
+            },
+            "id": "generate-article-content",
+            "name": "Generate Article Content",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [
+                950,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://content-api:5055/ingest",
+                "requestMethod": "POST",
+                "responseFormat": "json",
+                "jsonParameters": true,
+                "parametersJson": "={{ { \"domain\": \"example.com\", \"title\": $json.title, \"body\": $json.body, \"slug\": $json.slug } }}",
+                "options": {
+                    "timeout": 10000
+                }
+            },
+            "id": "create-article",
+            "name": "Create Article",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1200,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Build domain rotation for multiple sites\nconst domains = ['example.com', 'example-two.com']; // Add your domains here\nconst keyword = $input.first().json.keyword;\nconst slug = $input.first().json.slug;\n\nconst results = [];\n\n// Create articles for each domain\nfor (const domain of domains) {\n  results.push({\n    json: {\n      domain: domain,\n      title: $input.first().json.title,\n      body: $input.first().json.body,\n      slug: slug,\n      keyword: keyword\n    }\n  });\n}\n\nreturn results;"
+            },
+            "id": "multi-domain-distributor",
+            "name": "Multi-Domain Distributor",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [
+                950,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://content-api:5055/ingest",
+                "requestMethod": "POST",
+                "responseFormat": "json",
+                "jsonParameters": true,
+                "parametersJson": "={{ { \"domain\": $json.domain, \"title\": $json.title, \"body\": $json.body, \"slug\": $json.slug } }}",
+                "options": {
+                    "timeout": 10000
+                }
+            },
+            "id": "create-multi-domain-articles",
+            "name": "Create Multi-Domain Articles",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1200,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "command": "cd /opt/multidomain_site_kit && for d in sites/*; do (cd \"$d\" && pnpm build); done",
+                "options": {
+                    "timeout": 300
+                }
+            },
+            "id": "build-sites",
+            "name": "Build All Sites",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                1450,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "command": "cd /opt/multidomain_site_kit && for d in sites/*; do DOMAIN=$(basename \"$d\"); PROJECT=${DOMAIN//./-}; npx wrangler pages deploy \"$d/dist\" --project-name \"$PROJECT\"; done",
+                "options": {
+                    "timeout": 600
+                }
+            },
+            "id": "deploy-to-cloudflare",
+            "name": "Deploy to Cloudflare Pages",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                1700,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://bot-api:5001/stats",
+                "responseFormat": "json",
+                "options": {
+                    "timeout": 5000
+                }
+            },
+            "id": "check-bot-stats",
+            "name": "Check Bot Stats",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1200,
+                800
+            ]
+        }
+    ],
+    "connections": {
+        "Daily Trigger 09:00": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Seed Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Seed Data": {
+            "main": [
+                [
+                    {
+                        "node": "Generate High-CPC Keywords",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate High-CPC Keywords": {
+            "main": [
+                [
+                    {
+                        "node": "Enqueue Pinterest Keyword",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Generate Article Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Article Content": {
+            "main": [
+                [
+                    {
+                        "node": "Create Article",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Multi-Domain Distributor",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Multi-Domain Distributor": {
+            "main": [
+                [
+                    {
+                        "node": "Create Multi-Domain Articles",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Article": {
+            "main": [
+                [
+                    {
+                        "node": "Build All Sites",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create Multi-Domain Articles": {
+            "main": [
+                [
+                    {
+                        "node": "Build All Sites",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Build All Sites": {
+            "main": [
+                [
+                    {
+                        "node": "Deploy to Cloudflare Pages",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Check Bot Stats",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+      "settings": {
+    "timezone": "Europe/Istanbul"
+  }
+}

@@ -1,0 +1,72 @@
+---
+import ModernFinanceBase from '@mdkit/shared/src/layouts/ModernFinanceBase.astro'
+import domains from '../config.json'
+const cfg = domains['hing.me']
+---
+<ModernFinanceBase title="Finance Guides - Hing.me" description="Comprehensive financial guides and step-by-step tutorials for 2025" locale={cfg.locale}>
+  <div class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Financial Guides & Tutorials</h1>
+        <p>Step-by-step guides to help you master your finances and build wealth in 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">Popular Guides</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>🏠 Complete Mortgage Guide</h3>
+          <p>Everything you need to know about getting a mortgage in 2025, from pre-approval to closing.</p>
+          <a href="/articles/mortgage-guide-2025" class="btn">Read Guide</a>
+        </div>
+        
+        <div class="card">
+          <h3>💰 Investment Basics</h3>
+          <p>Learn the fundamentals of investing, from stocks to bonds to building a diversified portfolio.</p>
+          <a href="/articles/investment-basics-2025" class="btn">Start Learning</a>
+        </div>
+        
+        <div class="card">
+          <h3>💳 Debt Management</h3>
+          <p>Proven strategies to pay off debt faster and regain financial freedom.</p>
+          <a href="/calculators/loan" class="btn">Use Calculator</a>
+        </div>
+        
+        <div class="card">
+          <h3>📊 Financial Planning</h3>
+          <p>Create a comprehensive financial plan that works for your lifestyle and goals.</p>
+          <a href="/calculators" class="btn">Explore Tools</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+      <h2 class="section-title">Financial Tools</h2>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>🧮 Mortgage Calculator</h3>
+          <p>Calculate monthly payments and total interest</p>
+          <a href="/calculators/mortgage" class="btn">Use Tool</a>
+        </div>
+        
+        <div class="card">
+          <h3>💸 Loan Payoff Calculator</h3>
+          <p>Plan your debt payoff strategy</p>
+          <a href="/calculators/loan" class="btn">Use Tool</a>
+        </div>
+        
+        <div class="card">
+          <h3>📈 All Calculators</h3>
+          <p>Access our complete suite of financial tools</p>
+          <a href="/calculators" class="btn">View All</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ModernFinanceBase>

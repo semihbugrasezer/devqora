@@ -1,0 +1,268 @@
+---
+// /srv/auto-adsense/multidomain_site_kit/packages/shared/src/components/MortgageCalculator.astro
+const { theme = "finance" } = Astro.props;
+
+const themes = {
+  finance: { primary: "#2563eb", accent: "#16a34a", bg: "#f8fafc" },
+  tech: { primary: "#7c3aed", accent: "#f59e0b", bg: "#fafafa" }
+};
+
+const colors = themes[theme] || themes.finance;
+---
+
+<div class="calculator-container" style={`
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: 1px solid #e5e7eb;
+  max-width: 600px;
+  margin: 0 auto;
+`}>
+  <div style="text-align: center; margin-bottom: 32px;">
+    <h2 style={`color: ${colors.primary}; font-size: 28px; font-weight: 700; margin-bottom: 8px;`}>
+      💰 Mortgage Calculator
+    </h2>
+    <p style="color: #64748b; font-size: 16px;">
+      Calculate your monthly payments instantly
+    </p>
+  </div>
+
+  <form id="mortgage-form" style="display: grid; gap: 24px;">
+    <!-- Loan Amount -->
+    <div class="input-group">
+      <label for="loan-amount" style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">
+        🏠 Loan Amount
+      </label>
+      <div style="position: relative;">
+        <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-weight: 500;">$</span>
+        <input 
+          type="number" 
+          id="loan-amount" 
+          value="300000"
+          style={`
+            width: 100%;
+            padding: 16px 16px 16px 40px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            background: ${colors.bg};
+            transition: all 0.2s;
+          `}
+          min="1000"
+          max="10000000"
+          step="1000"
+        />
+      </div>
+    </div>
+
+    <!-- Interest Rate -->
+    <div class="input-group">
+      <label for="interest-rate" style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">
+        📈 Annual Interest Rate
+      </label>
+      <div style="position: relative;">
+        <input 
+          type="number" 
+          id="interest-rate" 
+          value="6.5"
+          style={`
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            background: ${colors.bg};
+            transition: all 0.2s;
+          `}
+          min="0.1"
+          max="30"
+          step="0.1"
+        />
+        <span style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-weight: 500;">%</span>
+      </div>
+    </div>
+
+    <!-- Loan Term -->
+    <div class="input-group">
+      <label for="loan-term" style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">
+        ⏰ Loan Term
+      </label>
+      <div style="position: relative;">
+        <input 
+          type="number" 
+          id="loan-term" 
+          value="30"
+          style={`
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            background: ${colors.bg};
+            transition: all 0.2s;
+          `}
+          min="1"
+          max="50"
+        />
+        <span style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #64748b; font-weight: 500;">years</span>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results" style={`
+      background: linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%);
+      padding: 24px;
+      border-radius: 12px;
+      color: white;
+      text-align: center;
+      margin-top: 8px;
+    `}>
+      <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 8px; opacity: 0.9;">
+        Monthly Payment
+      </h3>
+      <div id="monthly-payment" style="font-size: 36px; font-weight: 700; margin-bottom: 16px;">
+        $1,979
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+        <div style="text-align: center;">
+          <div style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">TOTAL PAID</div>
+          <div id="total-paid" style="font-size: 18px; font-weight: 600;">$712,440</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">TOTAL INTEREST</div>
+          <div id="total-interest" style="font-size: 18px; font-weight: 600;">$412,440</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+      <button 
+        type="button" 
+        onclick="generateReport()"
+        style={`
+          background: white;
+          border: 2px solid ${colors.primary};
+          color: ${colors.primary};
+          padding: 14px 20px;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        `}
+      >
+        📊 Full Report
+      </button>
+      <button 
+        type="button" 
+        onclick="compareRates()"
+        style={`
+          background: ${colors.primary};
+          border: 2px solid ${colors.primary};
+          color: white;
+          padding: 14px 20px;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        `}
+      >
+        🔍 Compare Rates
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function calculateMortgage() {
+    const principal = parseFloat(document.getElementById('loan-amount').value) || 0;
+    const annualRate = parseFloat(document.getElementById('interest-rate').value) || 0;
+    const years = parseFloat(document.getElementById('loan-term').value) || 0;
+    
+    const monthlyRate = (annualRate / 100) / 12;
+    const numPayments = years * 12;
+    
+    let monthlyPayment = 0;
+    if (monthlyRate > 0) {
+      monthlyPayment = (principal * monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+                      (Math.pow(1 + monthlyRate, numPayments) - 1);
+    } else {
+      monthlyPayment = principal / numPayments;
+    }
+    
+    const totalPaid = monthlyPayment * numPayments;
+    const totalInterest = totalPaid - principal;
+    
+    // Update display
+    document.getElementById('monthly-payment').textContent = 
+      '$' + monthlyPayment.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    document.getElementById('total-paid').textContent = 
+      '$' + totalPaid.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    document.getElementById('total-interest').textContent = 
+      '$' + totalInterest.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  }
+  
+  function generateReport() {
+    // This could trigger an ad-generating article creation
+    alert('Generating detailed payment schedule... (This would redirect to a monetized report page)');
+  }
+  
+  function compareRates() {
+    // This could redirect to a comparison page with more ads
+    alert('Comparing rates from top lenders... (This would redirect to a high-CPC comparison page)');
+  }
+  
+  // Add event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    const inputs = ['loan-amount', 'interest-rate', 'loan-term'];
+    inputs.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener('input', calculateMortgage);
+        element.addEventListener('focus', function(e) {
+          e.target.style.borderColor = '${colors.primary}';
+          e.target.style.boxShadow = '0 0 0 3px ${colors.primary}20';
+        });
+        element.addEventListener('blur', function(e) {
+          e.target.style.borderColor = '#e5e7eb';
+          e.target.style.boxShadow = 'none';
+        });
+      }
+    });
+    
+    // Initial calculation
+    calculateMortgage();
+  });
+</script>
+
+<style>
+  .calculator-container {
+    transition: all 0.3s ease;
+  }
+  
+  .calculator-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+  
+  button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  
+  @media (max-width: 768px) {
+    .calculator-container {
+      padding: 24px 20px;
+      margin: 0 16px;
+    }
+    
+    .action-buttons {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

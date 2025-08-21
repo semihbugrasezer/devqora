@@ -1,0 +1,269 @@
+---
+import ModernFinanceBase from '@mdkit/shared/src/layouts/ModernFinanceBase.astro'
+import domains from '../../config.json'
+const cfg = domains['hing.me']
+---
+<ModernFinanceBase title="Mortgage Calculator - Hing.me" description="Calculate your monthly mortgage payments with our easy-to-use calculator. Get instant results for loan amount, interest rate, and term." locale={cfg.locale}>
+  <div class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Mortgage Calculator</h1>
+        <p>Calculate your monthly mortgage payment and see how much you can afford</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <div class="calculator-wrapper">
+        <div class="calculator-card">
+          <h2>Mortgage Payment Calculator</h2>
+          <div id="mortgage-app"></div>
+          <div class="calculator-info">
+            <h3>How to Use</h3>
+            <ul>
+              <li>Enter your loan amount (home price minus down payment)</li>
+              <li>Input the annual interest rate (APR)</li>
+              <li>Choose your loan term in years (typically 15 or 30)</li>
+              <li>See your estimated monthly payment instantly</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="info-card">
+          <h3>What's Included in Your Payment</h3>
+          <ul>
+            <li><strong>Principal & Interest:</strong> The base loan payment</li>
+            <li><strong>Property Taxes:</strong> Annual taxes divided by 12</li>
+            <li><strong>Insurance:</strong> Homeowner's insurance premium</li>
+            <li><strong>PMI:</strong> If down payment is less than 20%</li>
+          </ul>
+          
+          <h3>Tips for Better Rates</h3>
+          <ul>
+            <li>Improve your credit score before applying</li>
+            <li>Save for a larger down payment (20% or more)</li>
+            <li>Shop around with multiple lenders</li>
+            <li>Consider shorter loan terms for lower rates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const el = document.getElementById('mortgage-app')
+    el.innerHTML = `
+      <div class="input-group">
+        <label for="amt">Loan Amount ($)</label>
+        <input id="amt" type="number" value="300000" placeholder="300,000" min="0">
+      </div>
+      <div class="input-group">
+        <label for="apr">Interest Rate (%)</label>
+        <input id="apr" type="number" value="6.5" step="0.01" placeholder="6.5" min="0" max="20">
+      </div>
+      <div class="input-group">
+        <label for="yrs">Loan Term (Years)</label>
+        <select id="yrs">
+          <option value="15">15 years</option>
+          <option value="20">20 years</option>
+          <option value="25">25 years</option>
+          <option value="30" selected>30 years</option>
+        </select>
+      </div>
+      <div class="result-section">
+        <div class="result-main">
+          <span class="result-label">Monthly Payment</span>
+          <span class="result-value">$<span id="monthly-payment">0</span></span>
+        </div>
+        <div class="result-details">
+          <div class="result-item">
+            <span>Total Interest:</span>
+            <span id="total-interest">$0</span>
+          </div>
+          <div class="result-item">
+            <span>Total Cost:</span>
+            <span id="total-cost">$0</span>
+          </div>
+        </div>
+      </div>`
+      
+    function calculate(){
+      const P = parseFloat(document.getElementById('amt').value || 0)
+      const annual_rate = parseFloat(document.getElementById('apr').value || 0)
+      const years = parseFloat(document.getElementById('yrs').value || 30)
+      
+      if (P <= 0 || annual_rate < 0 || years <= 0) {
+        document.getElementById('monthly-payment').textContent = '0'
+        document.getElementById('total-interest').textContent = '$0'
+        document.getElementById('total-cost').textContent = '$0'
+        return
+      }
+      
+      const r = annual_rate / 100 / 12 // Monthly interest rate
+      const n = years * 12 // Total number of payments
+      
+      let monthly_payment
+      if (r === 0) {
+        monthly_payment = P / n
+      } else {
+        monthly_payment = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1)
+      }
+      
+      const total_paid = monthly_payment * n
+      const total_interest = total_paid - P
+      
+      document.getElementById('monthly-payment').textContent = monthly_payment.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+      document.getElementById('total-interest').textContent = '$' + total_interest.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+      document.getElementById('total-cost').textContent = '$' + total_paid.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+    }
+    
+    ['amt', 'apr', 'yrs'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calculate)
+      document.getElementById(id).addEventListener('change', calculate)
+    })
+    
+    calculate() // Initial calculation
+  </script>
+
+  <style>
+    .calculator-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .calculator-card, .info-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .calculator-card h2 {
+      color: var(--secondary);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .input-group input:focus, .input-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .result-section {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .result-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    .result-label {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    
+    .result-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .result-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+    }
+    
+    .result-item span:first-child {
+      color: var(--text-light);
+    }
+    
+    .result-item span:last-child {
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .info-card h3 {
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .info-card ul {
+      margin: 0 0 2rem 1rem;
+    }
+    
+    .info-card li {
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    
+    .calculator-info {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    @media (max-width: 768px) {
+      .calculator-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .calculator-card, .info-card {
+        padding: 1.5rem;
+      }
+      
+      .result-main {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+      
+      .result-value {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</ModernFinanceBase>

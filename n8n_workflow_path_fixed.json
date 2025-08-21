@@ -1,0 +1,266 @@
+{
+  "name": "Full Auto-Adsense System (PATH FIXED)",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": [
+          {
+            "mode": "everyDay", 
+            "hour": 9
+          }
+        ]
+      },
+      "id": "daily_trigger",
+      "name": "Daily Trigger", 
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [200, 400]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "domain",
+              "value": "hing.me"
+            },
+            {
+              "name": "title", 
+              "value": "Daily Finance Content - {{ new Date().toISOString().split('T')[0] }}"
+            },
+            {
+              "name": "body",
+              "value": "This automated finance article covers budgeting, investment strategies, and wealth building techniques for smart financial decisions."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set_finance_data",
+      "name": "Set Finance Data",
+      "type": "n8n-nodes-base.set", 
+      "typeVersion": 3,
+      "position": [450, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "domain",
+              "value": "playu.co"
+            },
+            {
+              "name": "title",
+              "value": "Daily Gaming Content - {{ new Date().toISOString().split('T')[0] }}"
+            },
+            {
+              "name": "body", 
+              "value": "This automated gaming article covers game strategies, performance optimization, and competitive gaming techniques for enhanced gameplay."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set_gaming_data",
+      "name": "Set Gaming Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [450, 400]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "keyword",
+              "value": "finance automation guide"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set_finance_keyword",
+      "name": "Set Finance Keyword",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [450, 600]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "keyword", 
+              "value": "gaming automation guide"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set_gaming_keyword",
+      "name": "Set Gaming Keyword",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [450, 800]
+    },
+    {
+      "parameters": {
+        "url": "http://content-api:5055/ingest",
+        "method": "POST",
+        "responseFormat": "json",
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={{ $json }}"
+      },
+      "id": "create_finance_article",
+      "name": "Create Finance Article",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://content-api:5055/ingest",
+        "method": "POST", 
+        "responseFormat": "json",
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={{ $json }}"
+      },
+      "id": "create_gaming_article",
+      "name": "Create Gaming Article",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 400]
+    },
+    {
+      "parameters": {
+        "url": "http://bot-api:5001/enqueue/keyword",
+        "method": "POST",
+        "responseFormat": "json",
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={{ $json }}"
+      },
+      "id": "enqueue_finance_keyword",
+      "name": "Enqueue Finance Keyword",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 600]
+    },
+    {
+      "parameters": {
+        "url": "http://bot-api:5001/enqueue/keyword",
+        "method": "POST",
+        "responseFormat": "json", 
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={{ $json }}"
+      },
+      "id": "enqueue_gaming_keyword",
+      "name": "Enqueue Gaming Keyword",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 800]
+    },
+    {
+      "parameters": {
+        "command": "cd /srv/auto-adsense/multidomain_site_kit && bash scripts/build-all.sh"
+      },
+      "id": "build_all_sites",
+      "name": "Build All Sites",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 2,
+      "position": [950, 500]
+    },
+    {
+      "parameters": {
+        "command": "cd /srv/auto-adsense/multidomain_site_kit && bash scripts/deploy-all.sh"
+      },
+      "id": "deploy_to_cloudflare",
+      "name": "Deploy to Cloudflare",
+      "type": "n8n-nodes-base.executeCommand", 
+      "typeVersion": 2,
+      "position": [1200, 500]
+    }
+  ],
+  "connections": {
+    "Daily Trigger": {
+      "main": [
+        [
+          {"node": "Set Finance Data", "type": "main", "index": 0},
+          {"node": "Set Gaming Data", "type": "main", "index": 0},
+          {"node": "Set Finance Keyword", "type": "main", "index": 0},
+          {"node": "Set Gaming Keyword", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Set Finance Data": {
+      "main": [
+        [
+          {"node": "Create Finance Article", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Set Gaming Data": {
+      "main": [
+        [
+          {"node": "Create Gaming Article", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Set Finance Keyword": {
+      "main": [
+        [
+          {"node": "Enqueue Finance Keyword", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Set Gaming Keyword": {
+      "main": [
+        [
+          {"node": "Enqueue Gaming Keyword", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Create Finance Article": {
+      "main": [
+        [
+          {"node": "Build All Sites", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Create Gaming Article": {
+      "main": [
+        [
+          {"node": "Build All Sites", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Enqueue Finance Keyword": {
+      "main": [
+        [
+          {"node": "Build All Sites", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Enqueue Gaming Keyword": {
+      "main": [
+        [
+          {"node": "Build All Sites", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Build All Sites": {
+      "main": [
+        [
+          {"node": "Deploy to Cloudflare", "type": "main", "index": 0}
+        ]
+      ]
+    }
+  }
+}

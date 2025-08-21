@@ -1,0 +1,13 @@
+---
+import Base from '@mdkit/shared/src/layouts/Base.astro'
+import AdSlot from '@mdkit/shared/src/components/AdSlot.astro'
+import domains from '../../config.json'
+const cfg = domains['playu.co']; const title="Welcome to PlayU.co"; const desc="Your ultimate destination for gaming guides, reviews, and entertainment content"
+---
+<Base title={title} description={desc} locale={cfg.locale} adsenseClient={cfg.adsense_client}>
+  <h1>{title}</h1>
+  <p>{desc}</p>
+  <AdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.in_article} />
+  <p>Welcome to PlayU.co, your go-to resource for everything gaming and entertainment. Whether you're a casual player or a hardcore enthusiast, we've got you covered with comprehensive guides, honest reviews, and the latest gaming news.</p>
+  <p>From PC setup guides to console reviews, from indie gems to AAA blockbusters, we're passionate about helping you discover the best gaming experiences and optimize your setup for maximum enjoyment.</p>
+</Base>

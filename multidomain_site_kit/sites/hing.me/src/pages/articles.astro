@@ -1,0 +1,50 @@
+---
+import ModernFinanceBase from '@mdkit/shared/src/layouts/ModernFinanceBase.astro'
+import domains from '../config.json'
+const cfg = domains['hing.me']
+
+// Get all articles - filter to real financial articles only
+const allArticles = await Astro.glob('./articles/*.astro')
+const articles = allArticles.filter(article => {
+  const slug = article.file.split('/').pop()?.replace('.astro', '') || ''
+  return slug.includes('2025') || slug.includes('guide') || slug.includes('basics')
+})
+---
+<ModernFinanceBase title="Financial Articles - Hing.me" description="Expert financial articles and guides for 2025" locale={cfg.locale}>
+  <div class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Financial Articles & Insights</h1>
+        <p>Expert analysis, practical strategies, and actionable advice for building wealth in 2025</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">Latest Articles</h2>
+      <div class="grid grid-2">
+        {articles.map((article, index) => {
+          // Extract article info from file path
+          const slug = article.file.split('/').pop()?.replace('.astro', '') || ''
+          let title = slug.split('-').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' ')
+          
+          // Better titles for known articles
+          if (slug.includes('mortgage-guide')) title = 'Complete Mortgage Guide 2025'
+          if (slug.includes('investment-basics')) title = 'Investment Basics for Beginners'
+          
+          return (
+            <div class="card">
+              <h3><a href={`/articles/${slug}`}>{title}</a></h3>
+              <p>Expert financial guidance with actionable strategies you can implement today.</p>
+              <a href={`/articles/${slug}`} class="btn">Read Article</a>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  </div>
+
+</ModernFinanceBase>

@@ -1,0 +1,140 @@
+---
+import ModernFinanceBase from '@mdkit/shared/src/layouts/ModernFinanceBase.astro'
+import domains from '../config.json'
+const cfg = domains['hing.me']
+---
+<ModernFinanceBase title={cfg.title} description={cfg.description} locale={cfg.locale}>
+  <div class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Smart Finance for 2025</h1>
+        <p>Expert financial guidance, tools, and strategies to build wealth in the modern economy</p>
+        <div class="hero-actions">
+          <a href="/articles" class="btn">Read Articles</a>
+          <a href="/calculators" class="btn btn-secondary">Try Calculators</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">Financial Tools & Guides</h2>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>📈 Investment Planning</h3>
+          <p>Learn how to build a diversified investment portfolio and grow your wealth over time with proven strategies.</p>
+          <a href="/articles/investment-basics-2025" class="btn">Learn More</a>
+        </div>
+        <div class="card">
+          <h3>🏠 Mortgage Planning</h3>
+          <p>Calculate mortgage payments, compare rates, and understand the home buying process from start to finish.</p>
+          <a href="/calculators/mortgage" class="btn">Calculate Now</a>
+        </div>
+        <div class="card">
+          <h3>💰 Debt Management</h3>
+          <p>Take control of your debt with payoff strategies, consolidation options, and smart repayment plans.</p>
+          <a href="/calculators/loan" class="btn">Plan Payoff</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+      <h2 class="section-title">Latest Financial Insights</h2>
+      <div class="grid grid-3">
+        <div class="article-item">
+          <h3><a href="/articles/mortgage-guide-2025">Complete Mortgage Guide 2025</a></h3>
+          <p>Everything you need to know about getting a mortgage in 2025, including current rates and requirements.</p>
+          <a href="/articles/mortgage-guide-2025" class="btn btn-secondary">Read Article</a>
+        </div>
+        <div class="article-item">
+          <h3><a href="/articles/investment-basics-2025">Investment Basics for Beginners</a></h3>
+          <p>Start your wealth-building journey with these fundamental investment principles and strategies.</p>
+          <a href="/articles/investment-basics-2025" class="btn btn-secondary">Learn Investing</a>
+        </div>
+        <div class="article-item">
+          <h3><a href="/articles/investment-portfolio-diversification-guide">Portfolio Diversification Guide</a></h3>
+          <p>Master portfolio diversification strategies to reduce risk and maximize returns with expert guidance.</p>
+          <a href="/articles/investment-portfolio-diversification-guide" class="btn btn-secondary">Read Guide</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <div class="cta-section">
+        <h2>Ready to Take Control of Your Finances?</h2>
+        <p>Join thousands of people who are building wealth with our expert guidance and powerful financial tools.</p>
+        <div class="cta-actions">
+          <a href="/articles" class="btn">Start Learning</a>
+          <a href="/calculators" class="btn btn-secondary">Use Calculators</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    .cta-section {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border-radius: 16px;
+    }
+    
+    .cta-section h2 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+    
+    .cta-section p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+    
+    .cta-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .cta-actions .btn {
+      background: white;
+      color: var(--primary);
+    }
+    
+    .cta-actions .btn:hover {
+      background: var(--bg-secondary);
+    }
+    
+    .cta-actions .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+    
+    .cta-actions .btn-secondary:hover {
+      background: white;
+      color: var(--primary);
+    }
+    
+    @media (max-width: 768px) {
+      .hero-actions, .cta-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</ModernFinanceBase>

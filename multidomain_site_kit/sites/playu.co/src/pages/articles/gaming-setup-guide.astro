@@ -1,0 +1,27 @@
+---
+import Base from '@mdkit/shared/src/layouts/Base.astro'
+import AdSlot from '@mdkit/shared/src/components/AdSlot.astro'
+import domains from '../../config.json'
+const cfg = domains['playu.co']
+const title = "Ultimate Gaming Setup Guide 2024"; const desc = "Build the perfect gaming setup with our comprehensive guide"
+---
+<Base title={title} description={desc} locale={cfg.locale} adsenseClient={cfg.adsense_client}>
+  <h1>{title}</h1>
+  <p>Building the perfect gaming setup can be overwhelming with so many options available. This guide will help you create a setup that fits your budget and gaming needs.</p>
+  
+  <AdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.in_article} />
+  
+  <h2>Essential Components</h2>
+  <ul>
+    <li><strong>Gaming PC or Console:</strong> The heart of your setup</li>
+    <li><strong>Monitor:</strong> Look for high refresh rates and low response times</li>
+    <li><strong>Gaming Chair:</strong> Comfort is crucial for long gaming sessions</li>
+    <li><strong>Audio:</strong> Quality headphones or speakers enhance immersion</li>
+  </ul>
+  
+  <h2>Budget Considerations</h2>
+  <p>You don't need to spend thousands to have a great gaming experience. Start with the essentials and upgrade over time.</p>
+  
+  <h2>Setup Tips</h2>
+  <p>Proper cable management and ergonomic positioning will make your gaming sessions more enjoyable and comfortable.</p>
+</Base>

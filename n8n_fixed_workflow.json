@@ -1,0 +1,110 @@
+{
+  "name": "Fixed Content & Pinterest Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": [
+          {
+            "mode": "everyDay",
+            "hour": 10
+          }
+        ]
+      },
+      "id": "daily-trigger",
+      "name": "Daily Content Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Generate content data\nconst domains = ['hing.me', 'playu.co'];\nconst financeKeywords = [\n  'mortgage rates 2024',\n  'investment strategies',\n  'personal finance tips',\n  'retirement planning',\n  'debt management'\n];\nconst gamingKeywords = [\n  'pc gaming setup',\n  'esports strategies',\n  'gaming laptop guide',\n  'streaming setup',\n  'game optimization'\n];\n\nconst randomDomain = domains[Math.floor(Math.random() * domains.length)];\nconst keywords = randomDomain === 'hing.me' ? financeKeywords : gamingKeywords;\nconst keyword = keywords[Math.floor(Math.random() * keywords.length)];\n\nconst title = `${keyword.charAt(0).toUpperCase() + keyword.slice(1)} - Complete Guide 2024`;\nconst body = `This comprehensive guide covers everything you need to know about ${keyword}. Learn expert tips, strategies, and best practices to achieve your goals.\\n\\n## Key Benefits\\n\\n- Professional insights and analysis\\n- Step-by-step implementation guide\\n- Real-world examples and case studies\\n- Expert recommendations\\n\\n## Getting Started\\n\\nFollow our detailed guide to master ${keyword} and achieve exceptional results in your journey.`;\n\nreturn [{\n  json: {\n    keyword: keyword,\n    domain: randomDomain,\n    title: title,\n    body: body,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "content-generator",
+      "name": "Content Generator",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://content-api:5055/ingest",
+        "sendQuery": false,
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "={{ {\n  \"domain\": $json.domain,\n  \"title\": $json.title,\n  \"body\": $json.body\n} }}"
+      },
+      "id": "create-article",
+      "name": "Create Article",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://bot-api:5001/enqueue/keyword",
+        "sendQuery": false,
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "={{ {\n  \"keyword\": $json.keyword\n} }}"
+      },
+      "id": "enqueue-pinterest",
+      "name": "Enqueue Pinterest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [700, 400]
+    }
+  ],
+  "connections": {
+    "Daily Content Trigger": {
+      "main": [
+        [
+          {
+            "node": "Content Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Generator": {
+      "main": [
+        [
+          {
+            "node": "Create Article",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Enqueue Pinterest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1"
+}

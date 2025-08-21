@@ -1,0 +1,8 @@
+{
+  "name": "site-playu.co",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev":"astro dev", "build":"astro build", "preview":"astro preview" },
+  "dependencies": { "astro":"^4.10.0", "@mdkit/shared":"file:../../packages/shared" }
+}

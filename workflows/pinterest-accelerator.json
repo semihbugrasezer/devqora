@@ -1,0 +1,323 @@
+{
+    "name": "Pinterest Traffic Accelerator",
+    "nodes": [
+        {
+            "parameters": {
+                "triggerTimes": [
+                    {
+                        "mode": "everyX",
+                        "value": 4,
+                        "unit": "hours"
+                    }
+                ]
+            },
+            "id": "pinterest-trigger",
+            "name": "Pinterest Trigger (4h)",
+            "type": "n8n-nodes-base.cron",
+            "typeVersion": 2,
+            "position": [
+                200,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Pinterest trending keywords for high-CPC niches\nconst trendingKeywords = [\n  // Finance & Investment\n  'passive income ideas',\n  'budgeting tips',\n  'investment strategies',\n  'debt payoff plan',\n  'financial freedom',\n  'retirement planning',\n  'credit score improvement',\n  'mortgage calculator',\n  'loan comparison',\n  \n  // Business & Marketing\n  'online business ideas',\n  'social media marketing',\n  'email marketing tips',\n  'SEO strategies',\n  'content marketing',\n  'affiliate marketing',\n  'web hosting guide',\n  'ecommerce tips',\n  \n  // Insurance & Legal\n  'car insurance tips',\n  'health insurance guide',\n  'life insurance comparison',\n  'home insurance',\n  'legal advice',\n  \n  // Technology & Software\n  'productivity apps',\n  'software comparison',\n  'tech reviews',\n  'cybersecurity tips',\n  'cloud storage',\n  \n  // Real Estate\n  'home buying tips',\n  'real estate investment',\n  'property management',\n  'refinancing guide'\n];\n\n// Generate multiple keyword variations\nconst suffixes = [\n  'guide 2024',\n  'tips for beginners',\n  'step by step',\n  'ultimate guide',\n  'best practices',\n  'comparison chart',\n  'free tools',\n  'calculator'\n];\n\nconst out = [];\nconst keywordCount = Math.min(8, trendingKeywords.length);\n\nfor (let i = 0; i < keywordCount; i++) {\n  const baseKeyword = trendingKeywords[Math.floor(Math.random() * trendingKeywords.length)];\n  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];\n  const finalKeyword = `${baseKeyword} ${suffix}`;\n  \n  out.push({\n    json: {\n      keyword: finalKeyword,\n      category: 'trending',\n      priority: Math.random() > 0.5 ? 'high' : 'normal',\n      timestamp: new Date().toISOString()\n    }\n  });\n}\n\nreturn out;"
+            },
+            "id": "generate-trending-keywords",
+            "name": "Generate Trending Keywords",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://bot-api:5001/enqueue/keyword",
+                "requestMethod": "POST",
+                "responseFormat": "json",
+                "jsonParameters": true,
+                "parametersJson": "={{ { \"keyword\": $json.keyword, \"priority\": $json.priority } }}",
+                "options": {
+                    "timeout": 5000,
+                    "retry": {
+                        "enabled": true,
+                        "maxTries": 3
+                    }
+                }
+            },
+            "id": "bulk-enqueue-keywords",
+            "name": "Bulk Enqueue Keywords",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                700,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "triggerTimes": [
+                    {
+                        "mode": "everyDay",
+                        "hour": 18,
+                        "minute": 0
+                    }
+                ]
+            },
+            "id": "evening-boost-trigger",
+            "name": "Evening Boost (18:00)",
+            "type": "n8n-nodes-base.cron",
+            "typeVersion": 2,
+            "position": [
+                200,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// High-engagement evening keywords\nconst eveningKeywords = [\n  'work from home jobs',\n  'side hustle ideas',\n  'make money online',\n  'freelancing tips',\n  'online courses',\n  'digital marketing',\n  'cryptocurrency guide',\n  'personal finance',\n  'budgeting apps',\n  'investment opportunities'\n];\n\nconst templates = [\n  'ultimate {} guide',\n  'best {} for beginners',\n  '{} mistakes to avoid',\n  'how to start {}',\n  '{} tools and resources'\n];\n\nconst out = [];\n\nfor (let i = 0; i < 5; i++) {\n  const keyword = eveningKeywords[Math.floor(Math.random() * eveningKeywords.length)];\n  const template = templates[Math.floor(Math.random() * templates.length)];\n  const finalKeyword = template.replace('{}', keyword);\n  \n  out.push({\n    json: {\n      keyword: finalKeyword,\n      category: 'evening_boost',\n      priority: 'high',\n      boost_type: 'engagement'\n    }\n  });\n}\n\nreturn out;"
+            },
+            "id": "evening-boost-keywords",
+            "name": "Evening Boost Keywords",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [
+                450,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://bot-api:5001/enqueue/keyword",
+                "requestMethod": "POST",
+                "responseFormat": "json",
+                "jsonParameters": true,
+                "parametersJson": "={{ { \"keyword\": $json.keyword, \"priority\": \"high\", \"boost\": true } }}",
+                "options": {
+                    "timeout": 5000
+                }
+            },
+            "id": "evening-keyword-queue",
+            "name": "Evening Keyword Queue",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                700,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://bot-api:5001/stats",
+                "responseFormat": "json",
+                "options": {
+                    "timeout": 10000
+                }
+            },
+            "id": "monitor-queue-status",
+            "name": "Monitor Queue Status",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                950,
+                450
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Monitor and alert if queue is getting too long or empty\nconst stats = $json;\nconst keywordQueue = stats.keyword_queue || 0;\nconst pinJobs = stats.pin_jobs || 0;\nconst reports = stats.reports || 0;\n\nlet status = 'healthy';\nlet message = 'Pinterest bot is running normally';\nlet action = 'none';\n\n// Check queue health\nif (keywordQueue > 100) {\n  status = 'warning';\n  message = `Keyword queue is high: ${keywordQueue} items`;\n  action = 'reduce_input';\n} else if (keywordQueue < 5) {\n  status = 'warning';\n  message = `Keyword queue is low: ${keywordQueue} items`;\n  action = 'add_keywords';\n}\n\nif (pinJobs > 50) {\n  status = 'error';\n  message = `Pin job queue backed up: ${pinJobs} items`;\n  action = 'check_workers';\n}\n\n// Calculate activity rate\nconst totalActivity = keywordQueue + pinJobs + reports;\nconst activityScore = Math.min(100, totalActivity * 2);\n\nreturn [{\n  json: {\n    status: status,\n    message: message,\n    action: action,\n    activity_score: activityScore,\n    keyword_queue: keywordQueue,\n    pin_jobs: pinJobs,\n    reports: reports,\n    timestamp: new Date().toISOString()\n  }\n}];"
+            },
+            "id": "analyze-bot-health",
+            "name": "Analyze Bot Health",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [
+                1200,
+                450
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "need-more-keywords",
+                            "leftValue": "={{ $json.action }}",
+                            "rightValue": "add_keywords",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "check-if-keywords-needed",
+            "name": "Check If Keywords Needed",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                1450,
+                450
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Emergency keyword injection\nconst emergencyKeywords = [\n  'passive income streams',\n  'budget calculator free',\n  'best investment apps',\n  'credit repair guide',\n  'mortgage rates today',\n  'insurance comparison tool',\n  'business loan calculator',\n  'cryptocurrency investment',\n  'retirement calculator',\n  'debt consolidation'\n];\n\nconst out = [];\n\nfor (let i = 0; i < 10; i++) {\n  const keyword = emergencyKeywords[i % emergencyKeywords.length];\n  \n  out.push({\n    json: {\n      keyword: `${keyword} ${new Date().getFullYear()}`,\n      category: 'emergency_fill',\n      priority: 'normal',\n      source: 'auto_refill'\n    }\n  });\n}\n\nreturn out;"
+            },
+            "id": "emergency-keyword-fill",
+            "name": "Emergency Keyword Fill",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 2,
+            "position": [
+                1700,
+                350
+            ]
+        },
+        {
+            "parameters": {
+                "url": "http://bot-api:5001/enqueue/keyword",
+                "requestMethod": "POST",
+                "responseFormat": "json",
+                "jsonParameters": true,
+                "parametersJson": "={{ { \"keyword\": $json.keyword, \"priority\": $json.priority } }}",
+                "options": {
+                    "timeout": 5000
+                }
+            },
+            "id": "emergency-keyword-queue",
+            "name": "Emergency Keyword Queue",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1950,
+                350
+            ]
+        }
+    ],
+    "connections": {
+        "Pinterest Trigger (4h)": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Trending Keywords",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Trending Keywords": {
+            "main": [
+                [
+                    {
+                        "node": "Bulk Enqueue Keywords",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Evening Boost (18:00)": {
+            "main": [
+                [
+                    {
+                        "node": "Evening Boost Keywords",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Evening Boost Keywords": {
+            "main": [
+                [
+                    {
+                        "node": "Evening Keyword Queue",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Bulk Enqueue Keywords": {
+            "main": [
+                [
+                    {
+                        "node": "Monitor Queue Status",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Evening Keyword Queue": {
+            "main": [
+                [
+                    {
+                        "node": "Monitor Queue Status",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Monitor Queue Status": {
+            "main": [
+                [
+                    {
+                        "node": "Analyze Bot Health",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Analyze Bot Health": {
+            "main": [
+                [
+                    {
+                        "node": "Check If Keywords Needed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check If Keywords Needed": {
+            "main": [
+                [
+                    {
+                        "node": "Emergency Keyword Fill",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Emergency Keyword Fill": {
+            "main": [
+                [
+                    {
+                        "node": "Emergency Keyword Queue",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+      "settings": {
+    "timezone": "Europe/Istanbul"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "name": "Simple Auto Content Generator - Working",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerTimes": [
+          {
+            "mode": "everyDay",
+            "hour": 10
+          }
+        ]
+      },
+      "id": "simple-cron",
+      "name": "Daily Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Generate simple keyword list\nconst keywords = [\n  'mortgage calculator guide',\n  'personal loan tips',\n  'investment basics',\n  'gaming pc build',\n  'esports strategy'\n];\n\nconst randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];\n\nreturn [{\n  json: {\n    keyword: randomKeyword,\n    domain: Math.random() > 0.5 ? 'hing.me' : 'playu.co',\n    title: randomKeyword + ' - Complete Guide 2024',\n    body: `This is a comprehensive guide about ${randomKeyword}. Learn everything you need to know with our expert tips and strategies.`\n  }\n}];"
+      },
+      "id": "generate-content",
+      "name": "Generate Content",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://bot-api:5001/enqueue/keyword",
+        "sendQuery": false,
+        "sendHeaders": false,
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "keyword",
+              "value": "={{$json.keyword}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "enqueue-keyword",
+      "name": "Enqueue Keyword",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        700,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://content-api:5055/ingest",
+        "sendQuery": false,
+        "sendHeaders": false,
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "domain",
+              "value": "={{$json.domain}}"
+            },
+            {
+              "name": "title",
+              "value": "={{$json.title}}"
+            },
+            {
+              "name": "body",
+              "value": "={{$json.body}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "create-article",
+      "name": "Create Article",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        700,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Daily Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Content": {
+      "main": [
+        [
+          {
+            "node": "Enqueue Keyword",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "1"
+}
