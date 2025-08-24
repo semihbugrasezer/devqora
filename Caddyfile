@@ -30,9 +30,9 @@
     }
 }
 
-# devqora.space - http://161.97.178.101:9080 adresine yönlendirme
-devqora.space, www.devqora.space {
-    reverse_proxy http://161.97.178.101:9080 {
+# devqora.space - Dashboard Interface (HTTP only, SSL via Cloudflare)
+http://devqora.space, http://www.devqora.space {
+    reverse_proxy devqora-dashboard:8080 {
         header_up Host {upstream_hostport}
         header_up X-Real-IP {remote_host}
         header_up X-Forwarded-For {remote_host}
@@ -47,7 +47,4 @@ devqora.space, www.devqora.space {
         X-XSS-Protection "1; mode=block"
         Referrer-Policy strict-origin-when-cross-origin
     }
-    
-    # Cloudflare gerçek IP ayarları
-    trusted_proxies cloudflare
 }

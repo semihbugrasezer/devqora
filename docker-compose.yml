@@ -5,6 +5,8 @@ services:
   caddy:
     image: caddy:2-alpine
     ports:
+      - "80:80"
+      - "443:443"
       - "8090:8090"
       - "8091:8091"
     volumes:

@@ -8,9 +8,84 @@
     <meta name="theme-color" content="#3b82f6">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Modern UI Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://unpkg.com/@headlessui/react@latest/dist/index.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        'gray': {
+                            50: '#f9fafb',
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            400: '#9ca3af',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                            700: '#374151',
+                            800: '#1f2937',
+                            900: '#111827',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --color-primary: #667eea;
+            --color-secondary: #764ba2;
+            --color-accent: #4facfe;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+        }
         
         * { 
             box-sizing: border-box; 
@@ -23,6 +98,61 @@
             line-height: 1.6;
             color: #1f2937;
             overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 30%, #8b5cf6 60%, var(--color-accent) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .feature-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem !important;
+                line-height: 1.1 !important;
+            }
+            .hero-subtitle {
+                font-size: 1.125rem !important;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            .hero-subtitle {
+                font-size: 1rem !important;
+            }
         }
         
         /* Utility classes */
@@ -376,82 +506,142 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full glass-white z-40 border-b border-gray-100">
-        <div class="container">
-            <div class="flex items-center justify-between py-4">
+    <nav x-data="{ mobileMenuOpen: false }" class="fixed top-0 w-full glass-effect bg-white/95 z-50 border-b border-gray-200/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow">
                         <i data-lucide="zap" class="w-5 h-5 text-white"></i>
                     </div>
-                    <span class="text-xl font-bold text-gray-900">Auto AdSense</span>
+                    <span class="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">Auto AdSense</span>
                 </div>
                 
                 <!-- Desktop Navigation -->
-                <div class="nav-desktop flex items-center space-x-6">
-                    <a href="#features" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Features</a>
-                    <a href="#pricing" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Pricing</a>
-                    <button onclick="showLogin()" class="btn btn-ghost">Sign In</button>
-                    <button onclick="showSignup()" class="btn btn-primary">Get Started Free</button>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group">
+                        Features
+                        <span class="absolute inset-x-0 bottom-0 h-0.5 bg-primary-600 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
+                    </a>
+                    <a href="#pricing" class="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200 relative group">
+                        Pricing  
+                        <span class="absolute inset-x-0 bottom-0 h-0.5 bg-primary-600 transform scale-x-0 group-hover:scale-x-100 transition-transform"></span>
+                    </a>
+                    <button onclick="showLogin()" class="px-4 py-2 text-gray-700 font-medium hover:text-primary-600 transition-colors duration-200">
+                        Sign In
+                    </button>
+                    <button onclick="showSignup()" class="px-6 py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                        Get Started Free
+                    </button>
                 </div>
-                
-                <!-- Mobile Navigation -->
-                <div class="nav-mobile">
-                    <button onclick="showLogin()" class="btn btn-ghost text-sm px-4 py-2">Sign In</button>
-                    <button onclick="showSignup()" class="btn btn-primary text-sm px-4 py-2">Get Started</button>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i x-show="!mobileMenuOpen" data-lucide="menu" class="w-6 h-6"></i>
+                        <i x-show="mobileMenuOpen" data-lucide="x" class="w-6 h-6"></i>
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 transform -translate-y-2"
+             x-transition:enter-end="opacity-100 transform translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 transform translate-y-0"
+             x-transition:leave-end="opacity-0 transform -translate-y-2"
+             class="md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-6 space-y-4">
+                <a href="#features" class="block px-3 py-2 text-gray-700 font-medium hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors">
+                    Features
+                </a>
+                <a href="#pricing" class="block px-3 py-2 text-gray-700 font-medium hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors">
+                    Pricing
+                </a>
+                <hr class="my-4">
+                <button onclick="showLogin(); mobileMenuOpen = false" class="w-full text-left px-3 py-2 text-gray-700 font-medium hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors">
+                    Sign In
+                </button>
+                <button onclick="showSignup(); mobileMenuOpen = false" class="w-full px-4 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all">
+                    Get Started Free
+                </button>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-gradient min-h-screen flex items-center text-white pt-20">
-        <div class="container">
-            <div class="hero-content text-center">
-                <div class="animate-fadeInUp">
-                    <div class="inline-flex items-center px-4 py-2 rounded-full glass mb-8 text-sm font-medium">
-                        <i data-lucide="trending-up" class="w-4 h-4 mr-2"></i>
-                        Increase your AdSense revenue by 300%
-                    </div>
+    <section class="hero-bg min-h-screen flex items-center text-white relative overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-white/10 rounded-full blur-xl animate-float"></div>
+            <div class="absolute top-1/3 right-1/3 w-24 h-24 bg-white/5 rounded-full blur-lg animate-float" style="animation-delay: 2s;"></div>
+            <div class="absolute bottom-1/4 left-1/3 w-40 h-40 bg-white/5 rounded-full blur-2xl animate-float" style="animation-delay: 4s;"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center">
+                <!-- Badge -->
+                <div class="inline-flex items-center px-4 py-2 rounded-full glass-effect bg-white/10 mb-8 text-sm font-medium animate-slide-up">
+                    <i data-lucide="trending-up" class="w-4 h-4 mr-2 text-yellow-300"></i>
+                    <span>Increase your AdSense revenue by 300%</span>
+                    <i data-lucide="sparkles" class="w-4 h-4 ml-2 text-yellow-300"></i>
                 </div>
                 
-                <h1 class="text-6xl font-black mb-8 animate-fadeInUp animate-delay-100 leading-tight">
-                    Automate Your
-                    <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                <!-- Main Title -->
+                <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight">
+                    <span class="block animate-slide-up">Automate Your</span>
+                    <span class="block text-white drop-shadow-lg animate-slide-up" style="animation-delay: 0.2s; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
                         AdSense Revenue
                     </span>
-                    with AI
+                    <span class="block animate-slide-up" style="animation-delay: 0.4s;">with AI</span>
                 </h1>
                 
-                <p class="text-xl text-gray-100 mb-12 max-w-3xl mx-auto animate-fadeInUp animate-delay-200 leading-relaxed">
+                <!-- Subtitle -->
+                <p class="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-100 mb-12 max-w-4xl mx-auto leading-relaxed animate-slide-up" style="animation-delay: 0.6s;">
                     Complete AI-powered system that generates content, manages Pinterest marketing, 
-                    and optimizes AdSense performance. Scale your revenue 24/7 without manual work.
+                    and optimizes AdSense performance. <br>
+                    <span class="text-yellow-300 font-semibold">Scale your revenue 24/7</span> without manual work.
                 </p>
                 
-                <div class="flex flex-col sm:flex-row gap-6 justify-center animate-fadeInUp animate-delay-300">
-                    <button onclick="showSignup()" class="btn btn-primary text-lg px-10 py-4">
-                        <i data-lucide="rocket" class="w-5 h-5 mr-3"></i>
-                        Start Free Trial
-                        <span class="ml-2 text-xs opacity-75">No Credit Card</span>
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style="animation-delay: 0.8s;">
+                    <button onclick="showSignup()" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl shadow-2xl hover:shadow-orange-500/25 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 overflow-hidden">
+                        <span class="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                        <span class="relative flex items-center text-white font-bold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5); color: white !important;">
+                            <i data-lucide="rocket" class="w-5 h-5 mr-3 group-hover:animate-bounce text-white"></i>
+                            <span class="text-white font-bold" style="color: white !important;">Start Free Trial</span>
+                            <span class="ml-3 px-2 py-1 text-xs bg-white/30 text-white rounded-full font-semibold">No Card Required</span>
+                        </span>
                     </button>
-                    <button onclick="showDemo()" class="btn btn-secondary text-lg px-10 py-4">
-                        <i data-lucide="play" class="w-5 h-5 mr-3"></i>
+                    
+                    <button onclick="showDemo()" class="group inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white glass-effect bg-white/10 border border-white/20 rounded-2xl hover:bg-white/20 transition-all duration-300">
+                        <i data-lucide="play" class="w-5 h-5 mr-3 group-hover:text-yellow-300 transition-colors"></i>
                         Watch Demo
+                        <i data-lucide="external-link" class="w-4 h-4 ml-2 opacity-70"></i>
                     </button>
                 </div>
                 
-                <div class="mt-16 animate-fadeInUp animate-delay-400">
-                    <div class="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-200">
+                <!-- Social Proof -->
+                <div class="mt-16 animate-slide-up" style="animation-delay: 1s;">
+                    <div class="flex flex-wrap justify-center items-center gap-6 md:gap-8 text-sm text-white/80">
                         <div class="flex items-center">
                             <i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-400"></i>
-                            Free 14-day trial
+                            <span>Free 14-day trial</span>
                         </div>
                         <div class="flex items-center">
                             <i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-400"></i>
-                            No setup fees
+                            <span>No setup fees</span>
                         </div>
                         <div class="flex items-center">
                             <i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-400"></i>
-                            Cancel anytime
+                            <span>Cancel anytime</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="users" class="w-4 h-4 mr-2 text-blue-400"></i>
+                            <span>10,000+ publishers trust us</span>
                         </div>
                     </div>
                 </div>
@@ -465,68 +655,83 @@
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-20 bg-pattern">
-        <div class="container">
-            <div class="text-center mb-16">
-                <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-6">
+    <section id="features" class="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white relative">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmM2Y0ZjYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJtMzYgMzQgNi00IDYgNHY1bC02IDQtNi00di01eiIvPjwvZz48L2c+PC9zdmc+')] opacity-30"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16 lg:mb-20">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 text-sm font-semibold mb-6 shadow-sm">
                     <i data-lucide="cpu" class="w-4 h-4 mr-2"></i>
-                    AI-Powered Automation
+                    <span>AI-Powered Automation</span>
+                    <i data-lucide="zap" class="w-4 h-4 ml-2 text-yellow-500"></i>
                 </div>
-                <h2 class="text-5xl font-bold text-gray-900 mb-6">Everything You Need</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
+                    Everything You Need
+                    <span class="block gradient-text">To Scale Revenue</span>
+                </h2>
+                
+                <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
                     Complete automation suite that handles content creation, social media marketing, 
                     and revenue optimization while you focus on growing your business.
                 </p>
             </div>
             
-            <div class="grid-responsive">
-                <div class="feature-card text-center">
-                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
-                        <i data-lucide="brain" class="w-10 h-10 text-white"></i>
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                <!-- AI Content Generation -->
+                <div class="feature-card group p-8 bg-white rounded-2xl border border-gray-200 text-center hover:border-blue-200 transition-all duration-300">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+                        <i data-lucide="brain" class="w-8 h-8 md:w-10 md:h-10 text-white"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-900">AI Content Generation</h3>
-                    <p class="text-gray-600 leading-relaxed">
+                    <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 group-hover:text-blue-600 transition-colors">AI Content Generation</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">
                         Powered by DeepSeek, Claude, and Groq AI. Creates high-quality, SEO-optimized 
                         articles and images automatically. Never run out of content again.
                     </p>
-                    <div class="mt-6 flex flex-wrap gap-2 justify-center">
-                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">SEO Optimized</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Multi AI Models</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Auto Publishing</span>
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-full border border-blue-200">SEO Optimized</span>
+                        <span class="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-full border border-blue-200">Multi AI Models</span>
+                        <span class="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-full border border-blue-200">Auto Publishing</span>
                     </div>
                 </div>
                 
-                <div class="feature-card text-center">
-                    <div class="w-20 h-20 bg-gradient-to-r from-red-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
-                        <i data-lucide="image" class="w-10 h-10 text-white"></i>
+                <!-- Pinterest Automation -->
+                <div class="feature-card group p-8 bg-white rounded-2xl border border-gray-200 text-center hover:border-purple-200 transition-all duration-300">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+                        <i data-lucide="image" class="w-8 h-8 md:w-10 md:h-10 text-white"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-900">Pinterest Automation</h3>
-                    <p class="text-gray-600 leading-relaxed">
+                    <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 group-hover:text-purple-600 transition-colors">Pinterest Automation</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">
                         Automatically creates and publishes Pinterest pins, manages multiple accounts, 
                         and drives traffic to your AdSense-enabled websites.
                     </p>
-                    <div class="mt-6 flex flex-wrap gap-2 justify-center">
-                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Multi Accounts</span>
-                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Auto Scheduling</span>
-                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Traffic Growth</span>
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <span class="px-3 py-1 bg-purple-50 text-purple-600 text-xs font-medium rounded-full border border-purple-200">Multi Accounts</span>
+                        <span class="px-3 py-1 bg-purple-50 text-purple-600 text-xs font-medium rounded-full border border-purple-200">Auto Scheduling</span>
+                        <span class="px-3 py-1 bg-purple-50 text-purple-600 text-xs font-medium rounded-full border border-purple-200">Traffic Growth</span>
                     </div>
                 </div>
                 
-                <div class="feature-card text-center">
-                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
-                        <i data-lucide="trending-up" class="w-10 h-10 text-white"></i>
+                <!-- Revenue Optimization -->
+                <div class="feature-card group p-8 bg-white rounded-2xl border border-gray-200 text-center hover:border-cyan-200 transition-all duration-300 md:col-span-2 lg:col-span-1">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+                        <i data-lucide="trending-up" class="w-8 h-8 md:w-10 md:h-10 text-white"></i>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-900">Revenue Optimization</h3>
-                    <p class="text-gray-600 leading-relaxed">
+                    <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 group-hover:text-cyan-600 transition-colors">Revenue Optimization</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">
                         Real-time performance monitoring, smart ad placement optimization, 
                         and automated A/B testing to maximize your AdSense earnings.
                     </p>
-                    <div class="mt-6 flex flex-wrap gap-2 justify-center">
-                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Real-time Analytics</span>
-                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">A/B Testing</span>
-                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Smart Placement</span>
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <span class="px-3 py-1 bg-cyan-50 text-cyan-600 text-xs font-medium rounded-full border border-cyan-200">Real-time Analytics</span>
+                        <span class="px-3 py-1 bg-cyan-50 text-cyan-600 text-xs font-medium rounded-full border border-cyan-200">A/B Testing</span>
+                        <span class="px-3 py-1 bg-cyan-50 text-cyan-600 text-xs font-medium rounded-full border border-cyan-200">Smart Placement</span>
                     </div>
                 </div>
+            </div>
             </div>
             
             <!-- Additional features grid -->
@@ -566,6 +771,186 @@
         </div>
     </section>
 
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-blue-50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-green-100 to-blue-100 text-green-700 text-sm font-semibold mb-6 shadow-sm">
+                    <i data-lucide="dollar-sign" class="w-4 h-4 mr-2"></i>
+                    <span>Simple & Transparent Pricing</span>
+                    <i data-lucide="trending-up" class="w-4 h-4 ml-2 text-blue-500"></i>
+                </div>
+                
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 leading-tight">
+                    Choose Your
+                    <span class="block gradient-text">Growth Plan</span>
+                </h2>
+                
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                    Start free, scale as you grow. All plans include our complete AI automation suite.
+                </p>
+            </div>
+            
+            <!-- Pricing Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 max-w-5xl mx-auto">
+                <!-- Starter Plan -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-8 relative hover:border-blue-300 transition-all duration-300 hover:shadow-xl">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Starter</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-black text-gray-900">$29</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <p class="text-gray-600 mb-8">Perfect for beginners getting started with automation</p>
+                        
+                        <button onclick="showSignup()" class="w-full btn btn-ghost py-3 mb-8">
+                            Start Free Trial
+                        </button>
+                        
+                        <div class="space-y-4 text-left">
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Up to 3 websites</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">50 AI articles/month</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Pinterest automation</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Basic analytics</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Email support</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pro Plan (Featured) -->
+                <div class="bg-white rounded-2xl border-2 border-blue-500 p-8 relative hover:border-blue-600 transition-all duration-300 hover:shadow-2xl transform hover:scale-105">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                            Most Popular
+                        </span>
+                    </div>
+                    
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Pro</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-black text-gray-900">$79</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <p class="text-gray-600 mb-8">For serious publishers ready to scale their revenue</p>
+                        
+                        <button onclick="showSignup()" class="w-full btn btn-primary py-3 mb-8">
+                            Start Free Trial
+                        </button>
+                        
+                        <div class="space-y-4 text-left">
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Up to 15 websites</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">200 AI articles/month</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Advanced Pinterest automation</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Real-time analytics & A/B testing</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Priority support & live chat</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Custom domain automation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Enterprise Plan -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-8 relative hover:border-purple-300 transition-all duration-300 hover:shadow-xl">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Enterprise</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-black text-gray-900">$199</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <p class="text-gray-600 mb-8">For agencies and large-scale publishers</p>
+                        
+                        <button onclick="showSignup()" class="w-full btn btn-ghost py-3 mb-8">
+                            Contact Sales
+                        </button>
+                        
+                        <div class="space-y-4 text-left">
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Unlimited websites</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Unlimited AI content</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Multi-account Pinterest management</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Advanced analytics & reporting</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">24/7 phone & chat support</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0"></i>
+                                <span class="text-gray-700">Custom integrations & API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="mt-16 text-center">
+                <h3 class="text-2xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div class="text-left">
+                        <h4 class="font-semibold text-gray-900 mb-2">Is there really a free trial?</h4>
+                        <p class="text-gray-600">Yes! 14 days completely free, no credit card required. Cancel anytime.</p>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-semibold text-gray-900 mb-2">Can I upgrade or downgrade anytime?</h4>
+                        <p class="text-gray-600">Absolutely. Change your plan whenever you need to scale up or down.</p>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-semibold text-gray-900 mb-2">What payment methods do you accept?</h4>
+                        <p class="text-gray-600">All major credit cards, PayPal, and bank transfers for enterprise plans.</p>
+                    </div>
+                    <div class="text-left">
+                        <h4 class="font-semibold text-gray-900 mb-2">Do you offer refunds?</h4>
+                        <p class="text-gray-600">Yes, 30-day money-back guarantee if you're not completely satisfied.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-20 bg-gradient-to-r from-blue-600 to-purple-700 text-white">
         <div class="container text-center">
@@ -582,6 +967,114 @@
             </div>
         </div>
     </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Main Footer Content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Company Info -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i data-lucide="zap" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold text-white">Auto AdSense</span>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        AI-powered AdSense automation that scales your revenue 24/7 with intelligent content generation and marketing.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors">
+                            <i data-lucide="twitter" class="w-5 h-5 text-gray-300"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-gray-300"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors">
+                            <i data-lucide="youtube" class="w-5 h-5 text-gray-300"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Product -->
+                <div>
+                    <h3 class="font-semibold text-white mb-6">Product</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#features" class="text-gray-300 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#pricing" class="text-gray-300 hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="#" onclick="showDemo()" class="text-gray-300 hover:text-white transition-colors">Demo</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Integrations</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">API Documentation</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Company -->
+                <div>
+                    <h3 class="font-semibold text-white mb-6">Company</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Press</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support -->
+                <div>
+                    <h3 class="font-semibold text-white mb-6">Support</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Community</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Status</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Newsletter Signup -->
+            <div class="border-t border-gray-800 pt-8 mb-8">
+                <div class="flex flex-col lg:flex-row items-center justify-between">
+                    <div class="mb-4 lg:mb-0">
+                        <h3 class="text-xl font-semibold text-white mb-2">Stay Updated</h3>
+                        <p class="text-gray-300">Get the latest updates on AI automation and revenue optimization tips.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                        <input type="email" placeholder="Enter your email" 
+                               class="px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 flex-1 lg:w-80">
+                        <button class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 whitespace-nowrap">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Footer -->
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col lg:flex-row items-center justify-between">
+                    <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 mb-4 lg:mb-0">
+                        <p class="text-gray-300 text-sm">
+                            © 2025 Auto AdSense. All rights reserved.
+                        </p>
+                        <div class="flex space-x-6 text-sm">
+                            <a href="#" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a>
+                            <a href="#" class="text-gray-300 hover:text-white transition-colors">Terms of Service</a>
+                            <a href="#" class="text-gray-300 hover:text-white transition-colors">Cookie Policy</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-300">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                        <span>SOC 2 Compliant</span>
+                        <span class="mx-2">•</span>
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                        <span>SSL Secured</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Login Modal -->
     <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 hidden">
