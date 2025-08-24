@@ -1,19 +1,16 @@
 networks: { edge: { }, internal: { } }
-volumes: { traefik_acme: {}, n8n_data: {}, redis_data: {}, content_data: {} }
+volumes: { caddy_data: {}, caddy_config: {}, n8n_data: {}, redis_data: {}, content_data: {} }
 
 services:
-  traefik:
-    image: traefik:v3.1
-    command:
-      - --api.dashboard=true
-      - --api.insecure=true
-      - --providers.docker=true
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --log.level=INFO
-    ports: ["9090:80","9443:443","8081:8080"]
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "8090:8090"
+      - "8091:8091"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
     networks: [edge]
     restart: unless-stopped
 
@@ -23,16 +20,14 @@ services:
       - TZ=${TZ}
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
-      - N8N_HOST=localhost
-      - N8N_PUBLIC_URL=http://localhost:7056
-      - WEBHOOK_URL=http://localhost:7056
+      - N8N_HOST=161.97.178.101
+      - N8N_PUBLIC_URL=http://161.97.178.101:8091
+      - WEBHOOK_URL=http://161.97.178.101:8091
       - N8N_DIAGNOSTICS_ENABLED=false
-      - N8N_SECURE_COOKIE=false
+      - N8N_SECURE_COOKIE=true
       - DB_SQLITE_POOL_SIZE=5
       - N8N_RUNNERS_ENABLED=false
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
-    ports:
-      - "7056:5678"
     volumes: [ "n8n_data:/home/node/.n8n" ]
     depends_on: [redis]
     networks: [edge, internal]
@@ -50,32 +45,130 @@ services:
     build: ./services/content-api
     env_file: .env
     volumes:
-      - /srv/auto-adsense/multidomain_site_kit/sites:/content   # bind-mount to your site repo
-    ports:
-      - "7055:5055" # Changed to avoid conflicts with cryonel (8080)
-    networks: [internal]
+      - /srv/auto-adsense/multidomain_site_kit/sites:/content
+    networks: [edge, internal]
     restart: unless-stopped
 
-  # Pinterest bot API & workers
+  # Real Pinterest Bot - NO MOCK DATA
   bot-api:
     build: ./services/pinbot
     env_file: .env
-    ports:
-      - "7001:5001" # Changed to avoid conflicts with cryonel (3000, 5432, 6379)
-    networks: [internal]
+    networks: [edge, internal]
     restart: unless-stopped
     command: ["python","/app/bot_api.py"]
 
-  pin-worker:
+  # Enhanced Tailwind Pinterest Worker
+  tailwind-pinterest-worker:
     build: ./services/pinbot
     env_file: .env
     networks: [internal]
     restart: unless-stopped
-    command: ["python","/app/pin_worker.py"]
+    command: ["python","/app/enhanced_tailwind_worker.py"]
+    depends_on: [redis, content-api]
 
-  poster-worker:
-    build: ./services/pinbot
+  # Real Analytics Service - NO MOCK DATA
+  real-analytics:
+    build: ./services/analytics
     env_file: .env
     networks: [internal]
     restart: unless-stopped
-    command: ["python","/app/poster_worker.py"]
+    command: ["python","/app/real_analytics_service.py"]
+    depends_on: [redis]
+
+  # AI Content Generator - DeepSeek, Claude, Groq, HuggingFace
+  ai-content-generator:
+    build: ./services/content
+    env_file: .env
+    volumes:
+      - /srv/auto-adsense/multidomain_site_kit/sites:/content
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python","/app/ai_content_generator.py"]
+    depends_on: [redis, content-api]
+
+  # Nano Banana Image Generator - FREE Images
+  nano-banana-generator:
+    build: ./services/image-generation
+    env_file: .env
+    volumes:
+      - /srv/auto-adsense/multidomain_site_kit/generated_images:/app/generated_images
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python","/app/nano_banana_client.py"]
+    depends_on: [redis]
+
+  # Topic Focused Content Generator - Anti-Spam
+  topic-content-generator:
+    build: ./services/content
+    env_file: .env
+    volumes:
+      - /srv/auto-adsense/multidomain_site_kit/sites:/content
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python","/app/topic_focused_generator.py"]
+    depends_on: [redis, ai-content-generator]
+
+  # Google AdSense Manager - Real Revenue Data
+  adsense-manager:
+    build: ./services/adsense
+    env_file: .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python", "/app/adsense_manager.py"]
+    depends_on: [redis]
+
+  # Content Scheduler - 100% Automatic Pipeline
+  content-scheduler:
+    build: ./services/orchestrator
+    env_file: .env
+    volumes:
+      - /srv/auto-adsense/multidomain_site_kit/sites:/sites
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python", "/app/content_scheduler.py"]
+    depends_on: [redis, content-api, ai-content-generator, tailwind-pinterest-worker]
+
+  # Auto Domain Deployer - Cloudflare Integration
+  auto-deployment:
+    build: ./services/auto-deployment
+    env_file: .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CLOUDFLARE_DASHBOARD=https://dash.cloudflare.com/3472bd4345145a5b73f49b198580dc3e/home/developer-platform
+    volumes:
+      - /srv/auto-adsense/multidomain_site_kit:/srv/auto-adsense/multidomain_site_kit
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python", "/app/domain_deployer.py"]
+    depends_on: [redis, content-api]
+
+  # Security Scanner - Semgrep Integration
+  security-scanner:
+    build: ./services/security
+    env_file: .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - /srv/auto-adsense:/srv/auto-adsense:ro
+    networks: [internal]
+    restart: unless-stopped
+    command: ["python", "/app/security_scanner.py"]
+    depends_on: [redis]
+
+  # Dashboard with Real Data
+  dashboard:
+    build: ./dashboard
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=8080
+    ports:
+      - "9080:8080"
+    depends_on: [redis, real-analytics, auto-deployment, security-scanner]
+    networks: [edge, internal]
+    restart: unless-stopped

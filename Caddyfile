@@ -1,0 +1,53 @@
+# /srv/auto-adsense/Caddyfile
+# Caddy konfigürasyonu - sadece localhost dashboard
+
+# Dashboard - Ana kontrol paneli (localhost)
+:8090 {
+    reverse_proxy dashboard:8080
+    
+    # Gzip sıkıştırma
+    encode gzip
+    
+    # Güvenlik başlıkları
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+}
+
+# n8n Workflow yönetimi (localhost)
+:8091 {
+    reverse_proxy n8n:5678
+    
+    encode gzip
+    
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        X-XSS-Protection "1; mode=block"
+    }
+}
+
+# devqora.space - http://161.97.178.101:9080 adresine yönlendirme
+devqora.space, www.devqora.space {
+    reverse_proxy http://161.97.178.101:9080 {
+        header_up Host {upstream_hostport}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+    
+    encode gzip
+    
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+    
+    # Cloudflare gerçek IP ayarları
+    trusted_proxies cloudflare
+}

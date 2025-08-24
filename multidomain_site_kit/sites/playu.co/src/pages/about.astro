@@ -1,0 +1,167 @@
+---
+import ModernBase from '@mdkit/shared/src/layouts/ModernBase.astro'
+import ModernAdSlot from '@mdkit/shared/src/components/ModernAdSlot.astro'
+import domains from '../config.json'
+
+const cfg = domains['playu.co']
+const title = "About Us - Playu.co"
+const description = "Your ultimate gaming destination. We cover the latest gaming trends, reviews, guides and everything you need to level up your gaming experience."
+---
+
+<ModernBase title={title} description={description} locale={cfg.locale} adsenseClient={cfg.adsense_client}>
+  <div class="container mx-auto px-4 py-12">
+    
+    <!-- Header Ad -->
+    <ModernAdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.header} />
+    
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-5xl font-bold text-gray-900 mb-6">About Playu.co</h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Your ultimate gaming destination where we explore the latest trends, share expert reviews, 
+        and provide comprehensive guides to elevate your gaming experience.
+      </p>
+    </div>
+
+    <!-- Mission Section -->
+    <section class="grid md:grid-cols-2 gap-12 items-center mb-16">
+      <div>
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
+        <p class="text-gray-600 mb-4">
+          At Playu.co, we're passionate about gaming in all its forms. Our mission is to create 
+          a comprehensive platform where gamers can discover new experiences, improve their skills, 
+          and stay updated with the latest industry developments.
+        </p>
+        <p class="text-gray-600">
+          We believe gaming is more than entertainment – it's a culture, a community, and a way to 
+          connect people worldwide. Our goal is to celebrate this culture while helping gamers 
+          make informed decisions about games, gear, and gaming strategies.
+        </p>
+      </div>
+      <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-1">
+        <div class="bg-white rounded-2xl p-8 h-full">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
+          <p class="text-gray-600">
+            To become the most trusted gaming resource globally, where every gamer 
+            finds valuable insights, honest reviews, and the inspiration to level up their gaming journey.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- In-Article Ad -->
+    <ModernAdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.in_article} />
+
+    <!-- What We Cover -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">What We Cover</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">📱</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Mobile Gaming</h3>
+          <p class="text-gray-600">
+            Latest mobile games, reviews, tips, and strategies for iOS and Android gaming experiences.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">🖥️</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">PC Gaming</h3>
+          <p class="text-gray-600">
+            Hardware reviews, game performance analysis, and guides for building the ultimate gaming PC.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">🎮</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Console Gaming</h3>
+          <p class="text-gray-600">
+            PlayStation, Xbox, Nintendo Switch coverage including exclusive games and console comparisons.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">🏆</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Esports</h3>
+          <p class="text-gray-600">
+            Competitive gaming news, tournament coverage, and professional player insights.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">⭐</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Game Reviews</h3>
+          <p class="text-gray-600">
+            Honest, in-depth reviews of the latest games across all platforms and genres.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">🛠️</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Gaming Setup</h3>
+          <p class="text-gray-600">
+            Recommendations for gaming chairs, desks, monitors, and accessories to optimize your setup.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="mb-16 text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-12">Our Team</h2>
+      <div class="max-w-2xl mx-auto">
+        <p class="text-lg text-gray-600 mb-8">
+          We're a team of passionate gamers, industry veterans, and content creators who live and breathe gaming. 
+          Our diverse backgrounds in competitive gaming, game development, and tech journalism bring you well-rounded perspectives.
+        </p>
+        <div class="bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl p-8 text-white">
+          <h3 class="text-2xl font-bold mb-4">Our Standards</h3>
+          <div class="grid md:grid-cols-3 gap-6 text-center">
+            <div>
+              <div class="text-3xl font-bold">100%</div>
+              <div class="text-sm opacity-90">Honest Reviews</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold">24/7</div>
+              <div class="text-sm opacity-90">Gaming Coverage</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold">∞</div>
+              <div class="text-sm opacity-90">Gaming Passion</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="text-center bg-gray-50 rounded-2xl p-12 mb-16">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Get in Touch</h2>
+      <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+        Have questions, suggestions, or want to collaborate? We're always excited to connect with fellow gamers and industry professionals.
+      </p>
+      <a href="/contact" class="inline-flex items-center px-8 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors">
+        Contact Us
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </section>
+
+    <!-- Footer Ad -->
+    <ModernAdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.footer} />
+
+  </div>
+</ModernBase>

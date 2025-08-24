@@ -1,0 +1,121 @@
+---
+export interface Props {
+  slot: string;
+  format?: string;
+  style?: string;
+  responsive?: boolean;
+  className?: string;
+}
+
+const { 
+  slot, 
+  format = "auto", 
+  style = "display:block", 
+  responsive = true,
+  className = ""
+} = Astro.props;
+
+const adClass = `ad-unit ${className}`.trim();
+---
+
+<div class={adClass}>
+  <ins class="adsbygoogle"
+       style={style}
+       data-ad-client="ca-pub-7970408813538482"
+       data-ad-slot={slot}
+       data-ad-format={format}
+       data-full-width-responsive={responsive.toString()}>
+  </ins>
+</div>
+
+<script>
+  // AdSense Auto Ads
+  (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<style>
+  .ad-unit {
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .ad-unit ins {
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  /* Responsive ad containers */
+  @media (max-width: 768px) {
+    .ad-unit {
+      margin: 1rem 0;
+    }
+  }
+
+  /* Ad unit variations */
+  .ad-unit.banner {
+    width: 100%;
+    max-width: 728px;
+    height: 90px;
+    margin: 2rem auto;
+  }
+
+  .ad-unit.rectangle {
+    width: 300px;
+    height: 250px;
+    margin: 2rem auto;
+  }
+
+  .ad-unit.leaderboard {
+    width: 100%;
+    max-width: 728px;
+    height: 90px;
+    margin: 2rem auto;
+  }
+
+  .ad-unit.sidebar {
+    width: 160px;
+    height: 600px;
+    margin: 1rem auto;
+  }
+
+  .ad-unit.mobile-banner {
+    width: 320px;
+    height: 50px;
+    margin: 1rem auto;
+  }
+
+  .ad-unit.square {
+    width: 250px;
+    height: 250px;
+    margin: 2rem auto;
+  }
+
+  /* Sticky ads */
+  .ad-unit.sticky-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 728px;
+    padding: 0.5rem;
+  }
+
+  .ad-unit.sticky-top {
+    position: sticky;
+    top: 80px;
+    z-index: 100;
+    margin: 1rem 0;
+  }
+
+  @media (max-width: 768px) {
+    .ad-unit.sticky-bottom {
+      max-width: 320px;
+      padding: 0.25rem;
+    }
+  }
+</style>

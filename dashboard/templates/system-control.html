@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Control Panel - Auto AdSense</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .control-button {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .metric-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-4">
+        <!-- Header -->
+        <div class="glass-card rounded-xl p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">System Control Panel</h1>
+                    <p class="text-blue-100">Complete automation system management</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <div class="status-dot w-3 h-3 bg-green-400 rounded-full mr-2"></div>
+                        <span class="text-white font-medium">All Systems Active</span>
+                    </div>
+                    <button onclick="refreshAll()" class="control-button text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <div class="metric-card rounded-xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">Total Revenue</p>
+                        <h3 class="text-2xl font-bold text-white" id="totalRevenue">$0.00</h3>
+                    </div>
+                    <i class="fas fa-dollar-sign text-green-400 text-2xl"></i>
+                </div>
+            </div>
+            
+            <div class="metric-card rounded-xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">Articles Generated</p>
+                        <h3 class="text-2xl font-bold text-white" id="articlesCount">0</h3>
+                    </div>
+                    <i class="fas fa-file-alt text-blue-400 text-2xl"></i>
+                </div>
+            </div>
+            
+            <div class="metric-card rounded-xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">Pinterest Pins</p>
+                        <h3 class="text-2xl font-bold text-white" id="pinsCount">0</h3>
+                    </div>
+                    <i class="fab fa-pinterest text-red-400 text-2xl"></i>
+                </div>
+            </div>
+            
+            <div class="metric-card rounded-xl p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">Active Services</p>
+                        <h3 class="text-2xl font-bold text-white" id="servicesCount">12/12</h3>
+                    </div>
+                    <i class="fas fa-server text-purple-400 text-2xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Tabs -->
+        <div class="glass-card rounded-xl p-6">
+            <div class="flex flex-wrap gap-2 mb-6 border-b border-white/20 pb-4">
+                <button onclick="showTab('adsense')" class="tab-btn active" data-tab="adsense">
+                    <i class="fas fa-dollar-sign mr-2"></i>AdSense
+                </button>
+                <button onclick="showTab('content')" class="tab-btn" data-tab="content">
+                    <i class="fas fa-edit mr-2"></i>Content
+                </button>
+                <button onclick="showTab('pinterest')" class="tab-btn" data-tab="pinterest">
+                    <i class="fab fa-pinterest mr-2"></i>Pinterest
+                </button>
+                <button onclick="showTab('deployment')" class="tab-btn" data-tab="deployment">
+                    <i class="fas fa-cloud mr-2"></i>Deployment
+                </button>
+                <button onclick="showTab('variables')" class="tab-btn" data-tab="variables">
+                    <i class="fas fa-cog mr-2"></i>Variables
+                </button>
+                <button onclick="showTab('monitoring')" class="tab-btn" data-tab="monitoring">
+                    <i class="fas fa-chart-line mr-2"></i>Monitoring
+                </button>
+            </div>
+
+            <!-- AdSense Tab -->
+            <div id="adsense-tab" class="tab-content">
+                <h2 class="text-2xl font-bold text-white mb-4">AdSense Revenue Management</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="glass-card rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-white mb-3">Account Status</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-blue-100">Publisher ID</span>
+                                    <span class="text-white font-mono">pub-7970408813538482</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-blue-100">Status</span>
+                                    <span class="text-green-400">Active</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-blue-100">Auto Ads</span>
+                                    <span class="text-green-400">Enabled</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-white mb-3">Revenue Controls</h3>
+                            <div class="space-y-3">
+                                <button onclick="refreshAdSenseData()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                    <i class="fas fa-sync-alt mr-2"></i>Refresh Revenue Data
+                                </button>
+                                <button onclick="generateAdSenseReport()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                    <i class="fas fa-chart-bar mr-2"></i>Generate Report
+                                </button>
+                                <button onclick="optimizeAds()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                    <i class="fas fa-magic mr-2"></i>Optimize Ad Placement
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">Recent Performance</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-100">Today's Revenue</span>
+                                <span class="text-xl font-bold text-green-400" id="todayRevenue">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-100">Impressions</span>
+                                <span class="text-white font-mono" id="impressions">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-100">Clicks</span>
+                                <span class="text-white font-mono" id="clicks">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-blue-100">CTR</span>
+                                <span class="text-white font-mono" id="ctr">0.00%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Tab -->
+            <div id="content-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-white mb-4">Content Generation Control</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">Content Controls</h3>
+                        <div class="space-y-3">
+                            <button onclick="generateContent()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fas fa-plus mr-2"></i>Generate New Content
+                            </button>
+                            <button onclick="scheduleContent()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fas fa-calendar mr-2"></i>Schedule Content
+                            </button>
+                            <button onclick="viewContentQueue()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fas fa-list mr-2"></i>View Content Queue
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">Content Stats</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Articles Today</span>
+                                <span class="text-white font-mono" id="articlesToday">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Images Generated</span>
+                                <span class="text-white font-mono" id="imagesGenerated">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Auto Schedule</span>
+                                <span class="text-green-400">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pinterest Tab -->
+            <div id="pinterest-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-white mb-4">Pinterest Automation</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">Pinterest Controls</h3>
+                        <div class="space-y-3">
+                            <button onclick="postToPinterest()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fab fa-pinterest mr-2"></i>Post to Pinterest
+                            </button>
+                            <button onclick="managePinterestAccounts()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fas fa-user-cog mr-2"></i>Manage Accounts
+                            </button>
+                            <button onclick="checkPinterestStatus()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fas fa-check-circle mr-2"></i>Check Status
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">Pinterest Stats</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Pins Today</span>
+                                <span class="text-white font-mono" id="pinsToday">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Active Boards</span>
+                                <span class="text-white font-mono" id="activeBoards">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Auto Posting</span>
+                                <span class="text-green-400">Enabled</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deployment Tab -->
+            <div id="deployment-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-white mb-4">Cloudflare Deployment</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">Deployment Controls</h3>
+                        <div class="space-y-3">
+                            <button onclick="deployToCloudflare()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fas fa-cloud-upload-alt mr-2"></i>Deploy to Cloudflare
+                            </button>
+                            <button onclick="checkDeploymentStatus()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fas fa-info-circle mr-2"></i>Check Status
+                            </button>
+                            <button onclick="rollbackDeployment()" class="w-full control-button text-white py-3 px-4 rounded-lg">
+                                <i class="fas fa-undo mr-2"></i>Rollback
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">Deployment Status</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Last Deploy</span>
+                                <span class="text-white font-mono" id="lastDeploy">Never</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Auto Deploy</span>
+                                <span class="text-green-400">Enabled</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Sites Online</span>
+                                <span class="text-green-400">2/2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variables Tab -->
+            <div id="variables-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-white mb-4">System Variables</h2>
+                <div class="glass-card rounded-lg p-4">
+                    <div id="systemVariables">
+                        <p class="text-blue-100">Loading system variables...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring Tab -->
+            <div id="monitoring-tab" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-white mb-4">System Monitoring</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">System Health</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">CPU Usage</span>
+                                <span class="text-white font-mono" id="cpuUsage">0%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Memory Usage</span>
+                                <span class="text-white font-mono" id="memoryUsage">0%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Uptime</span>
+                                <span class="text-white font-mono" id="uptime">0h 0m</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-white mb-3">Service Status</h3>
+                        <div class="space-y-2" id="serviceStatus">
+                            <div class="flex justify-between">
+                                <span class="text-blue-100">Loading...</span>
+                                <span class="text-yellow-400">Checking</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Management
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-white', 'text-purple-600');
+                btn.classList.add('text-blue-100');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // Add active class to selected button
+            const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+            activeBtn.classList.add('active', 'bg-white', 'text-purple-600');
+            activeBtn.classList.remove('text-blue-100');
+        }
+
+        // API Functions
+        async function refreshAdSenseData() {
+            try {
+                const response = await fetch('/api/adsense/refresh');
+                const data = await response.json();
+                if (data.success) {
+                    updateAdSenseDisplay(data.data);
+                    showNotification('AdSense data refreshed successfully!', 'success');
+                }
+            } catch (error) {
+                showNotification('Failed to refresh AdSense data', 'error');
+            }
+        }
+
+        async function generateAdSenseReport() {
+            try {
+                const response = await fetch('/api/adsense/report/30');
+                const data = await response.json();
+                if (data.success) {
+                    downloadReport(data.data);
+                    showNotification('Report generated successfully!', 'success');
+                }
+            } catch (error) {
+                showNotification('Failed to generate report', 'error');
+            }
+        }
+
+        async function generateContent() {
+            try {
+                const response = await fetch('/api/content/generate', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showNotification('Content generation started!', 'success');
+                }
+            } catch (error) {
+                showNotification('Failed to start content generation', 'error');
+            }
+        }
+
+        async function deployToCloudflare() {
+            try {
+                const response = await fetch('/api/deploy/cloudflare', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showNotification('Deployment started!', 'success');
+                }
+            } catch (error) {
+                showNotification('Failed to start deployment', 'error');
+            }
+        }
+
+        // UI Update Functions
+        function updateAdSenseDisplay(data) {
+            document.getElementById('totalRevenue').textContent = `$${data.total_earnings?.toFixed(2) || '0.00'}`;
+            document.getElementById('todayRevenue').textContent = `$${data.today_earnings?.toFixed(2) || '0.00'}`;
+            document.getElementById('impressions').textContent = data.total_impressions?.toLocaleString() || '0';
+            document.getElementById('clicks').textContent = data.total_clicks?.toLocaleString() || '0';
+            const ctr = data.total_impressions ? (data.total_clicks / data.total_impressions * 100).toFixed(2) : '0.00';
+            document.getElementById('ctr').textContent = `${ctr}%`;
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg z-50 ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            } text-white`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add tab button styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .tab-btn {
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 0.5rem;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                    color: rgba(219, 234, 254, 0.8);
+                }
+                .tab-btn:hover {
+                    background: rgba(255, 255, 255, 0.1);
+                    color: white;
+                }
+                .tab-btn.active {
+                    background: white;
+                    color: #7c3aed;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Load initial data
+            refreshAll();
+        });
+
+        async function refreshAll() {
+            await Promise.all([
+                refreshAdSenseData(),
+                loadSystemMetrics(),
+                loadServiceStatus()
+            ]);
+        }
+
+        async function loadSystemMetrics() {
+            try {
+                const response = await fetch('/api/monitoring/system');
+                const data = await response.json();
+                
+                document.getElementById('cpuUsage').textContent = `${data.cpu_usage?.toFixed(1) || '0.0'}%`;
+                document.getElementById('memoryUsage').textContent = `${data.memory_usage?.toFixed(1) || '0.0'}%`;
+                document.getElementById('uptime').textContent = data.uptime || '0h 0m';
+            } catch (error) {
+                console.error('Failed to load system metrics:', error);
+            }
+        }
+
+        async function loadServiceStatus() {
+            try {
+                const response = await fetch('/api/monitoring/services');
+                const data = await response.json();
+                
+                const serviceContainer = document.getElementById('serviceStatus');
+                serviceContainer.innerHTML = '';
+                
+                Object.entries(data).forEach(([service, status]) => {
+                    const serviceDiv = document.createElement('div');
+                    serviceDiv.className = 'flex justify-between';
+                    serviceDiv.innerHTML = `
+                        <span class="text-blue-100">${service}</span>
+                        <span class="${status === 'running' ? 'text-green-400' : 'text-red-400'}">
+                            ${status}
+                        </span>
+                    `;
+                    serviceContainer.appendChild(serviceDiv);
+                });
+            } catch (error) {
+                console.error('Failed to load service status:', error);
+            }
+        }
+
+        // Placeholder functions for other controls
+        async function optimizeAds() { showNotification('Ad optimization started!', 'info'); }
+        async function scheduleContent() { showNotification('Content scheduled!', 'info'); }
+        async function viewContentQueue() { showNotification('Opening content queue...', 'info'); }
+        async function postToPinterest() { showNotification('Pinterest posting started!', 'info'); }
+        async function managePinterestAccounts() { showNotification('Opening Pinterest management...', 'info'); }
+        async function checkPinterestStatus() { showNotification('Checking Pinterest status...', 'info'); }
+        async function checkDeploymentStatus() { showNotification('Checking deployment status...', 'info'); }
+        async function rollbackDeployment() { showNotification('Rolling back deployment...', 'info'); }
+
+        function downloadReport(data) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `adsense-report-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

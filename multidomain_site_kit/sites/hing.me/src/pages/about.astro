@@ -1,0 +1,165 @@
+---
+import ModernBase from '@mdkit/shared/src/layouts/ModernBase.astro'
+import ModernAdSlot from '@mdkit/shared/src/components/ModernAdSlot.astro'
+import domains from '../config.json'
+
+const cfg = domains['hing.me']
+const title = "Hakkımızda - Hing.me"
+const description = "Teknoloji dünyasındaki son gelişmeleri takip eden, kaliteli içerik üreten bir platform. Amacımız size en güncel teknik bilgileri sunmak."
+---
+
+<ModernBase title={title} description={description} locale={cfg.locale} adsenseClient={cfg.adsense_client}>
+  <div class="container mx-auto px-4 py-12">
+    
+    <!-- Header Ad -->
+    <ModernAdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.header} />
+    
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-5xl font-bold text-gray-900 mb-6">Hakkımızda</h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Teknoloji tutkunları için hazırlanan kaliteli içeriklerle, dijital dünyanın karmaşık yapısını sizin için basitleştiriyoruz.
+      </p>
+    </div>
+
+    <!-- Mission Section -->
+    <section class="grid md:grid-cols-2 gap-12 items-center mb-16">
+      <div>
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Misyonumuz</h2>
+        <p class="text-gray-600 mb-4">
+          Hing.me olarak, teknoloji dünyasındaki hızlı değişimleri takip ederek, okuyucularımıza 
+          en güncel ve güvenilir bilgileri sunmayı amaçlıyoruz. Karmaşık teknik konuları anlaşılır 
+          bir dilde açıklayarak, herkesin teknolojiden faydalanabilmesini sağlıyoruz.
+        </p>
+        <p class="text-gray-600">
+          Amacımız, teknoloji meraklıları ve profesyonelleri için bir referans noktası olmak, 
+          bilgi paylaşımını desteklemek ve dijital okuryazarlığı artırmaktır.
+        </p>
+      </div>
+      <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-1">
+        <div class="bg-white rounded-2xl p-8 h-full">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Vizyonumuz</h3>
+          <p class="text-gray-600">
+            Türkiye'nin en güvenilir teknoloji platformu olmak ve teknoloji 
+            ekosistemindeki tüm gelişmeleri objektif bir bakış açısıyla sunmak.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- In-Article Ad -->
+    <ModernAdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.in_article} />
+
+    <!-- What We Cover -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Hangi Konuları Kapsıyoruz</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">🤖</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Yapay Zeka</h3>
+          <p class="text-gray-600">
+            AI teknolojilerindeki son gelişmeler, pratik uygulamalar ve geleceğe dair öngörüler.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">🔗</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Blockchain</h3>
+          <p class="text-gray-600">
+            Kripto para, NFT, DeFi ve blockchain teknolojisinin farklı sektörlerdeki kullanımları.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">📱</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Mobil Teknolojiler</h3>
+          <p class="text-gray-600">
+            Smartphone'lar, mobil uygulamalar ve mobil ekosistemindeki yenilikler.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">🌐</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Web Geliştirme</h3>
+          <p class="text-gray-600">
+            Frontend, backend teknolojileri, framework'ler ve web geliştirme trendleri.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">🔒</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Siber Güvenlik</h3>
+          <p class="text-gray-600">
+            Dijital güvenlik, veri koruma, siber saldırılar ve korunma yöntemleri.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-2xl">⚡</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Gadget'lar</h3>
+          <p class="text-gray-600">
+            En yeni teknolojik ürünler, incelemeler ve satın alma rehberleri.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="mb-16 text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-12">Ekibimiz</h2>
+      <div class="max-w-2xl mx-auto">
+        <p class="text-lg text-gray-600 mb-8">
+          Teknoloji endüstrisinde yılların deneyimine sahip yazarlarımız, mühendislerimiz ve 
+          analistlerimizden oluşan profesyonel bir ekiple çalışıyoruz.
+        </p>
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-8 text-white">
+          <h3 class="text-2xl font-bold mb-4">Kalite Standartlarımız</h3>
+          <div class="grid md:grid-cols-3 gap-6 text-center">
+            <div>
+              <div class="text-3xl font-bold">100%</div>
+              <div class="text-sm opacity-90">Doğru Bilgi</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold">24/7</div>
+              <div class="text-sm opacity-90">Güncelleme</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold">∞</div>
+              <div class="text-sm opacity-90">Öğrenme</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="text-center bg-gray-50 rounded-2xl p-12 mb-16">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Bizimle İletişime Geçin</h2>
+      <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+        Sorularınız, önerileriniz veya işbirliği teklifleriniz için her zaman ulaşılabilir durumdayız.
+      </p>
+      <a href="/contact" class="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+        İletişime Geç
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </section>
+
+    <!-- Footer Ad -->
+    <ModernAdSlot client={cfg.adsense_client} slot={cfg.adsense_slots.footer} />
+
+  </div>
+</ModernBase>

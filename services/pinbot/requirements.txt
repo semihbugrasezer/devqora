@@ -3,3 +3,6 @@ requests==2.32.3
 pillow==10.4.0
 python-dotenv==1.0.1
 flask==3.0.3
+PyJWT==2.8.0
+cryptography==42.0.0
+schedule==1.2.0

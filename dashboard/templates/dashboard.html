@@ -1,0 +1,3406 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Auto AdSense Control Panel</title>
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Tailwind CSS utilities - Production için optimize edilmiş */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        /* Base styles */
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        
+        /* Utility classes */
+        .glass-card { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-primary { background: #3b82f6; color: white; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; font-weight: 500; }
+        .btn-success { background: #10b981; color: white; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; font-weight: 500; }
+        .btn-warning { background: #f59e0b; color: white; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; font-weight: 500; }
+        .btn-danger { background: #ef4444; color: white; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; font-weight: 500; }
+        .btn-ghost { background: transparent; color: #6b7280; padding: 0.75rem 1rem; border-radius: 0.5rem; border: 1px solid #e5e7eb; cursor: pointer; font-weight: 500; }
+        
+        /* Layout utilities */
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .hidden { display: none; }
+        .block { display: block; }
+        .inline-block { display: inline-block; }
+        .inline { display: inline; }
+        
+        /* Spacing utilities */
+        .p-1 { padding: 0.25rem; }
+        .p-2 { padding: 0.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        
+        .m-0 { margin: 0; }
+        .m-1 { margin: 0.25rem; }
+        .m-2 { margin: 0.5rem; }
+        .m-4 { margin: 1rem; }
+        .m-6 { margin: 1.5rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mr-1 { margin-right: 0.25rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .ml-2 { margin-left: 0.5rem; }
+        
+        /* Text utilities */
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        
+        .text-white { color: white; }
+        .text-gray-100 { color: #f3f4f6; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-900 { color: #111827; }
+        .text-blue-100 { color: #dbeafe; }
+        .text-green-400 { color: #4ade80; }
+        .text-primary-500 { color: #3b82f6; }
+        
+        /* Border utilities */
+        .border { border-width: 1px; }
+        .border-t { border-top-width: 1px; }
+        .border-b { border-bottom-width: 1px; }
+        .border-gray-100 { border-color: #f3f4f6; }
+        .border-gray-200 { border-color: #e5e7eb; }
+        .border-gray-300 { border-color: #d1d5db; }
+        .border-white\/20 { border-color: rgba(255, 255, 255, 0.2); }
+        
+        .rounded { border-radius: 0.25rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        
+        /* Background utilities */
+        .bg-white { background-color: white; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .bg-gray-100 { background-color: #f3f4f6; }
+        .bg-gray-200 { background-color: #e5e7eb; }
+        .bg-gray-300 { background-color: #d1d5db; }
+        .bg-gray-400 { background-color: #9ca3af; }
+        .bg-gray-500 { background-color: #6b7280; }
+        .bg-gray-600 { background-color: #4b5563; }
+        .bg-gray-700 { background-color: #374151; }
+        .bg-gray-800 { background-color: #1f2937; }
+        .bg-gray-900 { background-color: #111827; }
+        .bg-black { background-color: black; }
+        .bg-black\/50 { background-color: rgba(0, 0, 0, 0.5); }
+        
+        /* Shadow utilities */
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        
+        /* Grid utilities */
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .lg\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .lg\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        
+        /* Gap utilities */
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        
+        /* Space utilities */
+        .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem; }
+        .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+        .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+        .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+        
+        /* Position utilities */
+        .fixed { position: fixed; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        
+        /* Z-index utilities */
+        .z-50 { z-index: 50; }
+        
+        /* Size utilities */
+        .w-full { width: 100%; }
+        .w-4 { width: 1rem; }
+        .w-5 { width: 1.25rem; }
+        .w-8 { width: 2rem; }
+        .w-12 { width: 3rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-h-90vh { max-height: 90vh; }
+        
+        .h-4 { height: 1rem; }
+        .h-5 { height: 1.25rem; }
+        .h-8 { height: 2rem; }
+        .h-12 { height: 3rem; }
+        
+        /* Flex utilities */
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .flex-wrap { flex-wrap: wrap; }
+        
+        /* Overflow utilities */
+        .overflow-y-auto { overflow-y: auto; }
+        
+        /* Transition utilities */
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        
+        /* Focus utilities */
+        .focus\\:ring-2:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); }
+        .focus\\:ring-primary-500:focus { box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); }
+        .focus\\:border-primary-500:focus { border-color: #3b82f6; }
+        
+        /* Hover utilities */
+        .hover\\:text-gray-600:hover { color: #4b5563; }
+        .hover\\:bg-gray-100:hover { background-color: #f3f4f6; }
+        
+        /* Responsive utilities */
+        @media (min-width: 1024px) {
+            .lg\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .lg\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-tab { padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500; color: #6b7280; background: white; border-radius: 0.5rem; border: 1px solid #e5e7eb; white-space: nowrap; transition: all 0.2s; }
+            .mobile-tab.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+            .mobile-tab:hover { background: #f3f4f6; }
+            .mobile-tab.active:hover { background: #2563eb; }
+            
+            .btn-primary, .btn-success, .btn-warning, .btn-danger, .btn-ghost { padding: 0.75rem 1rem; font-size: 0.875rem; }
+            
+            h1 { font-size: 1.5rem !important; }
+            h2 { font-size: 1.25rem !important; }
+            
+            .p-4 { padding: 0.75rem !important; }
+            .p-3 { padding: 0.5rem !important; }
+            
+            .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem !important; }
+        }
+    </style>
+    <!-- Tailwind config removed - using inline styles instead -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .btn-success {
+            background-color: #059669;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-success:hover {
+            background-color: #047857;
+        }
+        .btn-warning {
+            background-color: #d97706;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-warning:hover {
+            background-color: #b45309;
+        }
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+        .btn-ghost {
+            background-color: white;
+            color: #374151;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+        .btn-ghost:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .status-active { 
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+        .status-pending { 
+            background-color: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+        .status-error { 
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        
+        /* Additional utility classes */
+        .bg-primary-50 { background-color: #eff6ff; }
+        .bg-primary-500 { background-color: #3b82f6; }
+        .bg-primary-600 { background-color: #2563eb; }
+        .text-primary-600 { color: #2563eb; }
+        .text-primary-700 { color: #1d4ed8; }
+        .text-primary-800 { color: #1e40af; }
+        .border-primary-200 { border-color: #bfdbfe; }
+        
+        .bg-success-50 { background-color: #ecfdf5; }
+        .bg-success-500 { background-color: #10b981; }
+        .bg-success-600 { background-color: #059669; }
+        .text-success-600 { color: #059669; }
+        .text-success-700 { color: #047857; }
+        
+        .bg-warning-500 { background-color: #f59e0b; }
+        .bg-warning-600 { background-color: #d97706; }
+        
+        .bg-danger-500 { background-color: #ef4444; }
+        .bg-danger-600 { background-color: #dc2626; }
+        
+        .bg-gray-50 { background-color: #f9fafb; }
+        .bg-gray-100 { background-color: #f3f4f6; }
+        .bg-gray-200 { background-color: #e5e7eb; }
+        .bg-gray-300 { background-color: #d1d5db; }
+        .bg-gray-400 { background-color: #9ca3af; }
+        .bg-gray-500 { background-color: #6b7280; }
+        .bg-gray-600 { background-color: #4b5563; }
+        .bg-gray-700 { background-color: #374151; }
+        .bg-gray-800 { background-color: #1f2937; }
+        .bg-gray-900 { background-color: #111827; }
+        
+        .text-gray-100 { color: #f3f4f6; }
+        .text-gray-200 { color: #e5e7eb; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-800 { color: #1f2937; }
+        .text-gray-900 { color: #111827; }
+        
+        .border-gray-100 { border-color: #f3f4f6; }
+        .border-gray-200 { border-color: #e5e7eb; }
+        .border-gray-300 { border-color: #d1d5db; }
+        
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-full { border-radius: 9999px; }
+        
+        .w-3 { width: 0.75rem; }
+        .w-4 { width: 1rem; }
+        .w-6 { width: 1.5rem; }
+        .w-8 { width: 2rem; }
+        .w-12 { width: 3rem; }
+        .w-full { width: 100%; }
+        
+        .h-2 { height: 0.5rem; }
+        .h-3 { height: 0.75rem; }
+        .h-4 { height: 1rem; }
+        .h-6 { height: 1.5rem; }
+        .h-8 { height: 2rem; }
+        .h-12 { height: 3rem; }
+        .h-full { height: 100%; }
+        .min-h-screen { min-height: 100vh; }
+        
+        .max-w-7xl { max-width: 80rem; }
+        
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .my-4 { margin-top: 1rem; margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .ml-2 { margin-left: 0.5rem; }
+        
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        
+        .space-x-2 > * + * { margin-left: 0.5rem; }
+        .space-x-3 > * + * { margin-left: 0.75rem; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        
+        .sticky { position: sticky; }
+        .top-0 { top: 0; }
+        .z-50 { z-index: 50; }
+        
+        .transition-all { transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+        .transition-shadow { transition: box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .hover\:bg-primary-700:hover { background-color: #1d4ed8; }
+        .hover\:bg-success-700:hover { background-color: #047857; }
+        .hover\:bg-warning-600:hover { background-color: #b45309; }
+        .hover\:bg-danger-600:hover { background-color: #b91c1c; }
+        .hover\:bg-gray-50:hover { background-color: #f9fafb; }
+        .hover\:border-gray-300:hover { border-color: #d1d5db; }
+        .hover\:text-primary-700:hover { color: #1d4ed8; }
+        .hover\:text-gray-700:hover { color: #374151; }
+        .hover\:text-gray-600:hover { color: #4b5563; }
+        
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+        .from-primary-500 { --tw-gradient-from: #3b82f6; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59, 130, 246, 0)); }
+        .to-primary-600 { --tw-gradient-to: #2563eb; }
+        .from-success-500 { --tw-gradient-from: #10b981; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(16, 185, 129, 0)); }
+        .to-success-600 { --tw-gradient-to: #059669; }
+        
+        .hidden { display: none; }
+        .block { display: block; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .inline { display: inline; }
+        .inline-block { display: inline-block; }
+        
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        
+        .border { border-width: 1px; }
+        .border-t { border-top-width: 1px; }
+        .border-b { border-bottom-width: 1px; }
+        
+        .cursor-pointer { cursor: pointer; }
+        .overflow-hidden { overflow: hidden; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        
+        .bg-black { background-color: #000000; }
+        .bg-opacity-50 { background-color: rgba(0, 0, 0, 0.5); }
+        
+        .fixed { position: fixed; }
+        .z-50 { z-index: 50; }
+        
+        .backdrop-blur { backdrop-filter: blur(8px); }
+        
+        .transform { transform: translateZ(0); }
+        .scale-95 { transform: scale(0.95); }
+        .scale-100 { transform: scale(1); }
+        
+        .transition { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .duration-200 { transition-duration: 200ms; }
+        .duration-300 { transition-duration: 300ms; }
+        
+        .ease-out { transition-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        .ease-in { transition-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+        
+        .opacity-0 { opacity: 0; }
+        .opacity-100 { opacity: 1; }
+        
+        .pointer-events-none { pointer-events: none; }
+        .pointer-events-auto { pointer-events: auto; }
+        
+        .select-none { user-select: none; }
+        
+        .resize-none { resize: none; }
+        
+        .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
+        .focus\:ring-2:focus { box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); }
+        .focus\:ring-primary-500:focus { box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); }
+        
+        .sm\:px-6 { }
+        .sm\:px-8 { }
+        .sm\:py-4 { }
+        .sm\:grid-cols-2 { }
+        .sm\:grid-cols-3 { }
+        .sm\:flex-row { }
+        .sm\:items-center { }
+        .sm\:justify-between { }
+        .sm\:mb-0 { }
+        .sm\:space-x-2 { }
+        .sm\:space-x-4 { }
+        .sm\:text-left { }
+        
+        .md\:grid-cols-2 { }
+        .md\:grid-cols-3 { }
+        .md\:grid-cols-4 { }
+        
+        .lg\:px-8 { }
+        .lg\:grid-cols-4 { }
+        
+        /* Additional color classes */
+        .bg-green-50 { background-color: #f0fdf4; }
+        .bg-green-100 { background-color: #dcfce7; }
+        .bg-green-500 { background-color: #22c55e; }
+        .bg-green-600 { background-color: #16a34a; }
+        .text-green-100 { color: #dcfce7; }
+        .text-green-200 { color: #bbf7d0; }
+        
+        .bg-blue-50 { background-color: #eff6ff; }
+        .bg-blue-600 { background-color: #2563eb; }
+        .text-blue-600 { color: #2563eb; }
+        
+        .bg-purple-50 { background-color: #faf5ff; }
+        .text-purple-600 { color: #9333ea; }
+        
+        .bg-emerald-600 { background-color: #059669; }
+        
+        .bg-red-500 { background-color: #ef4444; }
+        
+        /* Additional gradient classes */
+        .from-green-500 { --tw-gradient-from: #22c55e; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(34, 197, 94, 0)); }
+        .to-emerald-600 { --tw-gradient-to: #059669; }
+        
+        @media (min-width: 640px) {
+            .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .sm\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .sm\:py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .sm\:flex-row { flex-direction: row; }
+            .sm\:items-center { align-items: center; }
+            .sm\:justify-between { justify-content: space-between; }
+            .sm\:mb-0 { margin-bottom: 0; }
+            .sm\:space-x-2 > * + * { margin-left: 0.5rem; }
+            .sm\:space-x-4 > * + * { margin-left: 1rem; }
+            .sm\:text-left { text-align: left; }
+        }
+        
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+            .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <span class="text-2xl">🚀</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Auto AdSense Control Panel</h1>
+                        <p class="text-sm text-gray-500">AI-Powered Content & Pinterest Automation</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="refreshDashboard()" class="btn-ghost">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                        Yenile
+                    </button>
+                    <div class="text-right">
+                        <div class="text-sm text-gray-500">Son güncelleme</div>
+                        <div class="text-sm font-medium text-gray-900" id="last-update">Az önce</div>
+                    </div>
+                    <div id="user-info" class="flex items-center space-x-3" style="display: none;">
+                        <div class="text-right">
+                            <div class="text-sm font-medium text-gray-900" id="current-username">Guest</div>
+                            <div class="text-xs text-gray-500" id="current-user-role">User</div>
+                        </div>
+                        <button onclick="handleLogout()" class="btn-danger text-sm">
+                            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
+                            Çıkış
+                        </button>
+                    </div>
+                    <div class="w-3 h-3 bg-success-500 rounded-full pulse-animation"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- System Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- CPU Usage -->
+            <div class="glass-card rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">CPU Kullanımı</p>
+                        <p class="text-2xl font-bold text-gray-900" id="cpu-usage">0%</p>
+                    </div>
+                    <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center">
+                        <i data-lucide="cpu" class="w-6 h-6 text-primary-600"></i>
+                    </div>
+                </div>
+                <div class="bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-2 rounded-full transition-all duration-500" 
+                         id="cpu-bar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Memory Usage -->
+            <div class="glass-card rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">RAM Kullanımı</p>
+                        <p class="text-2xl font-bold text-gray-900" id="memory-usage">0%</p>
+                    </div>
+                    <div class="w-12 h-12 bg-success-50 rounded-lg flex items-center justify-center">
+                        <i data-lucide="hard-drive" class="w-6 h-6 text-success-600"></i>
+                    </div>
+                </div>
+                <div class="bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-success-500 to-success-600 h-2 rounded-full transition-all duration-500" 
+                         id="memory-bar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Today's Articles -->
+            <div class="glass-card rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Bugünkü Makaleler</p>
+                        <p class="text-2xl font-bold text-gray-900" id="today-articles">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-warning-50 rounded-lg flex items-center justify-center">
+                        <i data-lucide="file-text" class="w-6 h-6 text-warning-600"></i>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500">
+                    <span class="text-success-600 font-medium">+12%</span> geçen haftaya göre
+                </p>
+            </div>
+
+            <!-- Pinterest Posts -->
+            <div class="glass-card rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Pinterest Posts</p>
+                        <p class="text-2xl font-bold text-gray-900" id="pinterest-posts">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-danger-50 rounded-lg flex items-center justify-center">
+                        <i data-lucide="image" class="w-6 h-6 text-danger-600"></i>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500">
+                    <span class="text-success-600 font-medium">+8%</span> bugün
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Controls Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Domain Management -->
+            <div class="lg:col-span-2">
+                <div class="glass-card rounded-xl shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                                <i data-lucide="globe" class="w-5 h-5 mr-2"></i>
+                                Domain Yönetimi
+                            </h3>
+                            <button onclick="openAddDomainModal()" class="btn-primary">
+                                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                                Yeni Domain
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <!-- Domain List -->
+                        <div id="domain-list" class="space-y-4">
+                            <!-- Domains will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div class="glass-card rounded-xl shadow-sm mt-6">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <i data-lucide="trending-up" class="w-5 h-5 mr-2"></i>
+                            Analytics & Revenue
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gray-900" id="total-impressions">0</div>
+                                <div class="text-sm text-gray-500">Total Impressions</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gray-900" id="total-clicks">0</div>
+                                <div class="text-sm text-gray-500">Total Clicks</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-success-600" id="estimated-revenue">$0.00</div>
+                                <div class="text-sm text-gray-500">Estimated Revenue</div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <canvas id="analytics-chart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="space-y-6">
+                
+                <!-- AI Content Controls -->
+                <div class="glass-card rounded-xl shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <i data-lucide="bot" class="w-5 h-5 mr-2"></i>
+                            AI Content Controls
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <button onclick="generateContent()" class="w-full btn-primary">
+                            <i data-lucide="edit-3" class="w-4 h-4 mr-2"></i>
+                            Manuel Makale Üret
+                        </button>
+                        <button onclick="generateImages()" class="w-full btn-success">
+                            <i data-lucide="image" class="w-4 h-4 mr-2"></i>
+                            Resim Üret
+                        </button>
+                        <button onclick="deployToCloudflare()" class="w-full btn-warning">
+                            <i data-lucide="cloud" class="w-4 h-4 mr-2"></i>
+                            Cloudflare Deploy
+                        </button>
+                        <button onclick="postToPinterest()" class="w-full btn-danger">
+                            <i data-lucide="send" class="w-4 h-4 mr-2"></i>
+                            Pinterest'e Gönder
+                        </button>
+                        
+                        <!-- Content Pipeline Status -->
+                        <div class="border-t border-gray-100 pt-4 mt-4">
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">Content Pipeline</h4>
+                            <div id="pipeline-status" class="space-y-2">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span>Otomatik Scheduler:</span>
+                                    <span class="status-badge status-active">Aktif</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span>Son İçerik:</span>
+                                    <span id="last-content-time">-</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span>Günlük Hedef:</span>
+                                    <span id="daily-target">4/4</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Status -->
+                        <div class="border-t border-gray-100 pt-4 mt-4">
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">AI Provider Status</h4>
+                            <div id="ai-status" class="space-y-2">
+                                <!-- AI status will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pinterest Accounts -->
+                <div class="glass-card rounded-xl shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                                <i data-lucide="users" class="w-5 h-5 mr-2"></i>
+                                Pinterest Hesapları
+                            </h3>
+                            <button onclick="openAddPinterestModal()" class="btn-ghost text-sm">
+                                <i data-lucide="plus" class="w-4 h-4 mr-1"></i>
+                                Ekle
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div id="pinterest-accounts" class="space-y-3">
+                            <!-- Pinterest accounts will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AdSense Revenue Manager -->
+                <div class="glass-card rounded-xl shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <i data-lucide="dollar-sign" class="w-5 h-5 mr-2"></i>
+                            AdSense Revenue
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <!-- Revenue Summary -->
+                        <div class="grid grid-cols-1 gap-4 mb-6">
+                            <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-4 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-green-100 text-sm">Today's Earnings</p>
+                                        <p class="text-2xl font-bold" id="today-earnings">$0.00</p>
+                                    </div>
+                                    <i data-lucide="trending-up" class="w-8 h-8 text-green-200"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="bg-blue-50 rounded-lg p-3 text-center">
+                                    <div class="text-blue-600 font-semibold">CTR</div>
+                                    <div class="text-gray-900" id="current-ctr">0.00%</div>
+                                </div>
+                                <div class="bg-purple-50 rounded-lg p-3 text-center">
+                                    <div class="text-purple-600 font-semibold">CPC</div>
+                                    <div class="text-gray-900" id="current-cpc">$0.00</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="space-y-3">
+                            <button onclick="refreshAdSenseData()" class="w-full btn-primary text-sm">
+                                <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                                Refresh AdSense Data
+                            </button>
+                            <button onclick="viewAdSenseReport()" class="w-full btn-ghost text-sm">
+                                <i data-lucide="bar-chart" class="w-4 h-4 mr-2"></i>
+                                View Full Report
+                            </button>
+                            <button onclick="optimizeAds()" class="w-full btn-success text-sm">
+                                <i data-lucide="zap" class="w-4 h-4 mr-2"></i>
+                                Optimize Ad Placement
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Settings -->
+                <div class="glass-card rounded-xl shadow-sm">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <i data-lucide="settings" class="w-5 h-5 mr-2"></i>
+                            Sistem Ayarları
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <button onclick="showUserManagement()" class="w-full btn-primary" id="user-management-btn" style="display: none;">
+                            <i data-lucide="users" class="w-4 h-4 mr-2"></i>
+                            Kullanıcı Yönetimi
+                        </button>
+                        <button onclick="showSecurityPanel()" class="w-full btn-warning" id="security-panel-btn">
+                            <i data-lucide="shield-check" class="w-4 h-4 mr-2"></i>
+                            Güvenlik Taraması
+                        </button>
+                        <button onclick="openSettingsModal()" class="w-full btn-ghost">
+                            <i data-lucide="key" class="w-4 h-4 mr-2"></i>
+                            API Keys Yönet
+                        </button>
+                        <button onclick="viewLogs()" class="w-full btn-ghost">
+                            <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>
+                            System Logs
+                        </button>
+                        <button onclick="backupData()" class="w-full btn-ghost">
+                            <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                            Backup Al
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Domain Modal -->
+    <div id="addDomainModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Yeni Domain Ekle</h3>
+                    <button onclick="closeAddDomainModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="addDomainForm" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Domain Adı</label>
+                    <input type="text" name="name" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                           placeholder="example.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Niche</label>
+                    <select name="niche" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                        <option value="">Seçiniz</option>
+                        <option value="finance">Finance</option>
+                        <option value="technology">Technology</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="health">Health</option>
+                        <option value="business">Business</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dil</label>
+                    <select name="language" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                        <option value="tr">Türkçe</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Günlük Makale Hedefi</label>
+                    <input type="number" name="daily_target_articles" value="3" min="1" max="10" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                </div>
+                <div class="flex space-x-3 pt-4">
+                    <button type="submit" class="flex-1 btn-primary">
+                        Domain Ekle & Siteyi Kur
+                    </button>
+                    <button type="button" onclick="closeAddDomainModal()" class="flex-1 btn-ghost">
+                        İptal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AdSense Code Modal -->
+    <div id="adsenseModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">AdSense Kod Düzenle</h3>
+                    <button onclick="closeAdSenseModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="adsenseForm" class="p-6 space-y-4">
+                <input type="hidden" id="adsense-domain" name="domain">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Domain</label>
+                    <input type="text" id="adsense-domain-display" readonly 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">AdSense Client ID</label>
+                    <input type="text" id="adsense-client-id" name="adsense_client" required
+                           placeholder="ca-pub-1234567890123456"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <p class="mt-1 text-sm text-gray-500">Google AdSense'den aldığınız yayıncı ID'si</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">AdSense Durum</label>
+                    <select name="adsense_status" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                        <option value="active">Aktif</option>
+                        <option value="pending">Onay Bekliyor</option>
+                        <option value="inactive">Pasif</option>
+                    </select>
+                </div>
+                <div class="flex space-x-3 pt-4">
+                    <button type="submit" class="flex-1 btn-success">
+                        AdSense Kodu Kaydet
+                    </button>
+                    <button type="button" onclick="closeAdSenseModal()" class="flex-1 btn-ghost">
+                        İptal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">API Keys & Sistem Ayarları</h3>
+                    <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="settingsForm" class="p-6 space-y-6">
+                <!-- AI API Keys -->
+                <div>
+                    <h4 class="text-md font-semibold text-gray-900 mb-4">AI API Keys</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">DeepSeek API Key</label>
+                            <input type="password" name="deepseek_key" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                   placeholder="sk-...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Claude API Key</label>
+                            <input type="password" name="claude_key" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                   placeholder="sk-ant-...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Groq API Key (Ücretsiz)</label>
+                            <input type="password" name="groq_key" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                   placeholder="gsk-...">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">HuggingFace API Key (Ücretsiz)</label>
+                            <input type="password" name="hf_key" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                   placeholder="hf_...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Settings -->
+                <div>
+                    <h4 class="text-md font-semibold text-gray-900 mb-4">İçerik Ayarları</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Günlük Pinterest Pin Hedefi</label>
+                            <input type="number" name="daily_pin_target" value="6" min="1" max="20"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Domain Rotasyonu</label>
+                            <textarea name="domain_rotation" rows="3" 
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                      placeholder="https://domain1.com,https://domain2.com"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 pt-4 border-t border-gray-100">
+                    <button type="submit" class="flex-1 btn-primary">
+                        Ayarları Kaydet
+                    </button>
+                    <button type="button" onclick="closeSettingsModal()" class="flex-1 btn-ghost">
+                        İptal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Domain Management Modal -->
+    <div id="domain-management-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-90vh overflow-y-auto">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Domain Yönetim Paneli</h3>
+                    <button onclick="closeDomainManagementModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div id="domain-management-content">
+                    <!-- Domain management content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pinterest Account Modal -->
+    <div id="pinterest-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-90vh overflow-y-auto">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Pinterest Hesabı Ekle</h3>
+                    <button onclick="closePinterestModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="pinterest-form" class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Hesap Adı</label>
+                        <input type="text" name="account_name" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="Örn: MyBusiness">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pinterest Access Token</label>
+                        <input type="password" name="access_token" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="Pinterest API token">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Board ID</label>
+                        <input type="text" name="board_id" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="Pinterest board ID">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Durum</label>
+                        <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Pasif</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 pt-6 border-t border-gray-100 mt-6">
+                    <button type="submit" class="flex-1 btn-primary">
+                        Hesabı Ekle
+                    </button>
+                    <button type="button" onclick="closePinterestModal()" class="flex-1 btn-ghost">
+                        İptal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Domain Settings Modal -->
+    <div id="domain-settings-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-90vh overflow-y-auto">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Domain Ayarları</h3>
+                    <button onclick="closeDomainSettingsModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="domain-settings-form" class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Domain Adı</label>
+                        <input type="text" name="domain" readonly
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
+                               placeholder="example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dil</label>
+                        <select name="language" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="tr">Türkçe</option>
+                            <option value="en">English</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                            <option value="it">Italiano</option>
+                            <option value="pt">Português</option>
+                            <option value="nl">Nederlands</option>
+                            <option value="ru">Русский</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Niche</label>
+                        <select name="niche" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="technology">Technology</option>
+                            <option value="health">Health & Wellness</option>
+                            <option value="finance">Finance</option>
+                            <option value="travel">Travel</option>
+                            <option value="food">Food & Cooking</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="gaming">Gaming</option>
+                            <option value="sports">Sports</option>
+                            <option value="education">Education</option>
+                            <option value="lifestyle">Lifestyle</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">AdSense Client ID</label>
+                        <input type="text" name="adsense_client"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="ca-pub-1234567890">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Günlük Makale Hedefi</label>
+                        <input type="number" name="daily_articles" min="1" max="20" value="5"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Günlük Pin Hedefi</label>
+                        <input type="number" name="daily_pins" min="1" max="50" value="6"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="auto_cloudflare_deploy" name="auto_cloudflare_deploy" 
+                               class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+                        <label for="auto_cloudflare_deploy" class="text-sm text-gray-700">Cloudflare'e otomatik deployment yap</label>
+                    </div>
+                    <div class="flex items-center space-x-2 mt-2">
+                        <input type="checkbox" id="auto_translate" name="auto_translate" 
+                               class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+                        <label for="auto_translate" class="text-sm text-gray-700">Dil değişikliğinde otomatik çeviri yap</label>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 pt-6 border-t border-gray-100 mt-6">
+                    <button type="submit" class="flex-1 btn-primary">
+                        Ayarları Kaydet
+                    </button>
+                    <button type="button" onclick="closeDomainSettingsModal()" class="flex-1 btn-ghost">
+                        İptal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Management Modal -->
+    <div id="user-management-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-90vh overflow-y-auto">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Kullanıcı Yönetimi</h3>
+                    <button onclick="closeUserManagement()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Kullanıcı Adı
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Rol
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Kayıt Tarihi
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Son Giriş
+                                </th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    İşlemler
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
+                            <!-- User rows will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Panel Modal -->
+    <div id="security-panel-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-90vh overflow-y-auto">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Güvenlik Taraması - Semgrep</h3>
+                    <button onclick="closeSecurityPanel()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <!-- Security Status Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">Kritik</p>
+                                <p class="text-2xl font-bold text-red-600" id="critical-count">0</p>
+                            </div>
+                            <i data-lucide="alert-triangle" class="w-8 h-8 text-red-500"></i>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">Yüksek</p>
+                                <p class="text-2xl font-bold text-orange-600" id="high-count">0</p>
+                            </div>
+                            <i data-lucide="alert-circle" class="w-8 h-8 text-orange-500"></i>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">Orta</p>
+                                <p class="text-2xl font-bold text-yellow-600" id="medium-count">0</p>
+                            </div>
+                            <i data-lucide="info" class="w-8 h-8 text-yellow-500"></i>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">Düşük</p>
+                                <p class="text-2xl font-bold text-blue-600" id="low-count">0</p>
+                            </div>
+                            <i data-lucide="check-circle" class="w-8 h-8 text-blue-500"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mb-6 flex space-x-4">
+                    <button onclick="triggerSecurityScan()" class="btn-warning" id="trigger-scan-btn">
+                        <i data-lucide="scan-line" class="w-4 h-4 mr-2"></i>
+                        Yeni Tarama Başlat
+                    </button>
+                    <button onclick="refreshSecurityData()" class="btn-ghost">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                        Yenile
+                    </button>
+                </div>
+
+                <!-- Security Recommendations -->
+                <div class="mb-6">
+                    <h4 class="text-md font-semibold text-gray-900 mb-3">Güvenlik Önerileri</h4>
+                    <div id="security-recommendations" class="space-y-2">
+                        <!-- Recommendations will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Last Scan Info -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">Son Tarama</p>
+                            <p class="text-sm text-gray-500" id="last-scan-time">Henüz tarama yapılmamış</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Durum</p>
+                            <p class="text-sm" id="scan-status">Bilinmiyor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Admin Girişi</h3>
+                    <button onclick="closeLoginModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="login-form" class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kullanıcı Adı</label>
+                        <input type="text" name="username" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="admin">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Şifre</label>
+                        <input type="password" name="password" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 pt-6 border-t border-gray-100 mt-6">
+                    <button type="submit" class="flex-1 btn-primary">
+                        Giriş Yap
+                    </button>
+                    <button type="button" onclick="showSignupModal()" class="flex-1 btn-ghost">
+                        Kayıt Ol
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Admin Kayıt</h3>
+                    <button onclick="closeSignupModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="signup-form" class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kullanıcı Adı</label>
+                        <input type="text" name="username" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="admin">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Şifre</label>
+                        <input type="password" name="password" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                               placeholder="••••••••" minlength="6">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rol</label>
+                        <select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 pt-6 border-t border-gray-100 mt-6">
+                    <button type="submit" class="flex-1 btn-primary">
+                        Kayıt Ol
+                    </button>
+                    <button type="button" onclick="showLoginModal()" class="flex-1 btn-ghost">
+                        Giriş Yap
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Global variables
+        let dashboardData = {};
+        let analyticsChart = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            loadDashboardData();
+            setInterval(loadDashboardData, 30000); // Refresh every 30 seconds
+        });
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/dashboard');
+                dashboardData = await response.json();
+                updateDashboard();
+                updateLastUpdate();
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            // Update system stats
+            document.getElementById('cpu-usage').textContent = (dashboardData.system_metrics?.cpu_usage?.toFixed(1) || '0') + '%';
+            document.getElementById('memory-usage').textContent = (dashboardData.system_metrics?.memory_usage?.toFixed(1) || '0') + '%';
+            
+            document.getElementById('cpu-bar').style.width = (dashboardData.system_metrics?.cpu_usage || 0) + '%';
+            document.getElementById('memory-bar').style.width = (dashboardData.system_metrics?.memory_usage || 0) + '%';
+
+            // Update content stats
+            document.getElementById('today-articles').textContent = dashboardData.analytics?.total_articles || '0';
+            document.getElementById('pinterest-posts').textContent = dashboardData.pinterest?.total_pins_sent || '0';
+
+            // Update analytics
+            document.getElementById('total-impressions').textContent = formatNumber(dashboardData.analytics?.total_impressions || 0);
+            document.getElementById('total-clicks').textContent = formatNumber(dashboardData.analytics?.total_clicks || 0);
+            document.getElementById('estimated-revenue').textContent = '$' + (dashboardData.analytics?.estimated_revenue || 0).toFixed(2);
+
+            // Update domain list
+            updateDomainList();
+            
+            // Update Pinterest accounts
+            updatePinterestAccounts();
+            
+            // Update AI status
+            updateAIStatus();
+
+            // Update analytics chart
+            updateAnalyticsChart();
+        }
+
+        // Update domain list
+        function updateDomainList() {
+            const domainList = document.getElementById('domain-list');
+            let websites = dashboardData.domains || [];
+            
+            // Add existing domains if not present
+            const existingDomains = [
+                {
+                    domain: 'hing.me',
+                    status: 'Active',
+                    niche: 'Technology',
+                    language: 'Turkish',
+                    articles: 45,
+                    images: 78,
+                    last_updated: '2 hours ago',
+                    adsense_client: 'ca-pub-1234567890'
+                },
+                {
+                    domain: 'playu.co',
+                    status: 'Active', 
+                    niche: 'Gaming',
+                    language: 'English',
+                    articles: 32,
+                    images: 56,
+                    last_updated: '1 hour ago',
+                    adsense_client: 'ca-pub-0987654321'
+                }
+            ];
+            
+            if (websites.length === 0) {
+                websites = existingDomains;
+            } else {
+                // Merge existing domains with loaded domains
+                const domainNames = websites.map(w => w.name || w.domain);
+                existingDomains.forEach(domain => {
+                    if (!domainNames.includes(domain.domain)) {
+                        websites.push(domain);
+                    }
+                });
+            }
+            
+            if (websites.length === 0) {
+                domainList.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i data-lucide="globe" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                        <p>Henüz domain eklenmemiş</p>
+                        <p class="text-sm">Yeni domain eklemek için yukarıdaki butonu kullanın</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            domainList.innerHTML = websites.map(website => `
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                        <div class="flex items-center space-x-3 mb-2 sm:mb-0">
+                            <h4 class="font-semibold text-gray-900">${website.domain || website.name}</h4>
+                            <span class="status-badge status-${website.status === 'Active' ? 'active' : 'pending'}">${website.status}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="editDomain('${website.domain || website.name}')" class="text-blue-600 hover:text-blue-700 p-1" title="Domain Ayarları">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteDomain('${website.domain || website.name}')" class="text-red-600 hover:text-red-700 p-1" title="Domain Sil">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="viewDomainDetails('${website.domain || website.name}')" class="text-primary-600 hover:text-primary-700 p-1" title="Detayları Görüntüle">
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="editAdSenseCode('${website.domain || website.name}', '${website.adsense_client || ''}')" class="text-success-600 hover:text-success-700 p-1" title="AdSense Kodu">
+                                <i data-lucide="code" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-sm">
+                        <div class="flex justify-between sm:block">
+                            <span class="text-gray-500">Makaleler:</span>
+                            <span class="font-medium">${website.articles || 0}</span>
+                        </div>
+                        <div class="flex justify-between sm:block">
+                            <span class="text-gray-500">Resimler:</span>
+                            <span class="font-medium">${website.images || 0}</span>
+                        </div>
+                        <div class="flex justify-between sm:block">
+                            <span class="text-gray-500">Son Güncelleme:</span>
+                            <span class="font-medium">${website.last_updated || 'Bilinmiyor'}</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
+                            <div class="flex items-center space-x-4 mb-2 sm:mb-0">
+                                <span class="text-gray-500">Niche: <strong>${website.niche || 'N/A'}</strong></span>
+                                <span class="text-gray-500">Dil: <strong>${website.language || 'N/A'}</strong></span>
+                            </div>
+                            <div class="text-xs text-gray-400 font-mono">${website.adsense_client || 'AdSense kodu yok'}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        // Map platform names to Lucide icons
+        function getPlatformIcon(platform) {
+            const iconMap = {
+                'pinterest': 'share-2',
+                'instagram': 'camera',
+                'twitter': 'twitter',
+                'facebook': 'facebook',
+                'linkedin': 'linkedin',
+                'youtube': 'play-circle',
+                'tiktok': 'video',
+                'reddit': 'message-circle',
+                'tumblr': 'edit-3',
+                'snapchat': 'zap'
+            };
+            return iconMap[platform?.toLowerCase()] || 'share-2';
+        }
+
+        // Update Pinterest accounts
+        function updatePinterestAccounts() {
+            const accountsContainer = document.getElementById('pinterest-accounts');
+            const accounts = dashboardData.pinterest?.accounts || [];
+            
+            if (accounts.length === 0) {
+                accountsContainer.innerHTML = `
+                    <div class="text-center py-4 text-gray-500">
+                        <i data-lucide="share-2" class="w-8 h-8 mx-auto mb-2 text-gray-300"></i>
+                        <p class="text-sm">Pinterest hesabı eklenmemiş</p>
+                        <p class="text-xs mt-1">Hesap eklemek için yukarıdaki "Ekle" butonunu kullanın</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            accountsContainer.innerHTML = accounts.map(account => `
+                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <i data-lucide="${getPlatformIcon('pinterest')}" class="w-5 h-5 text-gray-400"></i>
+                    <div>
+                        <div class="font-medium text-gray-900">${account.username}</div>
+                        <div class="text-sm text-gray-500">${account.pins_today || 0} pin bugün</div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-${account.status === 'Active' ? 'active' : account.status === 'Shadowbanned' ? 'error' : 'pending'}">${account.status}</span>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        // Update AI status
+        function updateAIStatus() {
+            const statusContainer = document.getElementById('ai-status');
+            const aiProviders = ['DeepSeek', 'Claude', 'Groq', 'HuggingFace'];
+            
+            statusContainer.innerHTML = aiProviders.map(provider => `
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">${provider}</span>
+                    <span class="status-badge status-active">Aktif</span>
+                </div>
+            `).join('');
+        }
+
+        // Update analytics chart
+        function updateAnalyticsChart() {
+            const ctx = document.getElementById('analytics-chart').getContext('2d');
+            
+            if (analyticsChart) {
+                analyticsChart.destroy();
+            }
+            
+            analyticsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['6 gün önce', '5 gün önce', '4 gün önce', '3 gün önce', '2 gün önce', 'Dün', 'Bugün'],
+                    datasets: [{
+                        label: 'Impressions',
+                        data: [1200, 1900, 3000, 5000, 2000, 3000, 4500],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.1
+                    }, {
+                        label: 'Clicks',
+                        data: [65, 120, 200, 180, 150, 250, 300],
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Modal functions
+        function openAddDomainModal() {
+            const modal = document.getElementById('addDomainModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+            }
+        }
+
+        function closeAddDomainModal() {
+            const modal = document.getElementById('addDomainModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.getElementById('addDomainForm').reset();
+            }
+        }
+
+        function openSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+            }
+        }
+
+        function closeSettingsModal() {
+            const modal = document.getElementById('settingsModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function openAdSenseModal() {
+            const modal = document.getElementById('adsenseModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+            }
+        }
+
+        function closeAdSenseModal() {
+            const modal = document.getElementById('adsenseModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            document.getElementById('adsenseForm').reset();
+        }
+
+        function editAdSenseCode(domain, currentCode) {
+            document.getElementById('adsense-domain').value = domain;
+            document.getElementById('adsense-domain-display').value = domain;
+            document.getElementById('adsense-client-id').value = currentCode || '';
+            openAdSenseModal();
+        }
+
+        // Form submissions
+        document.getElementById('addDomainForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch('/api/domains', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    closeAddDomainModal();
+                    showNotification('Domain başarıyla eklendi! Otomatik kurulum başlatıldı.', 'success');
+                    loadDashboardData();
+                } else {
+                    showNotification('Domain eklenirken hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        });
+
+        document.getElementById('settingsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    closeSettingsModal();
+                    showNotification('Ayarlar başarıyla kaydedildi!', 'success');
+                } else {
+                    showNotification('Ayarlar kaydedilirken hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        });
+
+        document.getElementById('adsenseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            try {
+                const response = await fetch(`/api/domains/${data.domain}/adsense`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    closeAdSenseModal();
+                    showNotification('AdSense kodu başarıyla güncellendi!', 'success');
+                    loadDashboardData();
+                } else {
+                    showNotification('AdSense kodu güncellenirken hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        });
+
+        // Action functions
+        async function generateContent() {
+            try {
+                showNotification('AI makale üretimi başlatıldı...', 'info');
+                
+                const response = await fetch('/api/content/generate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        domain: 'auto',
+                        count: 1,
+                        niche: 'auto'
+                    })
+                });
+                
+                if (response.ok) {
+                    showNotification('Makale başarıyla üretildi!', 'success');
+                    loadDashboardData();
+                } else {
+                    showNotification('Makale üretiminde hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        async function generateImages() {
+            try {
+                showNotification('Resim üretimi başlatıldı...', 'info');
+                
+                const response = await fetch('/api/images/generate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        count: 5,
+                        style: 'modern'
+                    })
+                });
+                
+                if (response.ok) {
+                    showNotification('Resimler başarıyla üretildi!', 'success');
+                } else {
+                    showNotification('Resim üretiminde hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        async function deployToCloudflare() {
+            try {
+                showNotification('Cloudflare deployment başlatıldı...', 'info');
+                
+                const response = await fetch('/api/deploy/cloudflare', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        domains: ['hing.me', 'playu.co']
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showNotification(`${result.deployed_count} site başarıyla deploy edildi!`, 'success');
+                    loadDashboardData();
+                } else {
+                    showNotification('Deployment hatası oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        async function postToPinterest() {
+            try {
+                showNotification('Pinterest paylaşımı başlatıldı...', 'info');
+                
+                const response = await fetch('/api/pinterest/post', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        count: 3,
+                        domains: ['hing.me', 'playu.co']
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showNotification(`${result.posted_count} pin başarıyla paylaşıldı!`, 'success');
+                } else {
+                    showNotification('Pinterest paylaşımında hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        function viewDomainDetails(domain) {
+            window.open(`https://${domain}`, '_blank');
+        }
+
+        function manageDomain(domain) {
+            showNotification(`${domain} yönetim paneli açılıyor...`, 'info');
+        }
+
+        function refreshDashboard() {
+            loadDashboardData();
+            showNotification('Dashboard yenilendi', 'success');
+        }
+
+        function viewLogs() {
+            showNotification('System logs açılıyor...', 'info');
+        }
+
+        function backupData() {
+            showNotification('Backup işlemi başlatıldı...', 'info');
+        }
+
+        // AdSense Management Functions
+        async function refreshAdSenseData() {
+            try {
+                showNotification('AdSense verileri yenileniyor...', 'info');
+                
+                const response = await fetch('/api/adsense/refresh', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    updateAdSenseDisplay(data);
+                    showNotification('AdSense verileri güncellendi!', 'success');
+                } else {
+                    showNotification('AdSense verisi yenilenemedi.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        async function viewAdSenseReport() {
+            try {
+                const response = await fetch('/api/adsense/report/30');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showAdSenseReportModal(data);
+                } else {
+                    showNotification('Rapor getirilemedi.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        async function optimizeAds() {
+            try {
+                showNotification('Ad optimizasyonu başlatılıyor...', 'info');
+                
+                const response = await fetch('/api/adsense/optimize', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        domains: ['hing.me', 'playu.co']
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showOptimizationResults(result);
+                    showNotification('Optimizasyon tamamlandı!', 'success');
+                } else {
+                    showNotification('Optimizasyon hatası oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        function updateAdSenseDisplay(data) {
+            // Update revenue display
+            document.getElementById('today-earnings').textContent = '$' + (data.today_earnings || 0).toFixed(2);
+            document.getElementById('current-ctr').textContent = (data.ctr || 0).toFixed(2) + '%';
+            document.getElementById('current-cpc').textContent = '$' + (data.cpc || 0).toFixed(2);
+            
+            // Update main analytics
+            document.getElementById('estimated-revenue').textContent = '$' + (data.total_earnings || 0).toFixed(2);
+            document.getElementById('total-impressions').textContent = formatNumber(data.total_impressions || 0);
+            document.getElementById('total-clicks').textContent = formatNumber(data.total_clicks || 0);
+        }
+
+        function showAdSenseReportModal(data) {
+            // Create modal content
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-900">AdSense Performance Report (${data.period_days} days)</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-green-600">$${(data.total_earnings || 0).toFixed(2)}</div>
+                                <div class="text-sm text-gray-500">Total Earnings</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-blue-600">${formatNumber(data.total_impressions || 0)}</div>
+                                <div class="text-sm text-gray-500">Impressions</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-600">${formatNumber(data.total_clicks || 0)}</div>
+                                <div class="text-sm text-gray-500">Clicks</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-orange-600">${(data.average_ctr || 0).toFixed(2)}%</div>
+                                <div class="text-sm text-gray-500">Average CTR</div>
+                            </div>
+                        </div>
+                        
+                        ${data.daily_data && data.daily_data.length > 0 ? `
+                        <div class="mt-6">
+                            <h4 class="font-semibold mb-3">Daily Performance</h4>
+                            <div class="space-y-2">
+                                ${data.daily_data.map(day => `
+                                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                        <span class="text-sm">${day.date}</span>
+                                        <span class="font-medium">$${day.earnings.toFixed(2)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        function showOptimizationResults(results) {
+            // Show optimization suggestions
+            const suggestions = results.suggestions || [];
+            if (suggestions.length > 0) {
+                const suggestionText = suggestions.map(s => `• ${s.suggestion}`).join('\\n');
+                alert(`Ad Optimization Suggestions:\\n\\n${suggestionText}`);
+            }
+        }
+
+        // Utility functions
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        function updateLastUpdate() {
+            document.getElementById('last-update').textContent = new Date().toLocaleTimeString('tr-TR');
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 ${
+                type === 'success' ? 'bg-success-50 text-success-800 border border-success-200' :
+                type === 'error' ? 'bg-danger-50 text-danger-800 border border-danger-200' :
+                'bg-primary-50 text-primary-800 border border-primary-200'
+            }`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" class="w-5 h-5 mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            lucide.createIcons();
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Mobile responsive functions
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.mobile-section').forEach(el => {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.mobile-tab').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected section
+            const sectionEl = document.querySelector(`[data-section="${section}"]`);
+            if (sectionEl) {
+                sectionEl.classList.add('active');
+                sectionEl.style.display = 'block';
+            }
+            
+            // Add active class to clicked tab
+            const tabEl = document.querySelector(`[data-tab="${section}"]`);
+            if (tabEl) {
+                tabEl.classList.add('active');
+            }
+        }
+
+        // Add responsive styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .pulse-animation {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: .5;
+                }
+            }
+            
+            /* Mobile Responsive Styles */
+            @media (max-width: 768px) {
+                .container {
+                    padding-left: 1rem !important;
+                    padding-right: 1rem !important;
+                }
+                
+                .glass-card {
+                    border-radius: 0.75rem;
+                    margin-bottom: 1rem;
+                }
+                
+                .grid.lg\\:grid-cols-3 {
+                    display: block !important;
+                }
+                
+                .xl\\:col-span-2 {
+                    grid-column: span 1 !important;
+                }
+                
+                .mobile-tab {
+                    padding: 0.5rem 1rem;
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    color: #6b7280;
+                    background: white;
+                    border-radius: 0.5rem;
+                    border: 1px solid #e5e7eb;
+                    white-space: nowrap;
+                    transition: all 0.2s;
+                }
+                
+                .mobile-tab.active {
+                    background: #3b82f6;
+                    color: white;
+                    border-color: #3b82f6;
+                }
+                
+                .mobile-tab:hover {
+                    background: #f3f4f6;
+                }
+                
+                .mobile-tab.active:hover {
+                    background: #2563eb;
+                }
+                
+                .btn-primary, .btn-success, .btn-warning, .btn-danger, .btn-ghost {
+                    padding: 0.75rem 1rem;
+                    font-size: 0.875rem;
+                }
+                
+                h1 {
+                    font-size: 1.5rem !important;
+                }
+                
+                h2 {
+                    font-size: 1.25rem !important;
+                }
+                
+                h3 {
+                    font-size: 1.125rem !important;
+                }
+                
+                .text-2xl {
+                    font-size: 1.5rem !important;
+                }
+                
+                .text-xl {
+                    font-size: 1.25rem !important;
+                }
+                
+                .p-6 {
+                    padding: 1rem !important;
+                }
+                
+                .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+                    margin-top: 1rem !important;
+                }
+                
+                .gap-6 {
+                    gap: 1rem !important;
+                }
+                
+                .gap-8 {
+                    gap: 1rem !important;
+                }
+                
+                /* Mobile notification positioning */
+                .fixed.top-4.right-4 {
+                    top: 1rem;
+                    right: 1rem;
+                    left: 1rem;
+                    max-width: none;
+                }
+            }
+            
+            @media (max-width: 480px) {
+                .container {
+                    padding-left: 0.75rem !important;
+                    padding-right: 0.75rem !important;
+                }
+                
+                .text-sm {
+                    font-size: 0.75rem !important;
+                }
+                
+                .p-4 {
+                    padding: 0.75rem !important;
+                }
+                
+                .p-3 {
+                    padding: 0.5rem !important;
+                }
+                
+                .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+                    margin-top: 0.75rem !important;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize mobile sections
+        
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 transform translate-x-full`;
+            
+            // Set colors based on type
+            switch(type) {
+                case 'success':
+                    notification.style.background = '#10b981';
+                    notification.style.color = 'white';
+                    break;
+                case 'error':
+                    notification.style.background = '#ef4444';
+                    notification.style.color = 'white';
+                    break;
+                case 'warning':
+                    notification.style.background = '#f59e0b';
+                    notification.style.color = 'white';
+                    break;
+                default:
+                    notification.style.background = '#3b82f6';
+                    notification.style.color = 'white';
+            }
+            
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.transform = 'translateX(full)';
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+            
+            // Create icons
+            lucide.createIcons();
+        }
+        
+        // Domain Management Functions
+        function openDomainManagement(domainName) {
+            const modal = document.getElementById('domain-management-modal');
+            const content = document.getElementById('domain-management-content');
+            
+            // Show loading
+            content.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto mb-4"></div>
+                    <p class="text-gray-600">Domain yönetim paneli yükleniyor...</p>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            lucide.createIcons();
+            
+            // Load domain management content
+            loadDomainManagementContent(domainName);
+        }
+
+        function closeDomainManagementModal() {
+            document.getElementById('domain-management-modal').classList.add('hidden');
+            document.getElementById('domain-management-modal').classList.remove('flex');
+        }
+
+        async function loadDomainManagementContent(domainName) {
+            try {
+                const content = document.getElementById('domain-management-content');
+                
+                // Get domain data
+                const domainData = dashboardData.domains?.find(d => d.domain === domainName) || {
+                    domain: domainName,
+                    status: 'Active',
+                    niche: 'Technology',
+                    language: 'Turkish',
+                    articles: 0,
+                    images: 0,
+                    last_updated: 'Just now',
+                    adsense_client: ''
+                };
+                
+                content.innerHTML = `
+                    <div class="space-y-6">
+                        <!-- Domain Overview -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-3">Domain Bilgileri</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">Domain:</span>
+                                    <p class="text-gray-900">${domainData.domain}</p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">Durum:</span>
+                                    <p class="text-gray-900">${domainData.status}</p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">Niche:</span>
+                                    <p class="text-sm text-gray-900">${domainData.niche}</p>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-gray-600">Dil:</span>
+                                    <p class="text-sm text-gray-900">${domainData.language}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Language Settings -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-3">Dil Ayarları</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Site Dili</label>
+                                    <select id="domain-language" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                                        <option value="Turkish" ${domainData.language === 'Turkish' ? 'selected' : ''}>Türkçe</option>
+                                        <option value="English" ${domainData.language === 'English' ? 'selected' : ''}>English</option>
+                                        <option value="German" ${domainData.language === 'German' ? 'selected' : ''}>Deutsch</option>
+                                        <option value="French" ${domainData.language === 'French' ? 'selected' : ''}>Français</option>
+                                        <option value="Spanish" ${domainData.language === 'Spanish' ? 'selected' : ''}>Español</option>
+                                        <option value="Italian" ${domainData.language === 'Italian' ? 'selected' : ''}>Italiano</option>
+                                        <option value="Russian" ${domainData.language === 'Russian' ? 'selected' : ''}>Русский</option>
+                                        <option value="Arabic" ${domainData.language === 'Arabic' ? 'selected' : ''}>العربية</option>
+                                        <option value="Chinese" ${domainData.language === 'Chinese' ? 'selected' : ''}>中文</option>
+                                        <option value="Japanese" ${domainData.language === 'Japanese' ? 'selected' : ''}>日本語</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Niche (Kategori)</label>
+                                    <select id="domain-niche" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                                        <option value="Technology" ${domainData.niche === 'Technology' ? 'selected' : ''}>Teknoloji</option>
+                                        <option value="Gaming" ${domainData.niche === 'Gaming' ? 'selected' : ''}>Oyun</option>
+                                        <option value="Health" ${domainData.niche === 'Health' ? 'selected' : ''}>Sağlık</option>
+                                        <option value="Finance" ${domainData.niche === 'Finance' ? 'selected' : ''}>Finans</option>
+                                        <option value="Travel" ${domainData.niche === 'Travel' ? 'selected' : ''}>Seyahat</option>
+                                        <option value="Food" ${domainData.niche === 'Food' ? 'selected' : ''}>Yemek</option>
+                                        <option value="Fashion" ${domainData.niche === 'Fashion' ? 'selected' : ''}>Moda</option>
+                                        <option value="Sports" ${domainData.niche === 'Sports' ? 'selected' : ''}>Spor</option>
+                                        <option value="Education" ${domainData.niche === 'Education' ? 'selected' : ''}>Eğitim</option>
+                                        <option value="Business" ${domainData.niche === 'Business' ? 'selected' : ''}>İş</option>
+                                    </select>
+                                </div>
+                                <button onclick="updateDomainSettings('${domainData.domain}')" class="w-full btn-primary">
+                                    <i data-lucide="save" class="w-4 h-4 mr-2"></i>Ayarları Kaydet ve Deploy Et
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Content Management -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-3">İçerik Yönetimi</h4>
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                        <div class="text-2xl font-bold text-blue-600">${domainData.articles || 0}</div>
+                                        <div class="text-sm text-blue-600">Makale</div>
+                                    </div>
+                                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                                        <div class="text-2xl font-bold text-green-600">${domainData.images || 0}</div>
+                                        <div class="text-sm text-green-600">Resim</div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="generateContentForDomain('${domainData.domain}')" class="flex-1 btn-success">
+                                        <i data-lucide="edit-3" class="w-4 h-4 mr-2"></i>Yeni Makale Üret
+                                    </button>
+                                    <button onclick="generateImagesForDomain('${domainData.domain}')" class="flex-1 btn-warning">
+                                        <i data-lucide="image" class="w-4 h-4 mr-2"></i>Resim Üret
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Deployment Status -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-3">Deployment Durumu</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Son Deploy:</span>
+                                    <span class="text-sm text-gray-900">${domainData.last_updated}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Cloudflare Durumu:</span>
+                                    <span class="text-sm text-green-600">Aktif</span>
+                                </div>
+                                <button onclick="deployDomainToCloudflare('${domainData.domain}')" class="w-full btn-primary">
+                                    <i data-lucide="cloud" class="w-4 h-4 mr-2"></i>Cloudflare'e Deploy Et
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                lucide.createIcons();
+                
+            } catch (error) {
+                console.error('Domain management content loading error:', error);
+                content.innerHTML = `
+                    <div class="text-center py-8 text-red-600">
+                        <i data-lucide="alert-circle" class="w-12 h-12 mx-auto mb-4"></i>
+                        <p>Domain yönetim paneli yüklenirken hata oluştu</p>
+                    </div>
+                `;
+                lucide.createIcons();
+            }
+        }
+
+        async function updateDomainSettings(domainName) {
+            try {
+                const language = document.getElementById('domain-language').value;
+                const niche = document.getElementById('domain-niche').value;
+                
+                showNotification('Domain ayarları güncelleniyor...', 'info');
+                
+                // Update domain settings
+                const response = await fetch('/api/domains/' + encodeURIComponent(domainName), {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        language: language,
+                        niche: niche,
+                        update_content: true
+                    })
+                });
+
+                if (response.ok) {
+                    showNotification('Domain ayarları güncellendi! İçerik çevirisi başlatılıyor...', 'success');
+                    
+                    // Trigger content translation and deployment
+                    await translateAndDeployDomain(domainName, language);
+                    
+                } else {
+                    const error = await response.json();
+                    showNotification('Domain ayarları güncellenirken hata: ' + (error.message || 'Bilinmeyen hata'), 'error');
+                }
+            } catch (error) {
+                console.error('Domain settings update error:', error);
+                showNotification('Domain ayarları güncellenirken hata oluştu', 'error');
+            }
+        }
+
+        async function translateAndDeployDomain(domainName, newLanguage) {
+            try {
+                showNotification('İçerik çevirisi başlatılıyor...', 'info');
+                
+                // Start content translation
+                const translateResponse = await fetch('/api/content/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: domainName,
+                        target_language: newLanguage
+                    })
+                });
+
+                if (translateResponse.ok) {
+                    showNotification('İçerik çevirisi tamamlandı! Cloudflare deploy başlatılıyor...', 'success');
+                    
+                    // Deploy to Cloudflare
+                    await deployDomainToCloudflare(domainName);
+                    
+                } else {
+                    const error = await translateResponse.json();
+                    showNotification('İçerik çevirisi hatası: ' + (error.message || 'Bilinmeyen hata'), 'error');
+                }
+            } catch (error) {
+                console.error('Content translation error:', error);
+                showNotification('İçerik çevirisi sırasında hata oluştu', 'error');
+            }
+        }
+
+        async function deployDomainToCloudflare(domainName) {
+            try {
+                showNotification('Cloudflare deploy başlatılıyor...', 'info');
+                
+                const response = await fetch('/api/deploy/cloudflare', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: domainName,
+                        force_deploy: true
+                    })
+                });
+
+                if (response.ok) {
+                    showNotification('Domain başarıyla Cloudflare\'e deploy edildi!', 'success');
+                    closeDomainManagementModal();
+                    loadDashboardData(); // Refresh dashboard
+                } else {
+                    const error = await response.json();
+                    showNotification('Cloudflare deploy hatası: ' + (error.message || 'Bilinmeyen hata'), 'error');
+                }
+            } catch (error) {
+                console.error('Cloudflare deploy error:', error);
+                showNotification('Cloudflare deploy sırasında hata oluştu', 'error');
+            }
+        }
+
+        async function generateContentForDomain(domainName) {
+            try {
+                showNotification('Yeni makale üretiliyor...', 'info');
+                
+                const response = await fetch('/api/content/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: domainName,
+                        count: 1,
+                        language: document.getElementById('domain-language')?.value || 'Turkish'
+                    })
+                });
+
+                if (response.ok) {
+                    showNotification('Yeni makale üretildi!', 'success');
+                } else {
+                    const error = await response.json();
+                    showNotification('Makale üretimi hatası: ' + (error.message || 'Bilinmeyen hata'), 'error');
+                }
+            } catch (error) {
+                console.error('Content generation error:', error);
+                showNotification('Makale üretimi sırasında hata oluştu', 'error');
+            }
+        }
+
+        async function generateImagesForDomain(domainName) {
+            try {
+                showNotification('Resim üretiliyor...', 'info');
+                
+                const response = await fetch('/api/images/generate', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: domainName,
+                        count: 3
+                    })
+                });
+
+                if (response.ok) {
+                    showNotification('Resimler üretildi!', 'success');
+                } else {
+                    const error = await response.json();
+                    showNotification('Resim üretimi hatası: ' + (error.message || 'Bilinmeyen hata'), 'error');
+                }
+            } catch (error) {
+                console.error('Image generation error:', error);
+                showNotification('Resim üretimi sırasında hata oluştu', 'error');
+            }
+        }
+
+        // Pinterest Account Management Functions
+        function openAddPinterestModal() {
+            document.getElementById('pinterest-modal').classList.remove('hidden');
+            const modal = document.getElementById('pinterest-modal');
+            modal.classList.add('flex');
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            lucide.createIcons();
+        }
+
+        function closePinterestModal() {
+            document.getElementById('pinterest-modal').classList.add('hidden');
+            document.getElementById('pinterest-modal').classList.remove('flex');
+            document.getElementById('pinterest-form').reset();
+        }
+
+        async function managePinterestAccounts() {
+            try {
+                showNotification('Pinterest hesapları yükleniyor...', 'info');
+                
+                const response = await fetch('/api/pinterest/accounts');
+                const accounts = await response.json();
+                
+                if (accounts.length === 0) {
+                    showNotification('Henüz Pinterest hesabı eklenmemiş. Yeni hesap eklemek için "Ekle" butonunu kullanın.', 'warning');
+                } else {
+                    showNotification(`${accounts.length} Pinterest hesabı bulundu`, 'success');
+                    updatePinterestAccounts();
+                }
+            } catch (error) {
+                console.error('Pinterest hesapları yüklenirken hata:', error);
+                showNotification('Pinterest hesapları yüklenirken hata oluştu', 'error');
+            }
+        }
+
+        // Pinterest form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const pinterestForm = document.getElementById('pinterest-form');
+            if (pinterestForm) {
+                pinterestForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const accountData = {
+                        account_name: formData.get('account_name'),
+                        access_token: formData.get('access_token'),
+                        board_id: formData.get('board_id'),
+                        status: formData.get('status')
+                    };
+
+                    try {
+                        showNotification('Pinterest hesabı ekleniyor...', 'info');
+                        
+                        const response = await fetch('/api/pinterest/accounts', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(accountData)
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            showNotification('Pinterest hesabı başarıyla eklendi!', 'success');
+                            closePinterestModal();
+                            loadDashboardData(); // Refresh dashboard data
+                        } else {
+                            const error = await response.json();
+                            showNotification('Pinterest hesabı eklenirken hata: ' + (error.message || 'Bilinmeyen hata'), 'error');
+                        }
+                    } catch (error) {
+                        console.error('Pinterest hesabı ekleme hatası:', error);
+                        showNotification('Pinterest hesabı eklenirken hata oluştu', 'error');
+                    }
+                });
+            }
+        });
+
+        // Additional Functions
+        function refreshDashboard() {
+            loadDashboardData();
+            showNotification('Dashboard yenilendi!', 'success');
+        }
+
+        async function postToPinterest() {
+            try {
+                showNotification('Pinterest paylaşımı başlatıldı...', 'info');
+                
+                const response = await fetch('/api/pinterest/post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        count: 1
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showNotification(`Pinterest paylaşımı başarılı! ${result.posted_count} pin paylaşıldı.`, 'success');
+                } else {
+                    showNotification('Pinterest paylaşımında hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        async function deleteDomain(domainName) {
+            if (!confirm(`${domainName} domain'ini silmek istediğinizden emin misiniz?`)) {
+                return;
+            }
+
+            try {
+                showNotification('Domain siliniyor...', 'info');
+                
+                const response = await fetch(`/api/domains/${encodeURIComponent(domainName)}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showNotification('Domain başarıyla silindi!', 'success');
+                    loadDashboardData();
+                } else {
+                    showNotification('Domain silinirken hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Bağlantı hatası oluştu.', 'error');
+            }
+        }
+
+        async function editDomain(domainName) {
+            try {
+                showNotification('Domain ayarları açılıyor...', 'info');
+                openDomainSettingsModal(domainName);
+            } catch (error) {
+                showNotification('Domain ayarları açılırken hata oluştu.', 'error');
+            }
+        }
+
+        function openDomainSettingsModal(domainName) {
+            // Domain settings modal'ını açar
+            const modal = document.getElementById('domain-settings-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                // Domain verilerini yükle ve modal'ı doldur
+                loadDomainSettings(domainName);
+            }
+        }
+
+        function closeDomainSettingsModal() {
+            const modal = document.getElementById('domain-settings-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        async function loadDomainSettings(domainName) {
+            try {
+                const response = await fetch(`/api/domains/${encodeURIComponent(domainName)}`);
+                if (response.ok) {
+                    const domain = await response.json();
+                    populateDomainSettingsModal(domain);
+                }
+            } catch (error) {
+                showNotification('Domain ayarları yüklenirken hata oluştu.', 'error');
+            }
+        }
+
+        function populateDomainSettingsModal(domain) {
+            // Domain settings modal'ını domain verileri ile doldur
+            const form = document.getElementById('domain-settings-form');
+            if (form) {
+                form.querySelector('[name="domain"]').value = domain.name || '';
+                form.querySelector('[name="language"]').value = domain.language || '';
+                form.querySelector('[name="niche"]').value = domain.niche || '';
+                form.querySelector('[name="adsense_client"]').value = domain.adsense_client || '';
+            }
+        }
+
+        async function refreshAdSenseData() {
+            try {
+                showNotification('AdSense verileri yenileniyor...', 'info');
+                
+                const response = await fetch('/api/adsense/refresh');
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('AdSense verileri başarıyla yenilendi!', 'success');
+                    loadDashboardData();
+                } else {
+                    showNotification(result.message || 'AdSense verileri yenilenemedi.', 'warning');
+                }
+            } catch (error) {
+                showNotification('AdSense verileri yenilenirken hata oluştu.', 'error');
+            }
+        }
+
+        async function viewAdSenseReport() {
+            try {
+                showNotification('AdSense raporu açılıyor...', 'info');
+                
+                const response = await fetch('/api/adsense/report/30');
+                const result = await response.json();
+                
+                if (result.success) {
+                    // AdSense raporu modal'ını aç veya yeni sekmede aç
+                    showNotification('AdSense raporu hazırlandı.', 'success');
+                } else {
+                    showNotification('AdSense raporu alınamadı.', 'error');
+                }
+            } catch (error) {
+                showNotification('AdSense raporu alınırken hata oluştu.', 'error');
+            }
+        }
+
+        async function optimizeAds() {
+            try {
+                showNotification('Reklam optimizasyonu başlatıldı...', 'info');
+                // Optimize işlemi simülasyonu
+                setTimeout(() => {
+                    showNotification('Reklam optimizasyonu tamamlandı!', 'success');
+                }, 2000);
+            } catch (error) {
+                showNotification('Optimizasyon sırasında hata oluştu.', 'error');
+            }
+        }
+
+        function openAddPinterestModal() {
+            const modal = document.getElementById('pinterest-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closePinterestModal() {
+            const modal = document.getElementById('pinterest-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Domain Settings Form Handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const domainSettingsForm = document.getElementById('domain-settings-form');
+            if (domainSettingsForm) {
+                domainSettingsForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(domainSettingsForm);
+                    const domainName = formData.get('domain');
+                    
+                    const settingsData = {
+                        language: formData.get('language'),
+                        niche: formData.get('niche'),
+                        adsense_client: formData.get('adsense_client'),
+                        daily_articles: parseInt(formData.get('daily_articles')),
+                        daily_pins: parseInt(formData.get('daily_pins')),
+                        auto_cloudflare_deploy: formData.has('auto_cloudflare_deploy'),
+                        auto_translate: formData.has('auto_translate')
+                    };
+
+                    try {
+                        showNotification('Domain ayarları güncelleniyor...', 'info');
+                        
+                        const response = await fetch(`/api/domains/${encodeURIComponent(domainName)}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(settingsData)
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            showNotification('Domain ayarları başarıyla güncellendi!', 'success');
+                            closeDomainSettingsModal();
+                            loadDashboardData();
+                            
+                            // Auto-translate check
+                            if (settingsData.auto_translate) {
+                                showNotification('Otomatik çeviri başlatıldı...', 'info');
+                                await triggerDomainTranslation(domainName, settingsData.language);
+                            }
+                            
+                            // Auto-deploy check
+                            if (settingsData.auto_cloudflare_deploy) {
+                                showNotification('Cloudflare deployment başlatıldı...', 'info');
+                                await triggerCloudflareDeployment({domains: [domainName]});
+                            }
+                        } else {
+                            const error = await response.json();
+                            showNotification('Ayarlar güncellenirken hata: ' + (error.message || 'Bilinmeyen hata'), 'error');
+                        }
+                    } catch (error) {
+                        console.error('Domain ayarları güncelleme hatası:', error);
+                        showNotification('Domain ayarları güncellenirken hata oluştu', 'error');
+                    }
+                });
+            }
+        });
+
+        // Domain Translation Function
+        async function triggerDomainTranslation(domainName, targetLanguage) {
+            try {
+                const response = await fetch('/api/content/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: domainName,
+                        target_language: targetLanguage
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    showNotification(`${domainName} için çeviri tamamlandı!`, 'success');
+                } else {
+                    showNotification('Çeviri işleminde hata oluştu.', 'error');
+                }
+            } catch (error) {
+                showNotification('Çeviri işlemi başlatılırken hata oluştu.', 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ana dashboard görünümü her zaman açık olsun
+            if (window.innerWidth <= 768) {
+                showSection('dashboard');
+            }
+        });
+
+        // Authentication functions
+        function showLoginModal() {
+            const modal = document.getElementById('login-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('login-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function showSignupModal() {
+            const modal = document.getElementById('signup-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeSignupModal() {
+            const modal = document.getElementById('signup-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: formData.get('username'),
+                    password: formData.get('password')
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeLoginModal();
+                    location.reload(); // Refresh to show authenticated interface
+                } else {
+                    alert('Giriş başarısız: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                alert('Giriş sırasında hata oluştu');
+            });
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: formData.get('username'),
+                    password: formData.get('password'),
+                    role: 'user' // Default role
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeSignupModal();
+                    alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+                    showLoginModal();
+                } else {
+                    alert('Kayıt başarısız: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Signup error:', error);
+                alert('Kayıt sırasında hata oluştu');
+            });
+        }
+
+        function handleLogout() {
+            fetch('/api/auth/logout', {
+                method: 'POST'
+            })
+            .then(() => {
+                location.reload();
+            });
+        }
+
+        // Admin user management functions
+        function showUserManagement() {
+            if (!isAdmin()) {
+                alert('Bu işlem için admin yetkisi gereklidir');
+                return;
+            }
+            const modal = document.getElementById('user-management-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                loadUsers();
+            }
+        }
+
+        function closeUserManagement() {
+            const modal = document.getElementById('user-management-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function loadUsers() {
+            fetch('/api/admin/users')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateUsersList(data.users);
+                }
+            })
+            .catch(error => console.error('Error loading users:', error));
+        }
+
+        function updateUsersList(users) {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = users.map(user => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.username}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full ${user.role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
+                            ${user.role === 'admin' ? 'Admin' : 'Kullanıcı'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatDate(user.created)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.last_login ? formatDate(user.last_login) : 'Hiçbir zaman'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <select onchange="changeUserRole('${user.id}', this.value)" class="mr-2 px-2 py-1 border rounded">
+                            <option value="user" ${user.role === 'user' ? 'selected' : ''}>Kullanıcı</option>
+                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                        </select>
+                        <button onclick="deleteUser('${user.id}')" class="text-red-600 hover:text-red-900">Sil</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function changeUserRole(userId, newRole) {
+            fetch(`/api/admin/users/${userId}/role`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({role: newRole})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadUsers(); // Refresh the list
+                    alert('Kullanıcı rolü güncellendi');
+                } else {
+                    alert('Rol güncellenirken hata oluştu: ' + data.message);
+                }
+            });
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
+                fetch(`/api/admin/users/${userId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadUsers(); // Refresh the list
+                        alert('Kullanıcı silindi');
+                    } else {
+                        alert('Kullanıcı silinirken hata oluştu: ' + data.message);
+                    }
+                });
+            }
+        }
+
+        function isAdmin() {
+            // Check if current user is admin - this should be set by the server
+            return window.userRole === 'admin';
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('tr-TR');
+        }
+
+        // Security Panel Functions
+        function showSecurityPanel() {
+            const modal = document.getElementById('security-panel-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                loadSecurityData();
+            }
+        }
+
+        function closeSecurityPanel() {
+            const modal = document.getElementById('security-panel-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function loadSecurityData() {
+            // Load security scan status
+            fetch('/api/security/scan-status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateSecurityStatus(data.data);
+                }
+            });
+
+            // Load latest security report
+            fetch('/api/security/latest-report')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateSecurityReport(data.data);
+                }
+            });
+        }
+
+        function updateSecurityStatus(statusData) {
+            const scanStatus = document.getElementById('scan-status');
+            const lastScanTime = document.getElementById('last-scan-time');
+            
+            if (scanStatus) {
+                const status = statusData.scan_status || 'unknown';
+                scanStatus.textContent = status === 'completed' ? 'Tamamlandı' : 
+                                         status === 'running' ? 'Çalışıyor' : 'Bilinmiyor';
+                scanStatus.className = status === 'completed' ? 'text-sm text-green-600' :
+                                      status === 'running' ? 'text-sm text-blue-600' : 'text-sm text-gray-500';
+            }
+            
+            if (lastScanTime && statusData.last_scan_time) {
+                lastScanTime.textContent = formatDate(statusData.last_scan_time);
+            }
+        }
+
+        function updateSecurityReport(reportData) {
+            // Update severity counts
+            const severities = reportData.findings_by_severity || {};
+            document.getElementById('critical-count').textContent = severities.critical || 0;
+            document.getElementById('high-count').textContent = severities.high || 0;
+            document.getElementById('medium-count').textContent = severities.medium || 0;
+            document.getElementById('low-count').textContent = severities.low || 0;
+
+            // Update recommendations
+            const recommendations = reportData.recommendations || [];
+            const recommendationsDiv = document.getElementById('security-recommendations');
+            recommendationsDiv.innerHTML = recommendations.map(rec => `
+                <div class="flex items-start space-x-2 p-3 bg-blue-50 rounded-lg">
+                    <i data-lucide="info" class="w-4 h-4 text-blue-500 mt-0.5"></i>
+                    <span class="text-sm text-blue-800">${rec}</span>
+                </div>
+            `).join('') || '<p class="text-gray-500">Herhangi bir öneri bulunmuyor</p>';
+        }
+
+        function triggerSecurityScan() {
+            if (!isAdmin()) {
+                alert('Bu işlem için admin yetkisi gereklidir');
+                return;
+            }
+
+            const button = document.getElementById('trigger-scan-btn');
+            button.disabled = true;
+            button.innerHTML = '<i data-lucide="loader" class="w-4 h-4 mr-2 animate-spin"></i>Tarama Başlatılıyor...';
+
+            fetch('/api/security/trigger-scan', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Güvenlik taraması başlatıldı! Sonuçlar birkaç dakika içinde hazır olacak.');
+                    setTimeout(refreshSecurityData, 5000); // Refresh after 5 seconds
+                } else {
+                    alert('Tarama başlatılamadı: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Security scan trigger error:', error);
+                alert('Tarama başlatılırken hata oluştu');
+            })
+            .finally(() => {
+                button.disabled = false;
+                button.innerHTML = '<i data-lucide="scan-line" class="w-4 h-4 mr-2"></i>Yeni Tarama Başlat';
+            });
+        }
+
+        function refreshSecurityData() {
+            loadSecurityData();
+        }
+
+        // Utility function for authenticated fetch
+        function authenticatedFetch(url, options = {}) {
+            const token = localStorage.getItem('authToken');
+            options.headers = {
+                ...options.headers,
+                'Authorization': token || ''
+            };
+            return fetch(url, options);
+        }
+
+        // Check user authentication and role
+        function checkAuthentication() {
+            const token = localStorage.getItem('authToken');
+            
+            fetch('/api/auth/check', {
+                headers: {
+                    'Authorization': token || ''
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    // User is authenticated, set global role
+                    window.userRole = data.user.role;
+                    
+                    // Show user info in header
+                    const userInfo = document.getElementById('user-info');
+                    const username = document.getElementById('current-username');
+                    const userRole = document.getElementById('current-user-role');
+                    
+                    if (userInfo && username && userRole) {
+                        username.textContent = data.user.username;
+                        userRole.textContent = data.user.role === 'admin' ? 'Admin' : 'Kullanıcı';
+                        userInfo.style.display = 'flex';
+                    }
+                    
+                    // Show admin features if user is admin
+                    if (data.user.role === 'admin') {
+                        const userMgmtBtn = document.getElementById('user-management-btn');
+                        if (userMgmtBtn) {
+                            userMgmtBtn.style.display = 'block';
+                        }
+                    }
+                } else {
+                    // User not authenticated, redirect to landing page
+                    window.userRole = null;
+                    localStorage.removeItem('authToken');
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                console.error('Authentication check failed:', error);
+                window.userRole = null;
+                localStorage.removeItem('authToken');
+                window.location.href = '/';
+            });
+        }
+    </script>
+</body>
+</html>

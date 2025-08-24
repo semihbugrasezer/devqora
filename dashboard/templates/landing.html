@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Auto AdSense - AI-Powered Revenue Automation</title>
+    <meta name="description" content="Automate your AdSense revenue with AI content generation, Pinterest marketing, and smart optimization. 24/7 automated system.">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            line-height: 1.6;
+            color: #1f2937;
+            overflow-x: hidden;
+        }
+        
+        /* Utility classes */
+        .container { 
+            max-width: 1280px; 
+            margin: 0 auto; 
+            padding: 0 1.5rem; 
+        }
+        
+        .btn { 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0.875rem 1.75rem; 
+            border-radius: 0.75rem; 
+            font-weight: 600; 
+            text-decoration: none; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer; 
+            border: none; 
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%); 
+            color: white; 
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+            border: 1px solid transparent;
+        }
+        
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.6);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e3a8a 100%);
+        }
+        
+        .btn-secondary { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: white; 
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover { 
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+        
+        .btn-ghost:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Layout */
+        .min-h-screen { min-height: 100vh; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .text-center { text-align: center; }
+        .hidden { display: none; }
+        .fixed { position: fixed; }
+        .absolute { position: absolute; }
+        .relative { position: relative; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .z-50 { z-index: 50; }
+        .z-40 { z-index: 40; }
+        .z-10 { z-index: 10; }
+        .bg-opacity-60 { background-color: rgba(0, 0, 0, 0.6); }
+        .bg-white { background-color: white; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .p-4 { padding: 1rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mb-16 { margin-bottom: 4rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .space-x-2 > * + * { margin-left: 0.5rem; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .w-full { width: 100%; }
+        .w-8 { width: 2rem; }
+        .w-12 { width: 3rem; }
+        .w-16 { width: 4rem; }
+        .w-5 { width: 1.25rem; }
+        .h-8 { height: 2rem; }
+        .h-12 { height: 3rem; }
+        .h-16 { height: 4rem; }
+        .h-5 { height: 1.25rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-lg { max-width: 32rem; }
+        .max-w-2xl { max-width: 42rem; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-w-6xl { max-width: 72rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        .text-5xl { font-size: 3rem; }
+        .text-6xl { font-size: 3.75rem; }
+        .font-light { font-weight: 300; }
+        .font-normal { font-weight: 400; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
+        .font-black { font-weight: 900; }
+        .text-white { color: white; }
+        .text-gray-50 { color: #f9fafb; }
+        .text-gray-100 { color: #f3f4f6; }
+        .text-gray-200 { color: #e5e7eb; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-800 { color: #1f2937; }
+        .text-gray-900 { color: #111827; }
+        .text-blue-600 { color: #2563eb; }
+        .text-blue-500 { color: #3b82f6; }
+        .text-red-600 { color: #dc2626; }
+        .text-green-600 { color: #16a34a; }
+        .text-purple-600 { color: #9333ea; }
+        .text-yellow-400 { color: #facc15; }
+        .text-orange-400 { color: #fb923c; }
+        .border { border-width: 1px; }
+        .border-t { border-top-width: 1px; }
+        .border-gray-100 { border-color: #f3f4f6; }
+        .border-gray-300 { border-color: #d1d5db; }
+        .rounded { border-radius: 0.25rem; }
+        .grid { display: grid; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .gap-4 { gap: 1rem; }
+        
+        /* Hero Section */
+        .hero-gradient {
+            background: linear-gradient(135deg, 
+                #667eea 0%, 
+                #764ba2 25%, 
+                #f093fb 50%, 
+                #f5576c 75%, 
+                #4facfe 100%
+            );
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+        }
+        
+        .hero-content { 
+            position: relative; 
+            z-index: 10; 
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .animate-delay-100 { animation-delay: 0.1s; animation-fill-mode: both; }
+        .animate-delay-200 { animation-delay: 0.2s; animation-fill-mode: both; }
+        .animate-delay-300 { animation-delay: 0.3s; animation-fill-mode: both; }
+        .animate-delay-400 { animation-delay: 0.4s; animation-fill-mode: both; }
+        
+        /* Form styles */
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Background patterns */
+        .bg-pattern {
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(circle at 25px 25px, rgba(59, 130, 246, 0.1) 2px, transparent 0),
+                radial-gradient(circle at 75px 75px, rgba(168, 85, 247, 0.1) 2px, transparent 0);
+            background-size: 100px 100px;
+            background-position: 0 0, 50px 50px;
+        }
+        
+        /* Glass effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-white {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Feature cards */
+        .feature-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Responsive breakpoints */
+        @media (max-width: 1024px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .container { padding: 0 1rem; }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2rem; line-height: 1.2; }
+            .hero-content p { font-size: 1.125rem; }
+            .btn { padding: 0.75rem 1.5rem; font-size: 0.875rem; }
+            .container { padding: 0 0.75rem; }
+            .feature-card { padding: 1.5rem; }
+        }
+        
+        @media (max-width: 640px) {
+            .hero-content h1 { font-size: 1.75rem; }
+            .hero-content p { font-size: 1rem; }
+            .py-20 { padding-top: 3rem; padding-bottom: 3rem; }
+            .mb-16 { margin-bottom: 2rem; }
+        }
+        
+        /* Grid responsive */
+        .grid-responsive {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        @media (max-width: 640px) {
+            .grid-responsive {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+        
+        /* Navigation responsive */
+        .nav-mobile {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-desktop { display: none; }
+            .nav-mobile { display: flex; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full glass-white z-40 border-b border-gray-100">
+        <div class="container">
+            <div class="flex items-center justify-between py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i data-lucide="zap" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gray-900">Auto AdSense</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="nav-desktop flex items-center space-x-6">
+                    <a href="#features" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Features</a>
+                    <a href="#pricing" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">Pricing</a>
+                    <button onclick="showLogin()" class="btn btn-ghost">Sign In</button>
+                    <button onclick="showSignup()" class="btn btn-primary">Get Started Free</button>
+                </div>
+                
+                <!-- Mobile Navigation -->
+                <div class="nav-mobile">
+                    <button onclick="showLogin()" class="btn btn-ghost text-sm px-4 py-2">Sign In</button>
+                    <button onclick="showSignup()" class="btn btn-primary text-sm px-4 py-2">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center text-white pt-20">
+        <div class="container">
+            <div class="hero-content text-center">
+                <div class="animate-fadeInUp">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full glass mb-8 text-sm font-medium">
+                        <i data-lucide="trending-up" class="w-4 h-4 mr-2"></i>
+                        Increase your AdSense revenue by 300%
+                    </div>
+                </div>
+                
+                <h1 class="text-6xl font-black mb-8 animate-fadeInUp animate-delay-100 leading-tight">
+                    Automate Your
+                    <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                        AdSense Revenue
+                    </span>
+                    with AI
+                </h1>
+                
+                <p class="text-xl text-gray-100 mb-12 max-w-3xl mx-auto animate-fadeInUp animate-delay-200 leading-relaxed">
+                    Complete AI-powered system that generates content, manages Pinterest marketing, 
+                    and optimizes AdSense performance. Scale your revenue 24/7 without manual work.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center animate-fadeInUp animate-delay-300">
+                    <button onclick="showSignup()" class="btn btn-primary text-lg px-10 py-4">
+                        <i data-lucide="rocket" class="w-5 h-5 mr-3"></i>
+                        Start Free Trial
+                        <span class="ml-2 text-xs opacity-75">No Credit Card</span>
+                    </button>
+                    <button onclick="showDemo()" class="btn btn-secondary text-lg px-10 py-4">
+                        <i data-lucide="play" class="w-5 h-5 mr-3"></i>
+                        Watch Demo
+                    </button>
+                </div>
+                
+                <div class="mt-16 animate-fadeInUp animate-delay-400">
+                    <div class="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-200">
+                        <div class="flex items-center">
+                            <i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-400"></i>
+                            Free 14-day trial
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-400"></i>
+                            No setup fees
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-400"></i>
+                            Cancel anytime
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating elements -->
+        <div class="absolute top-20 left-10 w-12 h-12 bg-white bg-opacity-10 rounded-full animate-float animate-delay-100"></div>
+        <div class="absolute top-40 right-10 w-8 h-8 bg-white bg-opacity-10 rounded-full animate-float animate-delay-200"></div>
+        <div class="absolute bottom-20 left-1/4 w-6 h-6 bg-white bg-opacity-10 rounded-full animate-float animate-delay-300"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-pattern">
+        <div class="container">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold mb-6">
+                    <i data-lucide="cpu" class="w-4 h-4 mr-2"></i>
+                    AI-Powered Automation
+                </div>
+                <h2 class="text-5xl font-bold text-gray-900 mb-6">Everything You Need</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Complete automation suite that handles content creation, social media marketing, 
+                    and revenue optimization while you focus on growing your business.
+                </p>
+            </div>
+            
+            <div class="grid-responsive">
+                <div class="feature-card text-center">
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
+                        <i data-lucide="brain" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-900">AI Content Generation</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Powered by DeepSeek, Claude, and Groq AI. Creates high-quality, SEO-optimized 
+                        articles and images automatically. Never run out of content again.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-2 justify-center">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">SEO Optimized</span>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Multi AI Models</span>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Auto Publishing</span>
+                    </div>
+                </div>
+                
+                <div class="feature-card text-center">
+                    <div class="w-20 h-20 bg-gradient-to-r from-red-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
+                        <i data-lucide="image" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-900">Pinterest Automation</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Automatically creates and publishes Pinterest pins, manages multiple accounts, 
+                        and drives traffic to your AdSense-enabled websites.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-2 justify-center">
+                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Multi Accounts</span>
+                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Auto Scheduling</span>
+                        <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Traffic Growth</span>
+                    </div>
+                </div>
+                
+                <div class="feature-card text-center">
+                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
+                        <i data-lucide="trending-up" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-900">Revenue Optimization</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Real-time performance monitoring, smart ad placement optimization, 
+                        and automated A/B testing to maximize your AdSense earnings.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-2 justify-center">
+                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Real-time Analytics</span>
+                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">A/B Testing</span>
+                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Smart Placement</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional features grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-purple-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900 mb-2">Security First</h4>
+                    <p class="text-sm text-gray-600">Built with security best practices and continuous monitoring</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="zap" class="w-6 h-6 text-yellow-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900 mb-2">Lightning Fast</h4>
+                    <p class="text-sm text-gray-600">Optimized infrastructure for maximum performance and speed</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="globe" class="w-6 h-6 text-indigo-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900 mb-2">Global Scale</h4>
+                    <p class="text-sm text-gray-600">Manage multiple domains and markets from one dashboard</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="headphones" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900 mb-2">24/7 Support</h4>
+                    <p class="text-sm text-gray-600">Expert support team available around the clock</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-blue-600 to-purple-700 text-white">
+        <div class="container text-center">
+            <h2 class="text-4xl font-bold mb-6">Ready to 10X Your AdSense Revenue?</h2>
+            <p class="text-xl mb-10 max-w-2xl mx-auto text-blue-100">
+                Join thousands of publishers who have automated their revenue streams with our AI-powered platform.
+            </p>
+            <button onclick="showSignup()" class="btn btn-primary text-lg px-12 py-4 bg-white text-blue-600 hover:bg-gray-100">
+                <i data-lucide="rocket" class="w-5 h-5 mr-3"></i>
+                Start Your Free Trial
+            </button>
+            <div class="mt-8 text-sm text-blue-200">
+                <span>✨ No credit card required • ✨ 14-day free trial • ✨ Cancel anytime</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-white rounded-2xl shadow-2xl max-w-md w-full animate-fadeInUp">
+            <div class="p-8 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-2xl font-bold text-gray-900">Welcome Back</h3>
+                    <button onclick="closeLogin()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <p class="text-gray-600 mt-2">Sign in to your dashboard</p>
+            </div>
+            <form onsubmit="handleLogin(event)" class="p-8">
+                <div class="space-y-6">
+                    <div>
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-input" placeholder="Enter your username" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-input" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full text-lg py-4">
+                        <i data-lucide="log-in" class="w-5 h-5 mr-2"></i>
+                        Sign In
+                    </button>
+                    <div class="text-center">
+                        <button type="button" onclick="switchToSignup()" class="text-blue-600 hover:underline font-medium">
+                            Don't have an account? Sign up
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-white rounded-2xl shadow-2xl max-w-md w-full animate-fadeInUp">
+            <div class="p-8 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-2xl font-bold text-gray-900">Get Started Free</h3>
+                    <button onclick="closeSignup()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <p class="text-gray-600 mt-2">Create your account in seconds</p>
+            </div>
+            <form onsubmit="handleSignup(event)" class="p-8">
+                <div class="space-y-6">
+                    <div>
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-input" placeholder="Choose a username" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-input" placeholder="Create a password" required>
+                    </div>
+                    <div>
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" name="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full text-lg py-4">
+                        <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i>
+                        Create Account
+                    </button>
+                    <div class="text-center">
+                        <button type="button" onclick="switchToLogin()" class="text-blue-600 hover:underline font-medium">
+                            Already have an account? Sign in
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Modal functions
+        function showLogin() {
+            const modal = document.getElementById('login-modal');
+            modal.classList.remove('hidden');
+            document.getElementById('signup-modal').classList.add('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showSignup() {
+            const modal = document.getElementById('signup-modal');
+            modal.classList.remove('hidden');
+            document.getElementById('login-modal').classList.add('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLogin() {
+            document.getElementById('login-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function closeSignup() {
+            document.getElementById('signup-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchToSignup() {
+            closeLogin();
+            setTimeout(() => showSignup(), 100);
+        }
+
+        function switchToLogin() {
+            closeSignup();
+            setTimeout(() => showLogin(), 100);
+        }
+
+        function showDemo() {
+            alert('🎬 Interactive demo coming soon! Sign up for early access.');
+        }
+
+        // Close modals on backdrop click
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('bg-opacity-60')) {
+                closeLogin();
+                closeSignup();
+            }
+        });
+
+        // Authentication functions
+        function handleLogin(event) {
+            event.preventDefault();
+            const button = event.target.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            button.disabled = true;
+            button.innerHTML = '<i data-lucide="loader" class="w-5 h-5 mr-2 animate-pulse"></i>Signing in...';
+            lucide.createIcons();
+            
+            const formData = new FormData(event.target);
+            
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: formData.get('username'),
+                    password: formData.get('password')
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('authToken', data.token);
+                    button.innerHTML = '<i data-lucide="check" class="w-5 h-5 mr-2"></i>Success! Redirecting...';
+                    lucide.createIcons();
+                    
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1000);
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                button.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5 mr-2"></i>Sign In';
+                lucide.createIcons();
+                
+                // Show error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm';
+                errorDiv.textContent = error.message || 'Login failed. Please try again.';
+                
+                const existingError = event.target.querySelector('.bg-red-50');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                event.target.appendChild(errorDiv);
+                
+                setTimeout(() => {
+                    if (errorDiv && errorDiv.parentNode) {
+                        errorDiv.remove();
+                    }
+                }, 5000);
+            })
+            .finally(() => {
+                button.disabled = false;
+                if (button.innerHTML.includes('Signing in')) {
+                    button.innerHTML = originalText;
+                    lucide.createIcons();
+                }
+            });
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const button = event.target.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            const formData = new FormData(event.target);
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+            
+            if (password !== confirmPassword) {
+                showError(event.target, 'Passwords do not match!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError(event.target, 'Password must be at least 6 characters long!');
+                return;
+            }
+            
+            button.disabled = true;
+            button.innerHTML = '<i data-lucide="loader" class="w-5 h-5 mr-2 animate-pulse"></i>Creating account...';
+            lucide.createIcons();
+            
+            fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: formData.get('username'),
+                    password: password,
+                    role: 'user'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.innerHTML = '<i data-lucide="check" class="w-5 h-5 mr-2"></i>Account created!';
+                    lucide.createIcons();
+                    
+                    setTimeout(() => {
+                        switchToLogin();
+                        showSuccess('Account created successfully! Please sign in.');
+                    }, 1000);
+                } else {
+                    throw new Error(data.message || 'Signup failed');
+                }
+            })
+            .catch(error => {
+                console.error('Signup error:', error);
+                showError(event.target, error.message || 'Signup failed. Please try again.');
+            })
+            .finally(() => {
+                button.disabled = false;
+                if (button.innerHTML.includes('Creating account')) {
+                    button.innerHTML = originalText;
+                    lucide.createIcons();
+                }
+            });
+        }
+
+        function showError(form, message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm';
+            errorDiv.textContent = message;
+            
+            const existingError = form.querySelector('.bg-red-50');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            form.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                if (errorDiv && errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm z-50 shadow-lg';
+            successDiv.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 mr-2 inline"></i>${message}`;
+            
+            document.body.appendChild(successDiv);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                if (successDiv && successDiv.parentNode) {
+                    successDiv.remove();
+                }
+            }, 3000);
+        }
+
+        // Check if user is already authenticated
+        window.addEventListener('load', function() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                fetch('/api/auth/check', {
+                    headers: {
+                        'Authorization': token
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/dashboard';
+                    } else {
+                        localStorage.removeItem('authToken');
+                    }
+                })
+                .catch(error => {
+                    console.error('Auth check error:', error);
+                    localStorage.removeItem('authToken');
+                });
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeInUp');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

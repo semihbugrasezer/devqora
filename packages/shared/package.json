@@ -1,9 +1,0 @@
-{
-    "name": "@mdkit/shared",
-    "version": "0.0.1",
-    "type": "module",
-    "main": "index.js",
-    "peerDependencies": {
-        "astro": "^4.0.0"
-    }
-}
