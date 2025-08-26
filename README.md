@@ -458,4 +458,4 @@ This project is proprietary software. All rights reserved.
 
 **Built with ❤️ for automated content generation and revenue optimization**
 
-*Last updated: December 2024*
+*Last updated: Aug 2025*
